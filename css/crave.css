@@ -1,0 +1,32 @@
+/*
+Add special Crave iconCls here
+*/
+.x-tab img.nearBy, .x-button img.x-icon-mask.nearBy {
+	-webkit-mask-image:url('tab-Nearby-ON.png'); 
+}
+.x-tab img.saved, .x-button img.x-icon-mask.saved {
+	-webkit-mask-image:url('saved-icon-ON.png'); 
+}
+.x-tab img.following, .x-button img.x-icon-mask.following {
+	-webkit-mask-image:url('tab-Following-ON.png'); 
+}
+.x-tab img.me, .x-button img.x-icon-mask.me {
+	-webkit-mask-image:url('tab-Me-ON.png'); 
+}
+.x-button img.x-icon-mask.dishes {
+	-webkit-mask-image:url('dish-icon-ON.png'); 
+}
+.x-button img.x-icon-mask.res {
+	-webkit-mask-image:url('restaurant-icon-OFF@2x.png'); 
+}
+.iconHolder{
+float : left;
+padding : 10px;
+}
+.dishInfo{
+float : left;
+padding : 10px;
+}
+.resName{
+color: gray
+}
