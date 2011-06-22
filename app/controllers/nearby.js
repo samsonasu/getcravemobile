@@ -6,8 +6,9 @@ Crave.controllers.nearby = new Ext.Controller({
 		},
     	showRes: function(options) {
 			//Ext.Msg.alert('sh','sh',Ext.emptyFn);
-			Ext.getCmp('nearby').setActiveItem(1);
-			
-			
+			Ext.getCmp('nearby').setActiveItem(1);	
+		},
+		showDish : function(options) {
+			Ext.getCmp('nearby').setActiveItem(2);
 		}
 });

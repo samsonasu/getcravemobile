@@ -19,6 +19,15 @@ Add special Crave iconCls here
 .x-button img.x-icon-mask.res {
 	-webkit-mask-image:url('restaurant-icon-OFF@2x.png'); 
 }
+.x-button img.x-icon-mask.filter {
+	-webkit-mask-image:url('filter-icon.png'); 
+}
+.x-button img.x-icon-mask.camera {
+	-webkit-mask-image:url('camera-icon.png'); 
+}
+.crave-title{
+-webkit-mask-image:url('crave-logo-horizonal-white.png'); 
+}
 .iconHolder{
 float : left;
 padding : 10px;

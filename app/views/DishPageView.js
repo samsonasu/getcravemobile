@@ -1,4 +1,4 @@
-Ext.regModel('DishItem', {
+/*Ext.regModel('DishItem', {
     fields: ['name', 'resName','distance','icon']
 });
 
@@ -14,70 +14,39 @@ var store = new Ext.data.JsonStore({
 		{name: 'Cream Ice',   resName: 'Burma Superstar', distance: '301' , icon: 'icecream.jpg'}
     ]
 });
-var dishesBtn = new Ext.Button({
-	text: 'Dishes',
-	iconMask: true,
-	iconCls: 'dishes',
-	ui: 'decline',
-	width : "40%",
-	handler : function(b,e) {
-			Ext.dispatch({
-				controller: Crave.controllers.nearby,
-				action    : 'showDishes',
-				animation: {type:'slide', direction:'left'}
-			});
-	}
-});
-var resBtn = new Ext.Button({
-	text: 'Restaurents',
-	iconMask: true,
-	iconCls: 'res',
-	ui: 'decline',
-	width : "40%",
-	handler : function(b,e) {
-			Ext.dispatch({
-				controller: Crave.controllers.nearby,
-				action    : 'showRes',
-				animation: {type:'slide', direction:'left'}
-			});
-		//this.setActiveitem(Crave.views.reslistcard, {type: 'slide',direction: 'left'});
-	}
-});
-var uBtn = new Ext.Button({
-	iconMask: true,
-	iconCls: 'filter',
-	ui: 'decline',
-	width : "20%"
-});
-var nearByToolbar = new Ext.Toolbar({
-	dock :'top',
-	ui : 'light',
-	padding : 5,
-	items:[dishesBtn,resBtn,uBtn]
-});
-var nearBySearchToolbar = new Ext.Toolbar({
-	dock : 'top',
-	items: [{
-		xtype: 'searchfield',
-        name: 'searchBox',
-		width : '100%'
-	}]
-});
-var dishList = new Ext.List({
-	
+
+var dishPage = new Ext.List({
 	sorters: 'distance',
     itemTpl : '<div class="iconHolder"><img src="{icon}" height="80" width="80"/></div><div class="dishInfo"><div class="dishName">{name}</div><div class="resName">@{resName}</div><div class="resName">{distance} feet away</div></div>',
     store: store,
 	 onItemDisclosure: function(record, btn, index) {
+                Ext.Msg.alert('Tap', 'Disclose more info for ' + record.get('name'), Ext.emptyFn);
+     }
+});*/
+var bBtn = new Ext.Button({
+	ui : 'back',
+	text : 'Back',
+	handler : function(b,e){
 			Ext.dispatch({
 				controller: Crave.controllers.nearby,
 				action    : 'showDish',
 				animation: {type:'slide', direction:'left'}
 			});
-     }
+	}
 });
-Crave.views.DishListView = Ext.extend(Ext.Panel, {
-	dockedItems :[nearByToolbar,nearBySearchToolbar],
-	items: [dishList]
+var camera = new Ext.Button({
+	iconCls: 'camera',
+	handler : function(b,e){
+	}
 });
-Ext.reg('dishlistcard', Crave.views.DishListView);
+var toolBar = new Ext.Toolbar({
+	dock: 'top',
+	items: [bBtn,{xtype: 'spacer'},camera],
+	titleCls: 'crave-title'
+}); 
+Crave.views.DishPageView = Ext.extend(Ext.Panel, {
+	dockedItems: [toolBar],
+	style : "background-color : #456756;"
+	//items: [dishList]
+});
+Ext.reg('dishpagecard', Crave.views.DishPageView);
