@@ -326,13 +326,14 @@ var reviewFormPnl = new Ext.Panel({
 function dishDisplay(response) {
     var responseObject = eval('(' + response.responseText + ')');
     //instead of making this into a string I should create javascript object, apply template
-    htmlString = '<div class="dishinfo"><b>'+responseObject.menu_item.name+'</b><br/>';
+    htmlString = '<div class="dishinfo"><div class="dishDetails"><b>'+responseObject.menu_item.name+'</b><br/>';
     htmlString += '@'+responseObject.menu_item.restaurant.name+'<br>';
     //htmlString += '$ '+responseObject.menu_item.price+'<br>';
     if(responseObject.menu_item.menu_item_avg_rating_count) {
         htmlString += starDisplay(responseObject.menu_item.menu_item_avg_rating_count.avg_rating);
         htmlString += ' '+responseObject.menu_item.menu_item_avg_rating_count.count+' ratings';
     }
+    htmlString += "</div>";
     if(responseObject.menu_item.description!="") {
         htmlString += '<div class="dataSection"><div class="sectionHead">Description</div><div class="sectionBody">'+responseObject.menu_item.description+'</div></div>';
     }
