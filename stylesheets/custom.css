@@ -23,7 +23,6 @@ padding: .3em .3em;
 .x-list .x-list-item {
 	border-top: solid 1px #CCC;
 	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #F1F1F1));
-    );
 }
 
 .dishListinfo {

@@ -133,10 +133,11 @@
 
            urlPrefix = "";
            urlPrefixSet=false;
+           /* BS: I don't have this proxy so I'll just test against production with a spoofed location
            if(window.location.toString().indexOf("http://localhost")>-1) {
                urlPrefixSet=true;
                urlPrefix = '/wg/proxy.php?url=http://blooming-water-228.heroku.com';
-           }
+           } */
            console.log(dishStore.proxy.url);
            console.log(dishStore.proxy);
            console.log(dishStore);
@@ -148,8 +149,14 @@
                    places.proxy.url = urlPrefix+encodeURIComponent('/places.json?lat=37.77867&limit=25&long=-122.39127');
                } else {
                    console.log('in production');
-                   dishStore.proxy.url = 'http://getcrave.com/items/location.json?lat='+position.coords.latitude+'&distance=yes&limit=25&long='+position.coords.longitude;
-                   places.proxy.url = 'http://getcrave.com/places.json?lat='+position.coords.latitude+'&limit=25&long='+position.coords.longitude;
+                   //var coords = position.coords;
+                   var coords = {
+                     latitude: 37.77867,
+                     longitude: -122.39127
+                   };
+
+                   dishStore.proxy.url = 'http://getcrave.com/items/location.json?lat='+coords.latitude+'&distance=yes&limit=25&long='+coords.longitude;
+                   places.proxy.url = 'http://getcrave.com/places.json?lat='+coords.latitude+'&limit=25&long='+coords.longitude;
                }
                console.log(dishStore.proxy.url);
                dishStore.load(function() {
@@ -192,27 +199,8 @@
            });
 
            dishList.on('itemtap', function(dataView, index, item, e) {
-//               console.log(item);
-//               console.log(e); //.children[1].childres[0].firstChild.data
-//               console.log($(".dishname", item).text());
-//               console.log(dishList.getRecord(dishList.getNode(item)));
                thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
 
-               //this is returning the view index, not unsorted store indes...
-//               record = dataView.store.data.items[index];
-               /*
-                if(Ext.getCmp('carouselPnl')) {
-                    Ext.getCmp('carouselPnl').destroy();
-                }
-               var carouselPnl = new Ext.Carousel({
-                   id: 'carouselPnl',
-                   direction: 'horizontal',
-                   items: [
-                   ],
-                   width:'100%',
-                   height:'150px'
-               });
-               */
                Ext.Ajax.request({
                    url: (urlPrefix+'/items/'+thisId+'.json'),
                    reader: {
@@ -318,6 +306,7 @@
                }
                */
                if(target == "nearBy") {
+
                }
                if(target == "me") {
                    // The process of becoming a badass javascript programmer is paved with endless acts of idiocy
@@ -334,13 +323,13 @@
                                 type: 'json'
                            },
                            success: function(response) {
-                               var responseObject = eval('(' + response.responseText + ')');
+                               var responseObject = Ext.decode(response.responseText);
                                $(".userPic").html('<img src="'+responseObject.user.user_profile_pic_url+'">');
                                $(".userInfoPnl").html('<span class="userName">'+responseObject.user.user_name+'</span>');
                                //loop through ratings
                                //add each one as data store item to myDishStore
                                var ratingsArray = new Array();
-                               for(g=0;g<responseObject.user.menu_item_ratings.length;g++) {
+                               for(var g=0;g<responseObject.user.menu_item_ratings.length;g++) {
                                    var newRating = responseObject.user.menu_item_ratings[g]
                                    ratingsArray[g] = {id: newRating.id, rating: newRating.rating, review: newRating.review, menu_item_id: newRating.menu_item_id};
                                    myDishStore.loadData({id: newRating.id.toString()});
@@ -514,7 +503,7 @@
                        items:[listPnl]
                    },
                    {title:'saved',iconCls:'saved',items:[savedPnl]},
-                   {title:'me',iconCls:'me',handler:sessionHandler,items:[profilePnl]},
+                   //{title:'me',iconCls:'me',handler:sessionHandler,items:[profilePnl]},
                    placePnl,{width:0,items:[newDishForm]},{width:0,items:[reviewFormPnl]},{width:0,items:[filterListPnl]}
                ],
                tabBar: {
