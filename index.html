@@ -8,6 +8,9 @@
     <link rel="stylesheet"
      href="stylesheets/custom.css"
      type="text/css" />
+	<link rel="apple-touch-icon-precomposed" href="apple-touch-icon.png"/>
+	<link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72.png" sizes="72x72"/>
+	<link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114.png" sizes="114x114"/>
     <style type="text/css">
         .reviewField {border:none;}
         .starContainer {background-color:#ccc;  }
@@ -52,7 +55,7 @@
             border: none;
             background: transparent;
         }
-        .x-tab-pressed {border: solid 1px white;}
+        .x-tab-pressed {}
     </style>
     <link rel="Fav Icon" href="../favicon.ico" type="image/vnd.microsoft.icon">
 
@@ -105,7 +108,9 @@
     <tpl for=".">
         <div class="adish">
             <img src="../images/no-image-default.png" class="dishImg">
-                <span class="dishname">{review}</span>
+            <div class="dishListinfo">
+                <span class="dishname">{name}</span>
+                <span class="restaurantName">@{restaurant_name}</span>
             </div>
             <span class="chevrony"></span>
             </span>
@@ -114,6 +119,7 @@
 </textarea>
 
 
+<!--<script type="text/javascript" src="/contractor/lib/sencha-touch-debug.js"></script>-->
 <script type="text/javascript" src="sencha-touch.js"></script>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -144,11 +150,11 @@
            navigator.geolocation.getCurrentPosition(function(position) {
                if(urlPrefixSet) {
                    console.log('setting proxy url');
-                   dishStore.proxy.url = urlPrefix+encodeURIComponent('/items/location.json?distance=yes&lat=37.77867&limit=25&long=-122.39127');
+                   dishStore.proxy.url = urlPrefix+encodeURIComponent('/items/nearby.json?distance=yes&lat=37.77867&limit=25&long=-122.39127');
                    places.proxy.url = urlPrefix+encodeURIComponent('/places.json?lat=37.77867&limit=25&long=-122.39127');
                } else {
                    console.log('in production');
-                   dishStore.proxy.url = 'http://getcrave.com/items/location.json?lat='+position.coords.latitude+'&distance=yes&limit=25&long='+position.coords.longitude;
+                   dishStore.proxy.url = 'http://getcrave.com/items/nearby.json?lat='+position.coords.latitude+'&distance=yes&limit=25&long='+position.coords.longitude;
                    places.proxy.url = 'http://getcrave.com/places.json?lat='+position.coords.latitude+'&limit=25&long='+position.coords.longitude;
                }
                console.log(dishStore.proxy.url);
@@ -294,7 +300,6 @@
                items:[restMapPnl,restInfoPnl],
                width:'100%',
                height:100
-
            });
 
            var reviewPnl = new Ext.Panel({
@@ -323,30 +328,51 @@
                    // The process of becoming a badass javascript programmer is paved with endless acts of idiocy
                    var amiLoggedIn = isLoggedIn();
                    if(amiLoggedIn) {
+                       console.log('/users/'+localStorage.getItem("uid")+'/ratings.json?page=1');
                        if(urlPrefixSet) {
-                           myDishStoreUrl = urlPrefix+encodeURIComponent('/users/'+localStorage.getItem("uid")+'.json');
+                           myDishStoreUrl = '/wg/proxy.php?url='+encodeURIComponent('http://getcrave.com/users/'+localStorage.getItem("uid")+'/ratings.json?page=1&mobile=1');
+                           myProfileUrl = urlPrefix+encodeURIComponent('/users/'+localStorage.getItem("uid")+'.json');
                        } else {
-                           myDishStoreUrl = 'http://getcrave.com/users/'+localStorage.getItem("uid")+'.json';
+                           myDishStoreUrl = 'http://getcrave.com/users/'+localStorage.getItem("uid")+'/ratings.json?page=1&mobile=1';
+                           myProfileUrl = 'http://getcrave.com/users/'+localStorage.getItem("uid")+'.json';
                        }
+                       loggedinProfilePnl.setLoading(true);
                        Ext.Ajax.request({
                            url: (myDishStoreUrl),
                            reader: {
                                 type: 'json'
                            },
                            success: function(response) {
+                               console.log('uh');
+                               console.log(myDishStoreUrl);
+                               console.log(response)
                                var responseObject = eval('(' + response.responseText + ')');
-                               $(".userPic").html('<img src="'+responseObject.user.user_profile_pic_url+'">');
-                               $(".userInfoPnl").html('<span class="userName">'+responseObject.user.user_name+'</span>');
                                //loop through ratings
                                //add each one as data store item to myDishStore
                                var ratingsArray = new Array();
                                for(g=0;g<responseObject.user.menu_item_ratings.length;g++) {
-                                   var newRating = responseObject.user.menu_item_ratings[g]
-                                   ratingsArray[g] = {id: newRating.id, rating: newRating.rating, review: newRating.review, menu_item_id: newRating.menu_item_id};
-                                   myDishStore.loadData({id: newRating.id.toString()});
+                                   var newRating = responseObject.user.menu_item_ratings[g];
+                                   //the id represents the dish id
+                                   ratingsArray[g] = {id: newRating.menu_item.id, rating: newRating.rating, name: newRating.menu_item.name, restaurant_name: newRating.menu_item.restaurant.name, review: newRating.review, menu_item_id: newRating.menu_item_id};
+                                   myDishStore.loadData(ratingsArray);
+                                   //refresh myDishList here
                                }
+                               loggedinProfilePnl.setLoading(false);
                                console.log('whole store');
                                console.log(myDishStore);
+                               myDishList.refresh();
+                           }
+                       });
+                       Ext.Ajax.request({
+                           url: (myProfileUrl),
+                           reader: {
+                                type: 'json'
+                           },
+                           success: function(response) {
+                               var responseObject = eval('(' + response.responseText + ')');
+                               $(".userPic").html('<img src="'+responseObject.user.user_profile_pic_url+'?type=large" width="100" height="100">');
+                               $(".reviewCount").html(responseObject.user.user_ratings_count+" reviews");
+                               $(".profileUsername").html('<span class="userName">'+responseObject.user.user_name+'</span>');
                            }
                        });
                    }
@@ -508,14 +534,15 @@
                items: [
                    {items:[detailPnl]},
                    {
-                       title:'nearby',
+                       title:'Nearby',
                        iconCls:'nearBy',
                        id:'listPnlTab',
                        items:[listPnl]
                    },
-                   {title:'saved',iconCls:'saved',items:[savedPnl]},
-                   {title:'me',iconCls:'me',handler:sessionHandler,items:[profilePnl]},
-                   placePnl,{width:0,items:[newDishForm]},{width:0,items:[reviewFormPnl]},{width:0,items:[filterListPnl]}
+                   {title:'Saved',iconCls:'saved',items:[savedPnl]},
+                   {title:'Me',iconCls:'me',items:[profilePnl]},
+                   placePnl,
+                   {width:0,items:[newDishForm]},{width:0,items:[reviewFormPnl]},{width:0,items:[filterListPnl]}
                ],
                tabBar: {
                    dock: 'bottom',

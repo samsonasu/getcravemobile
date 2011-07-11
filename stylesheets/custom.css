@@ -1,3 +1,6 @@
+body {
+	background: url('/images/loading-screen.png') 0 0px #000;
+}
 .restName {font-weight:bold;}
 .restAddress {font-weight:lighter;display:block;}
 
@@ -89,7 +92,6 @@ font-weight: lighter;
 .dishInfo {background-color: white;}
 .dishinfo, #reviewPnl {
 	padding: 12px;
-	border: 1px solid;
 	font-size: 16px;
 	line-height: 24px;
 	}
@@ -210,7 +212,11 @@ font-weight: lighter;
 {
     background:#b1422e;
 }
-.x-toolbar-light .x-toolbar-title {color:#ffffff;}
+.x-toolbar-light .x-toolbar-title {
+	color: #ffffff;
+	font-size: 20px;
+	text-shadow: 0px -1px #6A281C;
+	}
 
 .x-toolbar-light {
 background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F6745D), color-stop(1, #E64E33) );
@@ -260,13 +266,13 @@ word-wrap:break-word;
 	-webkit-mask-image:url('../../images/nearby-on.png');
 }
 .x-tab img.saved, .x-button img.x-icon-mask.saved {
-	-webkit-mask-image:url('../../images/saved-icon-ON.png');
+	-webkit-mask-image:url('../../images/tab-saved-icon-ON.png');
 }
 .x-tab img.following, .x-button img.x-icon-mask.following {
 	-webkit-mask-image:url('../../images/tab-Following-ON.png');
 }
 .x-tab img.me, .x-button img.x-icon-mask.me {
-	-webkit-mask-image:url('../../images/tab-Me-ON.png');
+	-webkit-mask-image:url('../../images/tab-profile-ON.png');
 }
 .hideMe {display:none;}
 
@@ -358,13 +364,55 @@ display: box;
 }
 .x-tabbar.x-docked-bottom .x-tab .x-button-label, .x-tabbar.x-docked-bottom .x-tab .x-hasbadge .x-badge, .x-hasbadge .x-tabbar.x-docked-bottom .x-tab .x-badge {
 margin: 0;
-font-size: 12px;
+font-size: 10px;
 line-height: 12px;
+font-family:helvetica neue, helvetica, arial, sans-serif;
+font-weight:normal;
 text-rendering: optimizeLegibility;
 -webkit-font-smoothing: antialiased;
 }
 
 .filtersButton {background-image:url('../../images/filter-icon.png');}
 
-userTopPnl {background-color:#fff;}
+.userTopPnl {background-color:#fff;}
 .userPic, .userInfoPnl {float:left;}
+
+.reviewCount {clear:both;}
+
+.x-tabbar-dark {
+	background-color: #111;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#56595c), color-stop(2%,#434346), color-stop(100%,#232523));
+	border-top:1px solid #56595c;
+	height:50px;
+}
+
+.x-tabbar-dark.x-docked-bottom .x-tab-active {
+background-color: #1E1E1E;
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#1a1b1a), color-stop(2%,#2b2d2b), color-stop(100%,#101011));
+background-image: linear-gradient(#444,#2B2B2B 50%,#1E1E1E 51%,#111);
+text-shadow: rgba(0, 0, 0, 0.5) 0 -0.08em 0;
+border-bottom:1px solid #3a3b3b;
+color:#f9edc1;
+}
+
+.x-tabbar-dark.x-docked-bottom .x-tab img {
+background-color: #000;
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#19191a), color-stop(7%,#2e2f30), color-stop(100%,#181819));
+-webkit-box-shadow: 0px 1px 0px 0px #ffffff;
+margin-top: -2px;
+margin-bottom:-3px;
+}
+
+.x-tabbar-dark.x-docked-bottom .x-tab-active img {
+background-color: #78C4C2;
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#78c4c2), color-stop(100%,#62a9a7));
+-webkit-box-shadow:inset 0px 1px 0px 0px #386160;
+margin-top: -2px;
+}
+
+.dishDetails {
+	background: white;
+	margin: -12px -12px 12px;
+	padding: 10px;
+	bottom-border:1px solid #cccccc;
+}

@@ -10,7 +10,7 @@ var rateHandler = function(b,e) {
 
     if(b.getText() == "Submit") {
         reviewForm.submit({
-            url: '/menu_item_ratings',
+            url: '/ratings?mobile=1',
             method: 'post',
             submitDisabled: true,
             waitMsg: 'Saving Data...Please wait.',
