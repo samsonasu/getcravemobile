@@ -5,14 +5,15 @@ Ext.setup({
     $(".startuppic").remove();
 
     urlPrefix = "http://getcrave.com";
-    /* BS: I don't have this proxy so I'll just test against production with a spoofed location
-           if(window.location.toString().indexOf("http://localhost")>-1) {
-               urlPrefixSet=true;
-               urlPrefix = '/wg/proxy.php?url=http://blooming-water-228.heroku.com';
-           } */
+    if(window.location.toString().indexOf("local")>-1) {
+      //urlPrefix = '/wg/proxy.php?url=http://blooming-water-228.heroku.com';
+      urlPrefix = '/cravecom';
+    }
 
-    //probably should put some testing code or something here?  maybe not??
     Ext.Ajax.on('beforerequest', function(conn, options){
+      if (options.url.substring(0, urlPrefix.length) !== urlPrefix) {
+        options.url = urlPrefix + options.url;
+      }
       if (!options.params) {
         options.params = {};
       }
@@ -22,26 +23,24 @@ Ext.setup({
 
     navigator.geolocation.getCurrentPosition(function(position) {
       var coords = position.coords;
-      if(window.location.toString().indexOf("http://localhost")>-1) {
+      if(window.location.toString().indexOf("local")>-1) {
         coords = {
           latitude: 37.77867,
           longitude: -122.39127
         };
       }
 
-      dishStore.proxy.url = urlPrefix + dishStore.proxy.url;
       dishStore.proxy.extraParams = {
         "lat": coords.latitude,
         "long": coords.longitude,
         limit: 25
       }
-      console.log(dishStore.proxy.url);
+      
       dishStore.load(function() {
         console.log('dish store loaded');
         console.log(dishStore);
       });
 
-      places.proxy.url = urlPrefix + places.proxy.url;
       places.proxy.extraParams = {
         "lat": coords.latitude,
         "long": coords.longitude,
@@ -49,8 +48,6 @@ Ext.setup({
       }
 
       places.load();
-
-      Crave.activityStore.proxy.url = urlPrefix + Crave.activityStore.proxy.url;
       Crave.activityStore.load();
     });
 
@@ -233,8 +230,6 @@ Ext.setup({
               //refresh myDishList here
               }
               loggedinProfilePnl.setLoading(false);
-              console.log('whole store');
-              console.log(myDishStore);
               myDishList.refresh();
             }
           });

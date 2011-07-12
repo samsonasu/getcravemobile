@@ -15,6 +15,7 @@ Crave.activityStore = new Ext.data.JsonStore({
   model: 'MenuItemRating',
   proxy: {
     type:'ajax',
+    extraParams: {},
     url: '/activity.json',
     reader: {
       type:'json',
@@ -44,13 +45,18 @@ Crave.activityPanel = new Ext.Panel({
       items:[{
         text: 'Following',
         pressed: false,
+        handler:function() {
+          Crave.activityStore.proxy.extraParams.followed_by = "user_id";
+          Crave.activityStore.load();
+        },
         ui:'round',
         width:'110'
       },{
         text:'All',
         pressed: true,
         handler:function() {
-          Crave.activityStore
+          Crave.activityStore.proxy.extraParams.followed_by = undefined;
+          Crave.activityStore.load();
         },
         ui:'round',
         width:'110'
@@ -70,7 +76,17 @@ Crave.activityPanel = new Ext.Panel({
     singleSelect: true,
     grouped: true,
     indexBar: false,
-    store: Crave.activityStore
+    store: Crave.activityStore,
+    plugins: [new mobile.plugins.ListPullPager({
+		previousFn: function(cb,scope){
+		    Crave.activityStore.previousPage();
+		    cb.call(this);
+		},
+		nextFn: function(cb,scope){
+		    Crave.activityStore.nextPage();
+		    cb.call(this);
+		}
+    })]
   }
 });
 
