@@ -1,5 +1,5 @@
 body {
-	background: url('/images/loading-screen.png') 0 0px #000;
+	background: black;
 }
 .restName {font-weight:bold;}
 .restAddress {font-weight:lighter;display:block;}
@@ -15,6 +15,14 @@ body {
 .restaurantName {display:block;}
 .distanceFigure {display:block;color:#5d5d5d;}
 .cravelogo {margin: 10px 0 0 0;}
+
+.startuppic {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
 
 .x-button img {
 width: 1.0em;

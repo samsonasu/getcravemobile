@@ -1,23 +1,25 @@
 Ext.setup({
   glossOnIcon: false,
   onReady: function() {
-
-    $(".startuppic").remove();
-
     urlPrefix = "http://getcrave.com";
+    var local = false;
+
     if(window.location.toString().indexOf("local")>-1) {
       //urlPrefix = '/wg/proxy.php?url=http://blooming-water-228.heroku.com';
-      urlPrefix = '/cravecom';
+      urlPrefix = '/cravecomp';
+      local = true;
     }
 
     Ext.Ajax.on('beforerequest', function(conn, options){
       if (options.url.substring(0, urlPrefix.length) !== urlPrefix) {
         options.url = urlPrefix + options.url;
       }
-      if (!options.params) {
-        options.params = {};
+      if (local) {
+        if (!options.params) {
+          options.params = {};
+        }
+        options.params.mobile = "true";
       }
-      options.params.mobile = "true";
     }, this);
 
 
@@ -49,6 +51,10 @@ Ext.setup({
 
       places.load();
       Crave.activityStore.load();
+    }, function() {
+      //failure handler
+      console.log("no location available");
+      alert("We couldn't find your location, some features may be disabled because of this. ")
     });
 
 
@@ -469,6 +475,7 @@ Ext.setup({
       Ext.getCmp("menuRating").setValue(rating);
       console.log(Ext.getCmp("menuRating").getValue());
     });
+    $(".startuppic").remove();
   }
 });
 
