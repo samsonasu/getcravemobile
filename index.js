@@ -272,7 +272,8 @@ Ext.setup({
       }
     }
     var filtersHandler = function(b,e) {
-      Ext.getCmp('mainPnl').setActiveItem(filterListPnl);
+     em(filterListPnl);
+      //Ext.getCmp('mainPnl').setActiveItem(filterListPnl);
       labelString = "";
     }
 
@@ -365,7 +366,9 @@ Ext.setup({
         },{
           xtype:'button',
           iconCls:'filtersButton',
-          handler:filtersHandler
+          handler: function() {
+            filterListPnl.ownerCt.setActiveItem(filterListPnl);
+          }
         }]
       },searchForm
       ]
@@ -394,8 +397,8 @@ Ext.setup({
       ]
     });
 
+
     var mainPnl = new Ext.TabPanel({
-      fullscreen: true,
       id: 'mainPnl',
       layout:'card',
       activeItem:1,
@@ -422,9 +425,6 @@ Ext.setup({
       },{
         width:0,
         items:[reviewFormPnl]
-      },{
-        width:0,
-        items:[filterListPnl]
       }],
       tabBar: {
         dock: 'bottom',
@@ -439,6 +439,12 @@ Ext.setup({
       },
       cardSwitchAnimation: 'slide',
       direction:'horizontal'
+    });
+
+    Crave.viewport = new Ext.Panel({
+      fullscreen: true,
+      layout: 'card',
+      items: [mainPnl, filterListPnl]
     });
 
     justLoggedIn();

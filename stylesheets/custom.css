@@ -36,6 +36,45 @@ padding: .3em .3em;
 	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #F1F1F1));
 }
 
+.framePanel {
+  margin: 8px 15px 8px 15px;
+  border 1px solid #888;
+  border-radius: 15px;
+  background: white;
+  padding-bottom: 16px;
+}
+
+.framePanel .x-toolbar.title {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background: #ddd;
+}
+.framePanel .x-toolbar.title .x-toolbar-title {
+  padding: 4px;
+  text-align: left;
+  font-weight: normal;
+  font-size: 16px;
+  color: #333;
+}
+
+.framePanel .x-toolbar.x-docked-top  {
+  border-bottom: 0px;
+}
+
+.framePanel .x-panel-body {
+  background: white;
+}
+
+.framePanel .x-toolbar.x-toolbar-fancy .x-button.x-button-pressed{
+	background-color: #E8553A;
+	/*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
+	
+	-moz-box-shadow: inset 0px 0px 3px 3px #333333;
+	
+	border-top: 1px solid #B13320;
+}
+
 .dishListinfo {
 float: left;
 margin: 2px 0 0 7px;

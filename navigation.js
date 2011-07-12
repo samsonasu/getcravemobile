@@ -1,7 +1,5 @@
 var backHandler = function(b,e) {
-    if(b.getText() == "Back" || b.getText() == "Cancel") {
-        Ext.getCmp('mainPnl').setActiveItem(1);
-    }
+   Crave.viewport.setActiveItem(0);
 }
 var rateHandler = function(b,e) {
     if(b.getText() == "Rate") {

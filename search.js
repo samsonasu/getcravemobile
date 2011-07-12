@@ -5,8 +5,8 @@ dishSearchTemplate = new Ext.XTemplate('<tpl for="."><div class="adish"><b>{name
 var dishSearchStore = new Ext.data.Store({
     model: 'DishSearch',
     proxy: {
-        type:'ajax',
-        url:'',
+       type:'ajax',
+       url:'/items/search.json',
        reader: {
            type:'json',
            record:'menu_item'
@@ -51,17 +51,7 @@ var dishSearchList = new Ext.List({
 
 dishSearchList.on('itemtap', function(dataView, index, item, e) {
     record = dataView.store.data.items[index];
-    Ext.Ajax.request({
-      method: 'GET',
-      url: '/items/'+record.data.id+'.json',
-      reader: {
-        type: 'json'
-      },
-      success: function(response) {
-        dishDisplay(response);
-      }
-    });
-    Ext.getCmp('mainPnl').setActiveItem(1);
+    Crave.show_menu_item(record.data.id);
 });
 
 var searchPnl = new Ext.Panel({

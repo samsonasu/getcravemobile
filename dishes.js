@@ -32,12 +32,13 @@ var filterStore = new Ext.data.JsonStore({
 var filterList = new Ext.List({
     width:'100%',
     height:'100%',
+    scroll: false,
+    title: "Dietary Preference",
     itemTpl : '<span class="labelname">{label}</span>',
     grouped : false,
     multiSelect: true,
     simpleSelect:true,
     indexBar: false,
-
     store: filterStore
 });
 labelString = "";
@@ -51,36 +52,98 @@ filterList.on('itemtap', function(dataView, index, item, e) {
 //add listener to button, add distance parameter to search string
 
 var searchHandler = function(b,e) {
-    Ext.getCmp('mainPnl').setActiveItem(1);
-    dishSearchStore.proxy.url = urlPrefix+'/items/search.json?q='+labelString;
+    backHandler();
+    dishSearchStore.proxy.extraParams.q = labelString;
+    var dfb = Ext.getCmp('distanceFilterButton').getPressed();
+    dishSearchStore.proxy.extraParams.d = dfb.filter_value;
     dishSearchStore.load();
     console.log(dishSearchStore.proxy.url);
     Ext.getCmp('listPnl').setActiveItem(searchPnl);
     Ext.getCmp('searchPnl').setActiveItem(dishSearchList);
 }
+
+var distancePnl = function() {
+  var items = [];
+  Ext.each([".5", "2", "5", "10"], function(d) {
+    items.push({
+      text: d + " miles",
+      ui: 'round',
+      width: 62,
+      filter_value: d
+    });
+  });
+  items.push({
+    text: "All",
+    pressed: true,
+    width: 40,
+    ui: 'round'
+  });
+  return new Ext.Panel({
+    cls: 'framePanel',
+    dockedItems: [{
+      dock : 'top',
+      xtype: 'toolbar',
+      cls: 'title',
+      title: 'Distance from You'
+    }],
+    items: {
+      xtype: 'panel',
+      dockedItems: [{
+        xtype: 'toolbar',
+        ui: 'fancy',
+        dock: 'top',
+        layout:{
+          pack:'center'
+        },
+        items:[{
+          xtype:'segmentedbutton',
+          id: 'distanceFilterButton',
+          items: items
+        }]
+      }]
+    }
+  });
+
+}();
+
 var filterListPnl = new Ext.Panel({
-    items: [filterList],
-//    html: 'hello there',
-    id: 'filterListPnl',
+  items: [distancePnl, {
+    xtype: 'panel',
+    cls: 'framePanel',
+    layout: 'fit',
+    height: 800,
+    dockedItems: [{
+      dock : 'top',
+      xtype: 'toolbar',
+      cls: 'title',
+      title: 'Dietary Preference'
+    }],
+    items: filterList
+  }],
+  id: 'filterListPnl',
+  //layout: 'vbox',
+  width:'100%',
+  height:'100%',
+  scroll:'vertical',
+  dockedItems:[{
+    dock:'top',
+    xtype:'toolbar',
+    ui:'light',
+    title:'Filters',
     layout: {
-        type: 'card'
+      type: 'hbox',
+      pack:'justify'
     },
-    width:'100%',
-    height:'100%',
-    scroll:'vertical',
-    dockedItems:[
-        {
-            dock:'top',
-            xtype:'toolbar',
-            ui:'light',
-            title:'Filters',
-             layout: {
-                 type: 'hbox',
-                 pack:'justify'
-             },
-            items:[{text:'Cancel',ui:'normal', handler:backHandler},{text:'Search',ui:'normal', handler:searchHandler}]
-        }
-    ]
+    items:[{
+      text:'Cancel',
+      ui:'normal',
+      handler:backHandler
+    },{
+      text:'Search',
+      ui:'normal',
+      handler:searchHandler
+    }]
+  }]
 });
 
 
