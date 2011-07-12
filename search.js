@@ -37,7 +37,7 @@ var restaurantSearchList = new Ext.List({
 
 restaurantSearchList.on('itemtap', function(dataView, index, item, e) {
     record = dataView.store.data.items[index];
-    placeDisplay(record, index);
+    placeDisplay(record.data.id);
 });
 
 var dishSearchList = new Ext.List({
@@ -52,13 +52,14 @@ var dishSearchList = new Ext.List({
 dishSearchList.on('itemtap', function(dataView, index, item, e) {
     record = dataView.store.data.items[index];
     Ext.Ajax.request({
-        url: (urlPrefix+'/items/'+record.data.id+'.json'),
-        reader: {
-             type: 'json'
-        },
-        success: function(response) {
-            dishDisplay(response);
-        }
+      method: 'GET',
+      url: '/items/'+record.data.id+'.json',
+      reader: {
+        type: 'json'
+      },
+      success: function(response) {
+        dishDisplay(response);
+      }
     });
     Ext.getCmp('mainPnl').setActiveItem(1);
 });

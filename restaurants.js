@@ -89,18 +89,17 @@ var singleRestaurantStore = new Ext.data.Store({
         }
     },
     proxy: {
-        type:'ajax',
-        url:'',
-       reader: {
-           type:'json',
-           record:'menu_item'
-       }
+      type:'ajax',
+      url:'',
+      reader: {
+        type:'json',
+        record:'menu_item'
+      }
     }
 });
 
-function placeDisplay(record, index) {
-    console.log(urlPrefix+'/places/'+record.data.id+'/items.json');
-    singleRestaurantStore.proxy.url = (urlPrefix+'/places/'+record.data.id+'/items.json');
+function placeDisplay(restaurant_id) {
+    singleRestaurantStore.proxy.url = ('/places/'+restaurant_id+'/items.json');
 
     console.log('set to 4');
     Ext.getCmp('mainPnl').setActiveItem(4);
@@ -120,7 +119,8 @@ function placeDisplay(record, index) {
     });
 
     Ext.Ajax.request({
-        url: (urlPrefix+'/places/'+record.data.id+'/details.json'),
+        method: 'GET',
+        url: ('/places/'+restaurant_id+'/details.json'),
         reader: {
              type: 'json'
         },
@@ -142,9 +142,10 @@ function placeDisplay(record, index) {
             );
             // woah baby, this is a nasty hack but the map refuses to behave unless you trigger resize after a delay AFTER the initial ajax returns
             Ext.Ajax.request({
-                url: (urlPrefix+'/places/'+record.data.id+'.json'),
+                method: 'GET',
+                url: '/places/'+restaurant_id + '.json',
                 reader: {
-                     type: 'json'
+                   type: 'json'
                 },
                 success: function(response) {
                     google.maps.event.trigger(Ext.getCmp('googleMap').map, 'resize');
@@ -160,6 +161,7 @@ function placeDisplay(record, index) {
 function starDisplay(rating) {
     return '<img src="../images/ratings/rating-dish-'+parseInt(rating)+'.png">';
 }
+
 var newRestaurant = new Ext.form.FormPanel({
     scroll: 'vertical',
     dockedItems:[
@@ -233,7 +235,7 @@ var newRestaurant = new Ext.form.FormPanel({
                    var s = Ext.getCmp('restaurantAddress').getValue()+" "+Ext.getCmp('restaurantCity').getValue()+" "+Ext.getCmp('restaurantState').getValue()+" "+Ext.getCmp('restaurantZip').getValue();
 
                    var geocoder = new google.maps.Geocoder();
-                   geocoder.geocode( { 'address': s}, function(results, status) {
+                   geocoder.geocode( {'address': s}, function(results, status) {
                        if (status == google.maps.GeocoderStatus.OK) {
                            stringLocation = results[0].geometry.location.toString().replace("(","").replace(")","");
                            coordsArray = stringLocation.split(",");

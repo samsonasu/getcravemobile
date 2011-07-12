@@ -31,9 +31,19 @@ Crave.show_user_profile = function(user_id) {
 };
 
 Crave.show_menu_item = function(menu_item_id) {
-  alert('show menu item: ' + menu_item_id);
+  Ext.Ajax.request({
+    method: 'GET', // REST is fun
+    url: '/items/'+menu_item_id+'.json',
+    reader: {
+      type: 'json'
+    },
+    success: function(response) {
+      dishDisplay(response);
+    }
+  });
+  Ext.getCmp('mainPnl').setActiveItem(0);
 };
 
 Crave.show_restaurant = function(restaurant_id) {
-  alert('show restaurant:' + restaurant_id);
+  placeDisplay(restaurant_id);
 };

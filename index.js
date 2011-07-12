@@ -73,7 +73,7 @@ Ext.setup({
     });
     placesList.on('itemtap', function(dataView, index, item, e) {
       record = dataView.store.data.items[index];
-      placeDisplay(record, index);
+      placeDisplay(record.data.id);
     });
 
     var dishList = new Ext.List({
@@ -91,19 +91,17 @@ Ext.setup({
 
     dishList.on('itemtap', function(dataView, index, item, e) {
       var thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
-
-      Ext.Ajax.request({
-        url: (urlPrefix+'/items/'+thisId+'.json'),
-        reader: {
-          type: 'json'
-        },
-        success: function(response) {
-          dishDisplay(response);
-        }
-      });
-      Ext.getCmp('mainPnl').setActiveItem(0);
-    //Ext.getCmp('detailPnl').setLoading(false);
-
+      Crave.show_menu_item(thisId);
+//      Ext.Ajax.request({
+//        method: 'GET', // REST is fun
+//        url: '/items/'+thisId+'.json',
+//        reader: {
+//          type: 'json'
+//        },
+//        success: function(response) {
+//          dishDisplay(response);
+//        }
+//      });
     });
 
     var savedList = new Ext.List({
@@ -123,7 +121,7 @@ Ext.setup({
     savedList.on('itemtap', function(dataView, index, item, e) {
       var thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
       Ext.Ajax.request({
-        url: (urlPrefix+'/items/'+thisId+'.json'),
+        url: ('/items/'+thisId+'.json'),
         reader: {
           type: 'json'
         },
@@ -203,16 +201,14 @@ Ext.setup({
         var amiLoggedIn = isLoggedIn();
         if(amiLoggedIn) {
           console.log('/users/'+localStorage.getItem("uid")+'/ratings.json?page=1');
-          if(urlPrefixSet) {
-            myDishStoreUrl = '/wg/proxy.php?url='+encodeURIComponent('http://getcrave.com/users/'+localStorage.getItem("uid")+'/ratings.json?page=1&mobile=1');
-            myProfileUrl = urlPrefix+encodeURIComponent('/users/'+localStorage.getItem("uid")+'.json');
-          } else {
-            myDishStoreUrl = 'http://getcrave.com/users/'+localStorage.getItem("uid")+'/ratings.json?page=1&mobile=1';
-            myProfileUrl = 'http://getcrave.com/users/'+localStorage.getItem("uid")+'.json';
-          }
+          var uid = localStorage.getItem('uid');
           loggedinProfilePnl.setLoading(true);
           Ext.Ajax.request({
-            url: (myDishStoreUrl),
+            method: 'GET',
+            url: "/users/" + uid + "/ratings.json",
+            params: {
+              page: 1
+            },
             reader: {
               type: 'json'
             },
@@ -240,7 +236,8 @@ Ext.setup({
             }
           });
           Ext.Ajax.request({
-            url: (myProfileUrl),
+            method: 'GET',
+            url: "/users/" + uid + ".json",
             reader: {
               type: 'json'
             },
@@ -256,12 +253,7 @@ Ext.setup({
       console.log(b);
       console.log(e);
       if(target == "saved") {
-        if(urlPrefixSet) {
-          savedDishStore.proxy.url = urlPrefix+encodeURIComponent('/users/'+localStorage.getItem("uid")+'/saved.json');
-        } else {
-          savedDishStore.proxy.url = 'http://getcrave.com/users/'+localStorage.getItem("uid")+'/saved.json';
-        }
-        console.log(savedDishStore.proxy.url);
+        savedDishStore.proxy.url = "/users/" + uid + "/saved.json";
         savedDishStore.load(function() {
           console.log('saved dish store loaded');
           console.log(savedDishStore);
