@@ -17,7 +17,6 @@ var dishSearchStore = new Ext.data.Store({
 var restaurantSearchStore = new Ext.data.Store({
     model: 'Restaurants',
     id: 'restaurants',
-
     proxy: {
         type:'ajax',
         url:'',

@@ -84,15 +84,16 @@ var filterListPnl = new Ext.Panel({
 });
 
 
-dishTemplate = new Ext.XTemplate.from('dishesTemplate',
-    {distDisplay: function(miles) {
-        feet = Math.round(miles * 5280);
-        if(feet<1000) {
-            return feet+" feet";
-        } else {
-            return parseFloat(miles).toFixed(1)+' miles';
-        }
-    }});
+dishTemplate = new Ext.XTemplate.from('dishesTemplate', {
+  distDisplay: function(miles) {
+    feet = Math.round(miles * 5280);
+    if(feet<1000) {
+      return feet+" feet";
+    } else {
+      return parseFloat(miles).toFixed(1)+' miles';
+    }
+  }
+});
 
 Ext.regModel('Dish',
 {
@@ -157,8 +158,8 @@ var dishStore = new Ext.data.Store({
         }
     },
     proxy: {
-        type:'ajax',
-        url:'',
+       type:'ajax',
+       url: '/items/nearby.json',
        reader: {
            type:'json',
            record:'menu_item'

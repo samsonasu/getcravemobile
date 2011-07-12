@@ -54,11 +54,10 @@ Ext.regModel('DishSearch',
 
 var places = new Ext.data.Store({
    model: 'Restaurants',
-    id: 'places',
-
+   id: 'places',
    proxy: {
        type:'ajax',
-       url:'',
+       url: '/places.json',
        reader: {
            type:'json',
            record:'restaurant'
