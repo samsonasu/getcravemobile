@@ -37,6 +37,7 @@ Crave.activityPanel = new Ext.Panel({
   iconCls:'activity',
   id:'activityPnlTab',
   layout: 'fit',
+  loadingText: "Loading...",
   dockedItems: [{
     xtype: 'toolbar',
     ui:'light',
@@ -48,19 +49,25 @@ Crave.activityPanel = new Ext.Panel({
       xtype:'segmentedbutton',
       items:[{
         text: 'Following',
-        pressed: false,
+        pressed: true,
         handler:function() {
-          Crave.activityStore.proxy.extraParams.followed_by = "user_id";
-          Crave.activityStore.load();
+          Crave.activityPanel.setLoading(true);
+          delete Crave.activityStore.proxy.extraParams.all;
+          Crave.activityStore.load(function() {
+            Crave.activityPanel.setLoading(false);
+          });
         },
         ui:'round',
         width:'110'
       },{
         text:'All',
-        pressed: true,
+        pressed: false,
         handler:function() {
-          delete Crave.activityStore.proxy.extraParams.followed_by;
-          Crave.activityStore.load();
+          Crave.activityPanel.setLoading(true);
+          Crave.activityStore.proxy.extraParams.all = "true";
+          Crave.activityStore.load(function() {
+            Crave.activityPanel.setLoading(false);
+          });
         },
         ui:'round',
         width:'110'
@@ -69,7 +76,6 @@ Crave.activityPanel = new Ext.Panel({
   }],
   items: {
     xtype: 'list',
-    //fullscreen: true,
     itemTpl: new Ext.XTemplate.from('ratingTemplate',{
       ratingDisplay: function(rating) {
         return "<img class='stars' src='../images/rating-my-" + rating + ".png' >"
@@ -82,12 +88,18 @@ Crave.activityPanel = new Ext.Panel({
     indexBar: false,
     store: Crave.activityStore,
     plugins: [new mobile.plugins.ListPullPager({
+        previousEnabled: false,
+        nextEnabled: true,
 		previousFn: function(cb,scope){
-		    Crave.activityStore.previousPage();
+            Crave.activityStore.previousPage();
+            if (Crave.activityStore.currentPage === 1) {
+              this.setPreviousEnabled(false);
+            }
 		    cb.call(this);
 		},
 		nextFn: function(cb,scope){
 		    Crave.activityStore.nextPage();
+            this.setPreviousEnabled(true);
 		    cb.call(this);
 		}
     })]
