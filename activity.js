@@ -15,8 +15,9 @@ Ext.regModel("MenuItemRating", {
   }]
 });
 
-Crave.activityStore = new Ext.data.JsonStore({
+Crave.activityStore = new Ext.data.Store({
   model: 'MenuItemRating',
+  clearOnPageLoad: false,
   proxy: {
     type:'ajax',
     extraParams: {},
@@ -83,26 +84,12 @@ Crave.activityPanel = new Ext.Panel({
     }),
     itemSelector: '.arating',
     scroll:'vertical',
+    loadingText: 'Loading',
     singleSelect: true,
     grouped: true,
     indexBar: false,
     store: Crave.activityStore,
-    plugins: [new mobile.plugins.ListPullPager({
-        previousEnabled: false,
-        nextEnabled: true,
-		previousFn: function(cb,scope){
-            Crave.activityStore.previousPage();
-            if (Crave.activityStore.currentPage === 1) {
-              this.setPreviousEnabled(false);
-            }
-		    cb.call(this);
-		},
-		nextFn: function(cb,scope){
-		    Crave.activityStore.nextPage();
-            this.setPreviousEnabled(true);
-		    cb.call(this);
-		}
-    })]
+    plugins: [new Ext.plugins.ListPagingPlugin()]
   }
 });
 
