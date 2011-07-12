@@ -25,3 +25,15 @@ var rateHandler = function(b,e) {
     }
 
 }
+
+Crave.show_user_profile = function(user_id) {
+  alert('show profile: ' + user_id);
+};
+
+Crave.show_menu_item = function(menu_item_id) {
+  alert('show menu item: ' + menu_item_id);
+};
+
+Crave.show_restaurant = function(restaurant_id) {
+  alert('show restaurant:' + restaurant_id);
+};

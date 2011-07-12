@@ -439,3 +439,8 @@ margin-top: -2px;
 .arating .ratingListItem .review {
   color: #888;
 }
+
+.arating .ratingDescription A {
+  color: #01669a;
+  text-decoration: none;
+}

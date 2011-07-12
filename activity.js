@@ -4,11 +4,15 @@
  */
 
 Ext.regModel("MenuItemRating", {
-  fields: ["rating","created_at", "updated_at", "review", "id", "user_id", "menu_item_id"],
-  belongsTo: {
+  fields: ["rating","created_at", "updated_at", "review", "id", "user_id", "menu_item_id", "user", "menu_item"],
+  belongsTo: [{
     model: 'Dish',
+    name: 'menu_item',
     foreignKey: 'menu_item_id'
-  }
+  },{
+    model: 'User',
+    name: 'user'
+  }]
 });
 
 Crave.activityStore = new Ext.data.JsonStore({
@@ -55,7 +59,7 @@ Crave.activityPanel = new Ext.Panel({
         text:'All',
         pressed: true,
         handler:function() {
-          Crave.activityStore.proxy.extraParams.followed_by = undefined;
+          delete Crave.activityStore.proxy.extraParams.followed_by;
           Crave.activityStore.load();
         },
         ui:'round',

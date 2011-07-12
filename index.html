@@ -125,14 +125,16 @@
         <div class="arating">
             <img src="../images/no-image-default.png" class="dishImg">
             <div class="ratingListItem">
-                <span class="ratingDescription">User {user_id} rated the Dish {menu_item_id} @ (restaurant){restaurant_name}</span><br/>
+                <span class="ratingDescription">
+                  <a style="font-weight: bold;" href="#" onclick="Crave.show_user_profile({user.id});">{user.user_name}</a>
+                  rated <a href="#" onclick="Crave.show_menu_item({menu_item.id})">{menu_item.name}</a>
+                  @ <a href="#" onclick="Crave.show_restaurant({menu_item.restaurant.id})">{menu_item.restaurant.name}</a></span><br/>
                 {[this.ratingDisplay(values.rating)]}<br/>
                 <span class="review">{review}</span>
             </div>
         </div>
     </tpl>
 </textarea>
-
 
 
 <!--<script type="text/javascript" src="/contractor/lib/sencha-touch-debug.js"></script>-->
