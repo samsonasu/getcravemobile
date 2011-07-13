@@ -14,7 +14,7 @@ Ext.setup({
       if (options.url.substring(0, urlPrefix.length) !== urlPrefix) {
         options.url = urlPrefix + options.url;
       }
-      if (local) {
+      if (true || local) {
         if (!options.params) {
           options.params = {};
         }
