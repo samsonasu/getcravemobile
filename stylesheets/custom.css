@@ -36,29 +36,31 @@ padding: .3em .3em;
 	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #F1F1F1));
 }
 
+/** frame panel thing used on the filters screen and probably elsewhere **/
 .framePanel {
-  margin: 8px 15px 8px 15px;
-  border 1px solid #888;
-  border-radius: 15px;
+  margin: .5em;
+  border-radius: 1em;
   background: white;
-  padding-bottom: 16px;
+  padding-bottom: .75em;
 }
 
 .framePanel .x-toolbar.title {
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  height: 2em;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
   background: #ddd;
+  margin-bottom: .5em;
 }
 .framePanel .x-toolbar.title .x-toolbar-title {
-  padding: 4px;
+  padding-left: 1em;
   text-align: left;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 1em;
   color: #333;
 }
 
 .framePanel .x-toolbar.x-docked-top  {
-  border-bottom: 0px;
+  border-bottom: 0;
 }
 
 .framePanel .x-panel-body {

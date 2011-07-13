@@ -64,12 +64,12 @@ Ext.setup({
       grouped: false,
       indexBar: false,
       store: places,
-
       floating:true,
       centered:true,
       modal:true,
       hideOnMaskTap: false,
-      clearSectionOnDeactivate:true
+      clearSectionOnDeactivate:true,
+      plugins: [new Ext.plugins.ListPagingPlugin()]
     });
     placesList.on('itemtap', function(dataView, index, item, e) {
       record = dataView.store.data.items[index];
@@ -86,22 +86,13 @@ Ext.setup({
       id:'dishesNearbyList',
       scroll:'vertical',
       hideOnMaskTap: false,
-      clearSectionOnDeactivate:true
+      clearSectionOnDeactivate:true,
+      plugins: [new Ext.plugins.ListPagingPlugin()]
     });
 
     dishList.on('itemtap', function(dataView, index, item, e) {
       var thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
       Crave.show_menu_item(thisId);
-//      Ext.Ajax.request({
-//        method: 'GET', // REST is fun
-//        url: '/items/'+thisId+'.json',
-//        reader: {
-//          type: 'json'
-//        },
-//        success: function(response) {
-//          dishDisplay(response);
-//        }
-//      });
     });
 
     var savedList = new Ext.List({

@@ -55,6 +55,7 @@ Ext.regModel('DishSearch',
 var places = new Ext.data.Store({
    model: 'Restaurants',
    id: 'places',
+   clearOnPageLoad: false,
    proxy: {
        type:'ajax',
        url: '/places.json',
@@ -127,7 +128,7 @@ function placeDisplay(restaurant_id) {
         success: function(response) {
              //try looping through single restaurant store here
              //populate top panel with restaurant data, map
-             var responseObject = eval('(' + response.responseText + ')');
+             var responseObject = Ext.decode(response.responseText);
             //set restaurant data locally now
              localStorage.setItem('editRestaurantId',responseObject.restaurant.id);
              htmlString = '<div class="restaurantInfo"><span class="restName">'+responseObject.restaurant.name+'</span><span class="restAddress">'+responseObject.restaurant.street_address+', '+responseObject.restaurant.city+'<br><span id="restaurantTotalRatings"></span> ratings</span><!--<a class="newDish">add dish</a>--></div>';
@@ -143,7 +144,7 @@ function placeDisplay(restaurant_id) {
             // woah baby, this is a nasty hack but the map refuses to behave unless you trigger resize after a delay AFTER the initial ajax returns
             Ext.Ajax.request({
                 method: 'GET',
-                url: '/places/'+restaurant_id + '.json',
+                url: '/places/'+restaurant_id + '/items.json',
                 reader: {
                    type: 'json'
                 },
