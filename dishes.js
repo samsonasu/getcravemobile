@@ -55,7 +55,7 @@ var searchHandler = function(b,e) {
     backHandler();
     dishSearchStore.proxy.extraParams.q = labelString;
     var dfb = Ext.getCmp('distanceFilterButton').getPressed();
-    dishSearchStore.proxy.extraParams.d = dfb.filter_value;
+    dishSearchStore.proxy.extraParams.within = dfb.filter_value;
     dishSearchStore.load();
     console.log(dishSearchStore.proxy.url);
     Ext.getCmp('listPnl').setActiveItem(searchPnl);

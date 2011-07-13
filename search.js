@@ -7,6 +7,9 @@ var dishSearchStore = new Ext.data.Store({
     proxy: {
        type:'ajax',
        url:'/items/search.json',
+       extraParams: {
+         distance: 'yes'
+       },
        reader: {
            type:'json',
            record:'menu_item'
