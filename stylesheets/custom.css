@@ -426,10 +426,63 @@ text-rendering: optimizeLegibility;
 
 .filtersButton {background-image:url('../../images/filter-icon.png');}
 
-.userTopPnl {background-color:#fff;}
-.userPic, .userInfoPnl {float:left;}
+.userTopPnl {
+  background-color:#f9ecc0;
+  height: 100px
+}
+.userTopPnl .userPic {
+  float:left;
+}
+.userTopPnl .userInfo {
+  margin-left: 100px;
+  padding: 8px;
+}
+.userTopPnl .userInfo .userName {
+  font-size: 1em;
+  font-weight: bold;
+  color: #e9553b;
+}
+.userTopPnl .userInfo .reviewCount {
+  font-size: .8em;
+  margin-top: 6px;
+  color: #aaa;
+}
 
-.reviewCount {clear:both;}
+.userTopPnl .userInfo BUTTON.follow {
+  border-radius: .8em;
+  font-size: .8em;
+  margin-top: 6px;
+  width: 100px;
+  text-align: center;
+  color: #00679a;
+}
+
+.profileToolbar {
+  width: 100%;
+  padding: 0;
+}
+.profileToolbar .x-button {
+  border-radius: 0;
+  margin: 0;
+  height: 40px;
+}
+.profileToolbar .chevrony {
+  position: relative;
+  top: 8px;
+  margin: 0;
+}
+
+.profileToolbar .x-button SPAN.number {
+   display: block;
+   font-size: 14px;
+   padding-left: 4px;
+}
+
+.profileToolbar .x-button SPAN.text {
+   display: block;
+   font-size: 12px;
+   color: #888;
+}
 
 .x-tabbar-dark {
 	background-color: #111;

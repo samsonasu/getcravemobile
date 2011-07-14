@@ -158,45 +158,6 @@ dishTemplate = new Ext.XTemplate.from('dishesTemplate', {
   }
 });
 
-Ext.regModel('Dish',
-{
-    fields: ['name','id','price','description','restaurant_id','restaurant','distance','menu_item_avg_rating_count','avg_rating',{
-        name: 'rating',
-        convert: function(value, record) {
-            if(record.get('menu_item_avg_rating_count').avg_rating) {
-                return record.get('menu_item_avg_rating_count').avg_rating.toString();
-            } else {
-                return "unrated";
-            }
-        }
-    },{
-        name: 'restaurant_name',
-        convert: function(value, record) {
-            return record.get('restaurant').name.toString();
-        }
-    }]
-});
-
-Ext.regModel('savedDish',
-{
-    fields: ['menu_item','menu_item_avg_rating_count','avg_rating',{
-        name: 'rating',
-        convert: function(value, record) {
-            if(record.get('menu_item').menu_item_avg_rating_count) {
-                return record.get('menu_item').menu_item_avg_rating_count.avg_rating.toString();
-            } else {
-                console.log('one is UNRATED');
-                return "unrated";
-            }
-        }
-    },{
-        name: 'name',
-        convert: function(value, record) {
-            return record.get('menu_item').name.toString();
-        }
-    }]
-});
-
 var dishStore = new Ext.data.Store({
     model: 'Dish',
     clearOnPageLoad: false,

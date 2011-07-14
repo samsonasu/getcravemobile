@@ -1,5 +1,8 @@
 var backHandler = function(b,e) {
+   //this should be much better
    Crave.viewport.setActiveItem(0);
+   Ext.getCmp('mainPnl').setActiveItem(listPnl);
+   listPnl.setActiveItem(1);
 }
 var rateHandler = function(b,e) {
     if(b.getText() == "Rate") {
@@ -25,7 +28,10 @@ var rateHandler = function(b,e) {
 }
 
 Crave.show_user_profile = function(user_id) {
-  alert('show profile: ' + user_id);
+  var mainPnl = Ext.getCmp('mainPnl');
+  mainPnl.setActiveItem(profilePnl);
+  profilePnl.setActiveItem(userProfilePnl);
+  userProfilePnl.load_user_data(user_id);
 };
 
 Crave.show_menu_item = function(menu_item_id) {

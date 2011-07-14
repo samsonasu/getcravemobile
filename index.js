@@ -172,85 +172,27 @@ Ext.setup({
 
     var sessionHandler = function(b,e) {
       var target = $(e).attr("class");
-      /*if(b.getText() == "Login") {
-                   window.location = 'http://getcrave.com/auth/facebook';
-               }
-               if(b.getText() == "Logout") {
-                   localStorage.setItem("uid","");
-                   Ext.getCmp("loginButton").setVisible(true);
-                   Ext.getCmp("logoutButton").setVisible(false);
-               }
-               if(b.getText() == "New Restaurant") {
-                   Ext.getCmp('listPnl').setActiveItem(newRestaurant);
-               }
-               */
       if(target == "nearBy") {
 
-      }
-      if(target == "me") {
-        // The process of becoming a badass javascript programmer is paved with endless acts of idiocy
+      } else if (target == "me") {
         var amiLoggedIn = isLoggedIn();
+        console.log("targeted ME");
         if(amiLoggedIn) {
-          console.log('/users/'+localStorage.getItem("uid")+'/ratings.json?page=1');
           var uid = localStorage.getItem('uid');
-          loggedinProfilePnl.setLoading(true);
-          Ext.Ajax.request({
-            method: 'GET',
-            url: "/users/" + uid + "/ratings.json",
-            params: {
-              page: 1
-            },
-            reader: {
-              type: 'json'
-            },
-            success: function(response) {
-              var responseObject = Ext.decode(response.responseText);
-              //loop through ratings
-              //add each one as data store item to myDishStore
-              var ratingsArray = new Array();
-              for(g=0;g<responseObject.user.menu_item_ratings.length;g++) {
-                var newRating = responseObject.user.menu_item_ratings[g];
-                //the id represents the dish id
-                ratingsArray[g] = {
-                  id: newRating.menu_item.id,
-                  rating: newRating.rating,
-                  name: newRating.menu_item.name,
-                  restaurant_name: newRating.menu_item.restaurant.name,
-                  review: newRating.review,
-                  menu_item_id: newRating.menu_item_id
-                  };
-                myDishStore.loadData(ratingsArray);
-              //refresh myDishList here
-              }
-              loggedinProfilePnl.setLoading(false);
-              myDishList.refresh();
-            }
-          });
-          Ext.Ajax.request({
-            method: 'GET',
-            url: "/users/" + uid + ".json",
-            reader: {
-              type: 'json'
-            },
-            success: function(response) {
-              var responseObject = eval('(' + response.responseText + ')');
-              $(".userPic").html('<img src="'+responseObject.user.user_profile_pic_url+'?type=large" width="100" height="100">');
-              $(".reviewCount").html(responseObject.user.user_ratings_count+" reviews");
-              $(".profileUsername").html('<span class="userName">'+responseObject.user.user_name+'</span>');
-            }
-          });
+          profilePnl.setActiveItem(userProfilePnl);
+          userProfilePnl.load_user_data(uid);
+        } else {
+          profilePnl.setActiveItem(profileLoginPnl);
+          profilePnl.doLayout();
         }
-      }
-      console.log(b);
-      console.log(e);
-      if(target == "saved") {
+      } else if (target == "saved") {
         savedDishStore.proxy.url = "/users/" + uid + "/saved.json";
         savedDishStore.load(function() {
           console.log('saved dish store loaded');
           console.log(savedDishStore);
         });
       }
-    }
+    } //end session handler
 
     var tapHandler = function(b,e) {
       if(b.getText() == "Food") {
@@ -262,12 +204,7 @@ Ext.setup({
       //Ext.getCmp("newRestButton").setVisible(true);
       }
     }
-    var filtersHandler = function(b,e) {
-     em(filterListPnl);
-      //Ext.getCmp('mainPnl').setActiveItem(filterListPnl);
-      labelString = "";
-    }
-
+   
     var detailPnl = new Ext.Panel({
       items: [infoPnl,reviewPnl],
       id: 'detailPnl',
@@ -320,6 +257,8 @@ Ext.setup({
 
     //intentionally not using var to make this global
     listPnl = new Ext.Panel({
+      title:'Nearby',
+      iconCls:'nearBy',
       id: 'listPnl',
       items: [dishList,placesList,searchPnl,newRestaurant],
       layout: {
@@ -391,25 +330,15 @@ Ext.setup({
 
     var mainPnl = new Ext.TabPanel({
       id: 'mainPnl',
-      layout:'card',
       activeItem:1,
       items: [{
         items:[detailPnl]
-      },{
-        title:'Nearby',
-        iconCls:'nearBy',
-        id:'listPnlTab',
-        items:[listPnl]
-      },
+      },listPnl,
       Crave.activityPanel, {
         title:'Saved',
         iconCls:'saved',
         items:[savedPnl]
-      },{
-        title:'Me',
-        iconCls:'me',
-        items:[profilePnl]
-      },
+      },profilePnl,
       placePnl, {
         width:0,
         items:[newDishForm]
@@ -437,8 +366,6 @@ Ext.setup({
       layout: 'card',
       items: [mainPnl, filterListPnl]
     });
-
-    justLoggedIn();
 
     $(".starcover").live("click",function(event) {
       var rating = event.currentTarget.id.toString().replace("id-star","");

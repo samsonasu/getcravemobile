@@ -3,17 +3,6 @@
  * and open the template in the editor.
  */
 
-Ext.regModel("MenuItemRating", {
-  fields: ["rating","created_at", "updated_at", "review", "id", "user_id", "menu_item_id", "user", "menu_item"],
-  belongsTo: [{
-    model: 'Dish',
-    name: 'menu_item',
-    foreignKey: 'menu_item_id'
-  },{
-    model: 'User',
-    name: 'user'
-  }]
-});
 
 Crave.activityStore = new Ext.data.Store({
   model: 'MenuItemRating',
@@ -30,7 +19,6 @@ Crave.activityStore = new Ext.data.Store({
   getGroupString: function(record) {
     return TouchBS.pretty_date(record.get('created_at'));
   }
-
 });
 
 Crave.activityPanel = new Ext.Panel({

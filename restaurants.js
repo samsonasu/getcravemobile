@@ -10,48 +10,6 @@ restaurantTemplate = new Ext.XTemplate('<tpl for="."><div class="adish"><img src
 
 restaurantDishTemplate = new Ext.XTemplate.from('restDishTemplate');
 
-Ext.regModel('RestaurantDish',
-{
-    fields: ['name','id','price','description','restaurant_id','restaurant','distance','menu_item_avg_rating_count','avg_rating','count',{
-        name: 'rating',
-        convert: function(value, record) {
-            if(record.get('menu_item_avg_rating_count').avg_rating) {
-                return record.get('menu_item_avg_rating_count').avg_rating.toString();
-            } else {
-                return "unrated";
-            }
-        }
-    },{
-        name: 'rating_count',
-        convert: function(value, record) {
-            if(record.get('menu_item_avg_rating_count').count) {
-                if(record.get('menu_item_avg_rating_count').count.toString()=="1") {
-                    return record.get('menu_item_avg_rating_count').count.toString()+" review";
-                } else {
-                    return record.get('menu_item_avg_rating_count').count.toString()+" reviews";
-                }
-            } else {
-                return "";
-            }
-        }
-    },{
-        name: 'restaurant_name',
-        convert: function(value, record) {
-            return record.get('restaurant').name.toString();
-        }
-    }]
-});
-
-Ext.regModel('Restaurants',
-{
-    fields: ['distance','name','id']
-});
-
-Ext.regModel('DishSearch',
-{
-    fields: ['name','id','price','description','restaurant_id']
-});
-
 var places = new Ext.data.Store({
    model: 'Restaurants',
    id: 'places',
