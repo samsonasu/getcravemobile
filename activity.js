@@ -9,7 +9,7 @@ Crave.activityStore = new Ext.data.Store({
   clearOnPageLoad: false,
   proxy: {
     type:'ajax',
-    extraParams: {},
+    extraParams: isLoggedIn() ? {} : {all: true},
     url: '/activity.json',
     reader: {
       type:'json',
@@ -38,24 +38,23 @@ Crave.activityPanel = new Ext.Panel({
       xtype:'segmentedbutton',
       items:[{
         text: 'Following',
-        pressed: true,
+        pressed: isLoggedIn() ? true : false,
         handler:function() {
-          Crave.activityPanel.setLoading(true);
           delete Crave.activityStore.proxy.extraParams.all;
           Crave.activityStore.load(function() {
-            Crave.activityPanel.setLoading(false);
+            Ext.getCmp('activityList').scroller.scrollTo({x: 0, y: 0}, false, null, true);
           });
+          
         },
         ui:'round',
         width:'110'
       },{
-        text:'All',
-        pressed: false,
+        text:'All Foodies',
+        pressed: isLoggedIn() ? false : true,
         handler:function() {
-          Crave.activityPanel.setLoading(true);
           Crave.activityStore.proxy.extraParams.all = "true";
           Crave.activityStore.load(function() {
-            Crave.activityPanel.setLoading(false);
+            Ext.getCmp('activityList').scroller.scrollTo({x: 0, y: 0}, false, null, true);
           });
         },
         ui:'round',
@@ -65,6 +64,7 @@ Crave.activityPanel = new Ext.Panel({
   }],
   items: {
     xtype: 'list',
+    id: 'activityList',
     itemTpl: new Ext.XTemplate.from('ratingTemplate',{
       ratingDisplay: Crave.ratingDisplay
     }),

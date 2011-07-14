@@ -8,6 +8,10 @@ function isLoggedIn() {
     }
 }
 
+Crave.currentUserId = function() {
+  return localStorage.getItem("uid");
+}
+
 Crave.sign_out = function() {
   localStorage.setItem("uid","");
 }

@@ -46,6 +46,11 @@ Crave.show_menu_item = function(menu_item_id) {
     }
   });
   Ext.getCmp('mainPnl').setActiveItem(0);
+
+  
+  //Crave.viewport.setActiveItem(Crave.dishDisplayPanel);
+  //Crave.dishDisplayPanel.load_dish_data(menu_item_id);
+
 };
 
 Crave.show_restaurant = function(restaurant_id) {
@@ -54,9 +59,24 @@ Crave.show_restaurant = function(restaurant_id) {
 
 Crave.ratingDisplay = function(rating) {
   try {
-    parseInt(rating);
-    return "<img class='stars' src='../images/rating-my-" + rating + ".png' >"
+    return "<img class='stars' src='../images/rating-my-" + parseInt(rating)+ ".png' >"
   } catch(ex) {
     return "unrated";
+  }
+}
+
+//call this and then put it in docketItems[]
+//config.items is any buttons you want (back button, etc)
+Crave.create_titlebar = function(config) {
+  return {
+    dock:'top',
+    xtype:'toolbar',
+    ui:'light',
+    title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
+    layout: {
+      type: 'hbox',
+      pack:'justify'
+    },
+    items: config.items
   }
 }

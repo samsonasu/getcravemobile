@@ -10,7 +10,7 @@ var userDishStore = new Ext.data.Store({
         record:'menu_item_rating'
       }
     },
-    sorters: [{property: 'arating', direction: 'DESC'}],
+    sorters: [{property: 'rating', direction: 'DESC'}],
     getGroupString : function(record) {
         var rating = parseInt(record.get('rating'));
         return Crave.ratingDisplay(rating);
@@ -24,10 +24,9 @@ var userDishList = new Ext.List({
     grouped: true,
     indexBar: false,
     store: userDishStore,
+    loadingText: undefined,
     id:'userDishList',
-    scroll:'vertical',
-    height: 200,
-    flex: 1,
+    scroll: false,
     clearSectionOnDeactivate:true,
     listeners: {
       itemtap:  function(dataView, index, item, e) {
@@ -64,30 +63,94 @@ var savedDishStore = new Ext.data.Store({
 
 
 var savedDishList = new Ext.List({
-    itemTpl: Ext.XTemplate.from(savedDishTemplate),
-    itemSelector: '.adish',
-    singleSelect: true,
-    grouped: true,
-    indexBar: false,
-    store: savedDishStore, //dishes.js
-    id:'savedList',
-    scroll:'vertical',
-    hideOnMaskTap: false,
-    width:'100%',
-    height:'100%',
-    clearSectionOnDeactivate:true,
-    listeners: {
-      itemtap: function(dataView, index, item, e) {
-        var dish_id = savedDishStore.getAt(index).data.menu_item.id;
-        Crave.show_menu_item(dish_id);
-      }
-    },
-    plugins: [new Ext.plugins.ListPagingPlugin()]
-  });
+  itemTpl: Ext.XTemplate.from(savedDishTemplate),
+  itemSelector: '.adish',
+  singleSelect: true,
+  grouped: true,
+  indexBar: false,
+  store: savedDishStore, //dishes.js
+  id:'savedList',
+  scroll:'vertical',
+  hideOnMaskTap: false,
+  width:'100%',
+  height:'100%',
+  clearSectionOnDeactivate:true,
+  listeners: {
+    itemtap: function(dataView, index, item, e) {
+      var dish_id = savedDishStore.getAt(index).data.menu_item.id;
+      Crave.show_menu_item(dish_id);
+    }
+  },
+  plugins: [new Ext.plugins.ListPagingPlugin()]
+});
+
+var followerStore = new Ext.data.Store({
+  model: "FollowUser",
+  clearOnPageLoad: false,
+  autoLoad: false,
+  sorters: [{property: 'user.user_name', direction: 'ASC'}],
+  proxy: {
+    type:'ajax',
+    extraParams: {},
+    url: '',
+    reader: {
+      type:'json',
+      model: 'FollowUser',
+      record: 'user_following'
+    }
+  },
+  getGroupString : function(record) {
+    return record.data.user.user_name[0].toUpperCase();
+  }
+});
+
+//people who follow me
+var followerList = new Ext.List({
+  itemTpl: "<div class='followUser'><img src='{user.user_profile_pic_url}'><span class='user_name'>{user.user_name}</span><span class='chevrony'></span></div>",
+  itemSelector: '.followUser',
+  singleSelect: true,
+  grouped: true,
+  data: {user: {}},
+  indexBar: false,
+  store: followerStore, //dishes.js
+  id:'followerList',
+  scroll:'vertical',
+  hideOnMaskTap: false,
+  clearSectionOnDeactivate:true,
+  listeners: {
+    itemtap: function(dataView, index, item, e) {
+      var user_id = followerStore.getAt(index).data.user_id;
+      Crave.show_user_profile(user_id);
+    }
+  },
+  plugins: [new Ext.plugins.ListPagingPlugin()]
+});
+
+//people i'm following
+var followingList = new Ext.List({
+  itemTpl: "<div class='followUser'><img src='{user.user_profile_pic_url}'><span class='user_name'>{user.user_name}</span><span class='chevrony'></span></div>",
+  itemSelector: '.followUser',
+  singleSelect: true,
+  grouped: true,
+  data: {user: {}},
+  indexBar: false,
+  store: followerStore, //dishes.js
+  id:'followingList',
+  scroll:'vertical',
+  hideOnMaskTap: false,
+  clearSectionOnDeactivate:true,
+  listeners: {
+    itemtap: function(dataView, index, item, e) {
+      var user_id = followerStore.getAt(index).data.user_id;
+      Crave.show_user_profile(user_id);
+    }
+  },
+  plugins: [new Ext.plugins.ListPagingPlugin()]
+});
 
 //This panel is for any user profiles (including the current user)
 var userProfilePnl = new Ext.Panel({
-    items:[{
+    items: [{
       xtype: 'panel',
       id: 'userInfoPnl',
       html: '<div class="userTopPnl"><div class="userPic"></div><div class="userInfoPnl"><div class="profileUsername"></div><div class="reviewCount"></div></div></div>',
@@ -107,18 +170,25 @@ var userProfilePnl = new Ext.Panel({
           text: "<span class='chevrony'></span><span class='number' id='savedNumber'>142</span><span class='text'>Saved</span>",
           handler: function() {
             profilePnl.setActiveItem(savedDishList);
+            Ext.getCmp('backToProfileButton').show();
           }
         },{
           flex: 1,
           text: "<span class='chevrony'></span><span class='number' id='followingNumber'>115</span><span class='text'>Following</span>",
           handler: function() {
-            alert('clicky');
+            followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/following.json";
+            followerStore.load();
+            profilePnl.setActiveItem(followingList);
+            Ext.getCmp('backToProfileButton').show();
           }
         },{
           flex: 1,
           text: "<span class='chevrony'></span><span class='number' id='followersNumber'>481</span><span class='text'>Followers</span>",
           handler: function() {
-            alert('clicky');
+            followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/followers.json";
+            followerStore.load();
+            profilePnl.setActiveItem(followerList);
+            Ext.getCmp('backToProfileButton').show();
           }
         },]
       }]
@@ -126,12 +196,12 @@ var userProfilePnl = new Ext.Panel({
     layout: {
       type: 'vbox'
     },
+    scroll: 'vertical',
     id: 'userProfilePnl',
     height:'100%',
     width:'100%',
-    displayed_user_id: null,
     load_user_data: function(user_id) {
-      if (this.displayed_user_id === user_id) {
+      if (profilePnl.displayed_user_id === user_id) {
         return;
       }
       profilePnl.setLoading(true);
@@ -139,9 +209,13 @@ var userProfilePnl = new Ext.Panel({
       Ext.Ajax.request({
         method: "GET",
         url: '/users/' + user_id + '.json',
+        params: {
+          current_user_id: Crave.currentUserId()
+        },
         success: function(response, options) {
           profilePnl.setLoading(false);
           var is_self = user_id === localStorage.getItem('uid')
+          profilePnl.displayed_user_id = user_id;
           var user = Ext.decode(response.responseText).user;
           var html = '<div class="userTopPnl"><div class="userPic">';
           html = html + '<img src="'+user.user_profile_pic_url+'?type=large" width="100" height="100"></div>'
@@ -183,17 +257,23 @@ var profilePnl = new Ext.Panel({
   title:'Me',
   iconCls:'me',
   layout: 'card',
-  items:[profileLoginPnl, userProfilePnl, savedDishList],
+  items:[profileLoginPnl, userProfilePnl, savedDishList, followerList, followingList],
   id: 'profilePnl',
   height:'100%',
   width:'100%',
-  activeItem: 0,
-  dockedItems:[{
-    dock:'top',
-    xtype:'toolbar',
-    ui:'light',
-    title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
+  activeItem: isLoggedIn() ? 0 : 1,
+  dockedItems: Crave.create_titlebar({
     items:[{
+      text: "Back",
+      hidden: true,
+      id: "backToProfileButton",
+      ui: 'normal',
+      handler: function(btn) {
+        profilePnl.setActiveItem(userProfilePnl);
+        userDishList.refresh();  //herp derp
+        btn.hide();
+      }
+    },{
       text:'Sign Out',
       id:'signOutButton',
       hidden: !isLoggedIn(),
@@ -204,7 +284,7 @@ var profilePnl = new Ext.Panel({
         profilePnl.setActiveItem(0);
       }
     }]
-  }],
+  }),
   cardSwitchAnimation: 'pop',
   direction:'horizontal'
 });

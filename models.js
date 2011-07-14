@@ -100,5 +100,17 @@ Ext.regModel('Restaurants',
 
 Ext.regModel('DishSearch',
 {
-    fields: ['name','id','price','description','restaurant_id']
+  fields: ['name','id','price','description','restaurant_id']
+});
+
+Ext.regModel('User', {
+  fields: ['facebook_id', 'id', 'user_ratings_count', 'user_profile_pic_url', 'user_name', 'twitter_id']
+});
+
+Ext.regModel('FollowUser', {
+  fields: ['user_name', 'id', 'user_id', 'following_user_id', 'user'],
+  belongsTo: {
+    model: 'User',
+    name: 'user'
+  }
 });

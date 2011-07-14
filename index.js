@@ -95,7 +95,44 @@ Ext.setup({
       Crave.show_menu_item(thisId);
     });
 
-    
+/*
+    var dishPlaceStore = new Ext.data.Store({
+        model: 'Dish',
+        clearOnPageLoad: true,
+        sorters: [{property: 'arating', direction: 'ASC'}],
+        getGroupString : function(record) {
+            var rating = parseInt(record.get('rating'));
+            return Crave.ratingDisplay(rating);
+        },
+        proxy: {
+           type:'ajax',
+           url: '/items/nearby.json',
+           reader: {
+               type:'json',
+               record:'menu_item'
+           }
+        }
+    });
+
+
+    var dishPlaceList = new Ext.List({
+      itemTpl: Ext.XTemplate.from('dishPlaceTemplate'),
+      itemSelector: '.item',
+      singleSelect: true,
+      grouped: true,
+      indexBar: false,
+      store: dishPlaceStore,
+      scroll:'vertical',
+      hideOnMaskTap: false,
+      clearSectionOnDeactivate:true,
+      plugins: [new Ext.plugins.ListPagingPlugin()],
+      listeners: {
+        itemtap: function(dataView, index, item, e) {
+          
+        }
+      }
+    });
+*/
 
     var infoPnl = new Ext.Panel({
       html: '',
@@ -162,16 +199,6 @@ Ext.setup({
       } 
     } //end session handler
 
-    var tapHandler = function(b,e) {
-      if(b.getText() == "Food") {
-        Ext.getCmp('listPnl').setActiveItem(dishList);
-      //Ext.getCmp("newRestButton").setVisible(false);
-      }
-      if(b.getText() == "Places") {
-        Ext.getCmp('listPnl').setActiveItem(placesList);
-      //Ext.getCmp("newRestButton").setVisible(true);
-      }
-    }
    
     var detailPnl = new Ext.Panel({
       items: [infoPnl,reviewPnl],
@@ -184,16 +211,7 @@ Ext.setup({
       scroll:'vertical',
       width:'100%',
       height:'100%',
-      dockedItems:[
-      {
-        dock:'top',
-        xtype:'toolbar',
-        ui:'light',
-        title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
-        layout: {
-          type: 'hbox',
-          pack:'justify'
-        },
+      dockedItems: Crave.create_titlebar({
         items:[{
           text:'Back',
           ui:'back',
@@ -203,8 +221,7 @@ Ext.setup({
           ui:'normal',
           handler:rateHandler
         }]
-      }
-      ]
+      })
     });
 
     //intentionally not using var to make this global
@@ -231,17 +248,31 @@ Ext.setup({
         items:[{
           xtype:'segmentedbutton',
           items:[{
+            text: "All",
+            id: 'allButton',
+            pressed: true,
+            hidden: true,
+            handler:function () {
+              listPnl.setActiveItem(dishPlacesList);
+            },
+            ui: 'round',
+            width: '110'
+          },{
             text:'Food',
             id:'dishesButton',
-            pressed:true,
-            handler:tapHandler,
+            pressed:false,
+            handler:function () {
+              listPnl.setActiveItem(dishList);
+            },
             ui:'round',
             width:'110'
           },{
             text:'Places',
             id:'placesButton',
             pressed:false,
-            handler:tapHandler,
+            handler:function () {
+              listPnl.setActiveItem(placesList);
+            },
             ui:'round',
             width:'110'
           }]
@@ -313,7 +344,7 @@ Ext.setup({
     Crave.viewport = new Ext.Panel({
       fullscreen: true,
       layout: 'card',
-      items: [mainPnl, filterListPnl]
+      items: [mainPnl, filterListPnl, Crave.dishDisplayPanel]
     });
 
     $(".starcover").live("click",function(event) {

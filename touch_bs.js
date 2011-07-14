@@ -38,7 +38,6 @@ TouchBS.get_date = function(date) {
              }
           }
       }
-
       return d;
    }
 };
@@ -50,7 +49,8 @@ TouchBS.pretty_date = function(date) {
   }
   var diff = (((new Date()).getTime() - date.getTime()) / 1000);
   var day_diff = Math.floor(diff / 86400);
-  if (day_diff === 0) return "Today"
+  
+  if (day_diff <= 0) return "Today" //time zones can cause the date to appear in the future
   else if (day_diff === 1) return "Yesterday"
   else if (day_diff < 8) return day_diff + " days ago"
   else if (day_diff < 31) return Math.ceil( day_diff / 7 ) + " weeks ago"
