@@ -12,24 +12,8 @@ var userDishStore = new Ext.data.Store({
     },
     sorters: [{property: 'arating', direction: 'DESC'}],
     getGroupString : function(record) {
-        rating = parseInt(record.get('rating'));
-        if(rating==5) {
-            return "<img src='../images/rating-stars/rating-dish-5.png'>";
-        }
-        if(rating==4) {
-            return "<img src='../images/rating-stars/rating-dish-4.png'>";
-        }
-        if(rating==3) {
-            return "<img src='../images/rating-stars/rating-dish-3.png'>";
-        }
-        if(rating==2) {
-            return "<img src='../images/rating-stars/rating-dish-2.png'>";
-        }
-        if(rating==1) {
-            return "<img src='../images/rating-stars/rating-dish-1.png'>";
-        } else {
-            return "unrated";
-        }
+        var rating = parseInt(record.get('rating'));
+        return Crave.ratingDisplay(rating);
     }
 });
 
@@ -42,7 +26,8 @@ var userDishList = new Ext.List({
     store: userDishStore,
     id:'userDishList',
     scroll:'vertical',
-    autoHeight: true,
+    height: 200,
+    flex: 1,
     clearSectionOnDeactivate:true,
     listeners: {
       itemtap:  function(dataView, index, item, e) {
@@ -139,7 +124,7 @@ var userProfilePnl = new Ext.Panel({
       }]
     },userDishList],
     layout: {
-      type: 'auto'
+      type: 'vbox'
     },
     id: 'userProfilePnl',
     height:'100%',
