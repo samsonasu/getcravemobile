@@ -152,6 +152,10 @@ var userProfilePnl = new Ext.Panel({
           }
           Ext.getCmp('userInfoPnl').update(html);
           Ext.getCmp('signOutButton').setVisible(is_self);
+          
+          $("#savedNumber").innerHTML = user.saved_count;
+          $("#followingNumber").innerHTML = user.following_count;
+          $("#followersNumber").innerHTML = user.followers_count;
         },
         failure: Ext.createDelegate(Crave.handle_failure, mainPnl)
       });
@@ -164,6 +168,7 @@ var userProfilePnl = new Ext.Panel({
       });
       savedDishStore.proxy.url = "/users/" + user_id + "/saved.json";
       savedDishStore.load();
+      
       
     }
 });
