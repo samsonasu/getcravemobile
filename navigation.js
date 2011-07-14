@@ -51,3 +51,12 @@ Crave.show_menu_item = function(menu_item_id) {
 Crave.show_restaurant = function(restaurant_id) {
   placeDisplay(restaurant_id);
 };
+
+Crave.ratingDisplay = function(rating) {
+  try {
+    parseInt(rating);
+    return "<img class='stars' src='../images/rating-my-" + rating + ".png' >"
+  } catch(ex) {
+    return "unrated";
+  }
+}

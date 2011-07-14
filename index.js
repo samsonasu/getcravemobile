@@ -95,33 +95,7 @@ Ext.setup({
       Crave.show_menu_item(thisId);
     });
 
-    var savedList = new Ext.List({
-      itemTpl: dishTemplate,
-      itemSelector: '.adish',
-      singleSelect: true,
-      grouped: true,
-      indexBar: false,
-      store: savedDishStore,
-      id:'savedList',
-      scroll:'vertical',
-      hideOnMaskTap: false,
-      width:'100%',
-      height:'100%',
-      clearSectionOnDeactivate:true
-    });
-    savedList.on('itemtap', function(dataView, index, item, e) {
-      var thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
-      Ext.Ajax.request({
-        url: ('/items/'+thisId+'.json'),
-        reader: {
-          type: 'json'
-        },
-        success: function(response) {
-          dishDisplay(response);
-        }
-      });
-      Ext.getCmp('mainPnl').setActiveItem(0);
-    });
+    
 
     var infoPnl = new Ext.Panel({
       html: '',
@@ -185,13 +159,7 @@ Ext.setup({
           profilePnl.setActiveItem(profileLoginPnl);
           profilePnl.doLayout();
         }
-      } else if (target == "saved") {
-        savedDishStore.proxy.url = "/users/" + uid + "/saved.json";
-        savedDishStore.load(function() {
-          console.log('saved dish store loaded');
-          console.log(savedDishStore);
-        });
-      }
+      } 
     } //end session handler
 
     var tapHandler = function(b,e) {
@@ -238,22 +206,6 @@ Ext.setup({
       }
       ]
     });
-
-    var savedPnl = new Ext.Panel({
-      id: 'savedPnl',
-      items: [savedList],
-      width:'100%',
-      height:'100%',
-      dockedItems:[
-      {
-        dock:'top',
-        xtype:'toolbar',
-        ui:'light',
-        title:'Saved Items'
-      }
-      ]
-    });
-
 
     //intentionally not using var to make this global
     listPnl = new Ext.Panel({
@@ -334,11 +286,8 @@ Ext.setup({
       items: [{
         items:[detailPnl]
       },listPnl,
-      Crave.activityPanel, {
-        title:'Saved',
-        iconCls:'saved',
-        items:[savedPnl]
-      },profilePnl,
+      Crave.activityPanel,
+      profilePnl,
       placePnl, {
         width:0,
         items:[newDishForm]

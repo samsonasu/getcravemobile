@@ -1,5 +1,6 @@
 var userDishStore = new Ext.data.Store({
     model: 'MenuItemRating',
+    clearOnPageLoad: false,
     proxy: {
       type:'ajax',
       extraParams: {},
@@ -41,17 +42,63 @@ var userDishList = new Ext.List({
     store: userDishStore,
     id:'userDishList',
     scroll:'vertical',
-    width:'100%',
-    height: '100%',
-    hideOnMaskTap: false,
+    autoHeight: true,
     clearSectionOnDeactivate:true,
     listeners: {
       itemtap:  function(dataView, index, item, e) {
         var record = userDishStore.getAt(index);
         Crave.show_menu_item(record.data.id);
       }
+    },
+    plugins: [new Ext.plugins.ListPagingPlugin()]
+});
+
+
+var savedDishStore = new Ext.data.Store({
+    model: 'savedDish',
+    clearOnPageLoad: false,
+    sorters: [{property: 'rating', direction: 'DESC'}],
+    getGroupString : function(record) {
+      try {
+        var rating = parseInt(record.data.menu_item.menu_item_avg_rating_count.avg_rating);
+        return Crave.ratingDisplay(rating);
+      } catch (ex) {
+        return "unrated"
+      }
+    },
+    proxy: {
+       type:'ajax',
+       url:'',
+       reader: {
+           type:'json',
+           model: 'savedDish',
+           record:'user_saved_menu_item'
+       }
     }
 });
+
+
+var savedDishList = new Ext.List({
+    itemTpl: Ext.XTemplate.from(savedDishTemplate),
+    itemSelector: '.adish',
+    singleSelect: true,
+    grouped: true,
+    indexBar: false,
+    store: savedDishStore, //dishes.js
+    id:'savedList',
+    scroll:'vertical',
+    hideOnMaskTap: false,
+    width:'100%',
+    height:'100%',
+    clearSectionOnDeactivate:true,
+    listeners: {
+      itemtap: function(dataView, index, item, e) {
+        var dish_id = savedDishStore.getAt(index).data.menu_item.id;
+        Crave.show_menu_item(dish_id);
+      }
+    },
+    plugins: [new Ext.plugins.ListPagingPlugin()]
+  });
 
 //This panel is for any user profiles (including the current user)
 var userProfilePnl = new Ext.Panel({
@@ -74,7 +121,7 @@ var userProfilePnl = new Ext.Panel({
           flex: 1,
           text: "<span class='chevrony'></span><span class='number' id='savedNumber'>142</span><span class='text'>Saved</span>",
           handler: function() {
-            alert('clicky');
+            profilePnl.setActiveItem(savedDishList);
           }
         },{
           flex: 1,
@@ -125,15 +172,13 @@ var userProfilePnl = new Ext.Panel({
       });
       //load reviews
       userDishStore.proxy.url = '/users/' + user_id + "/ratings.json";
-      userDishList.setLoading(true);
       userDishStore.load({
         params: {
           page: 1
-        },
-        callback: function() {
-          userDishList.setLoading(false);
         }
       });
+      savedDishStore.proxy.url = "/users/" + user_id + "/saved.json";
+      savedDishStore.load();
       
     }
 });
@@ -153,7 +198,7 @@ var profilePnl = new Ext.Panel({
   title:'Me',
   iconCls:'me',
   layout: 'card',
-  items:[profileLoginPnl, userProfilePnl],
+  items:[profileLoginPnl, userProfilePnl, savedDishList],
   id: 'profilePnl',
   height:'100%',
   width:'100%',

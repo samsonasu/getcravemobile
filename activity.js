@@ -66,9 +66,7 @@ Crave.activityPanel = new Ext.Panel({
   items: {
     xtype: 'list',
     itemTpl: new Ext.XTemplate.from('ratingTemplate',{
-      ratingDisplay: function(rating) {
-        return "<img class='stars' src='../images/rating-my-" + rating + ".png' >"
-      }
+      ratingDisplay: Crave.ratingDisplay
     }),
     itemSelector: '.arating',
     scroll:'vertical',

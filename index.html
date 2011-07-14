@@ -120,6 +120,20 @@
     </tpl>
 </textarea>
 
+<textarea id="savedDishTemplate" class="x-hidden-display">
+    <tpl for="menu_item">
+        <div class="adish">
+            <img src="../images/no-image-default.png" class="dishImg">
+            <div class="dishListinfo">
+                <span class="dishname">{name}</span>
+                <span class="restaurantName">@{restaurant.name}</span>
+            </div>
+            <span class="chevrony"></span>
+            </span>
+        </div>
+    </tpl>
+</textarea>
+
 <textarea id="ratingTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="arating">

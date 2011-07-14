@@ -27,22 +27,11 @@ Ext.regModel('Dish',
 
 Ext.regModel('savedDish',
 {
-    fields: ['menu_item','menu_item_avg_rating_count','avg_rating',{
-        name: 'rating',
-        convert: function(value, record) {
-            if(record.get('menu_item').menu_item_avg_rating_count) {
-                return record.get('menu_item').menu_item_avg_rating_count.avg_rating.toString();
-            } else {
-                console.log('one is UNRATED');
-                return "unrated";
-            }
-        }
-    },{
-        name: 'name',
-        convert: function(value, record) {
-            return record.get('menu_item').name.toString();
-        }
-    }]
+    fields: ['menu_item'],
+    belongsTo: {
+      name: 'menu_item',
+      model: "Dish"
+    }
 });
 
 
