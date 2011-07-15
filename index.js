@@ -1,6 +1,8 @@
 Ext.setup({
   glossOnIcon: false,
-  onReady: function() {
+  onReady: function(){
+    Crave.app_version = "1.0";
+    
     urlPrefix = "http://getcrave.com";
     var local = false;
 

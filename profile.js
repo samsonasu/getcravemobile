@@ -232,7 +232,6 @@ var userProfilePnl = new Ext.Panel({
             html = html + '<button id="followButton" onclick="Crave.follow_user(' + user_id + ');" class="follow">+ Follow</button>';
           }
           Ext.getCmp('userInfoPnl').update(html);
-          Ext.getCmp('signOutButton').setVisible(is_self);
           
           $("#savedNumber")[0].innerHTML = user.saved_count;
           $("#followingNumber")[0].innerHTML = user.following_count;
@@ -254,11 +253,6 @@ var userProfilePnl = new Ext.Panel({
     }
 });
 
-Crave.follow_user = function(user_id) {
-  //TODO: actually follow somebody
-  $("#followButton")[0].innerHTML = "- Unfollow";
-}
-
 profileLoginPnl = new Ext.Panel({
   html:'<div class="fancyImage"><img class="logoutButton" src="../images/profile-cold-food.png"></div><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="/auth/facebook" class="loginButton"></a>',
   id: 'profileLoginPnl',
@@ -269,7 +263,7 @@ var profilePnl = new Ext.Panel({
   title:'Me',
   iconCls:'me',
   layout: 'card',
-  items:[profileLoginPnl, userProfilePnl, savedDishList, followerList, followingList],
+  items:[profileLoginPnl, userProfilePnl, savedDishList, followerList, followingList, Crave.buildSettingsPanel()],
   id: 'profilePnl',
   height:'100%',
   width:'100%',
@@ -279,24 +273,33 @@ var profilePnl = new Ext.Panel({
       text: "Back",
       hidden: true,
       id: "backToProfileButton",
-      ui: 'normal',
+      ui: 'back',
       handler: function(btn) {
         profilePnl.setActiveItem(userProfilePnl);
         userDishList.refresh();  //herp derp
         btn.hide();
+        Ext.getCmp('profileSettingsButton').show();
       }
     },{
-      text:'Sign Out',
-      id:'signOutButton',
+      text:'Settings',
       hidden: !isLoggedIn(),
+      id: 'profileSettingsButton',
       ui:'normal',
       handler: function(b,e) {
-        Crave.sign_out();
-        this.hide();
-        profilePnl.setActiveItem(0);
+        profilePnl.setActiveItem(Crave.settingsPanel);
+        Ext.getCmp('backToProfileButton').show();
+        b.hide();
       }
     }]
   }),
   cardSwitchAnimation: 'pop',
   direction:'horizontal'
 });
+
+
+
+
+Crave.follow_user = function(user_id) {
+  //TODO: actually follow somebody
+  $("#followButton")[0].innerHTML = "- Unfollow";
+}

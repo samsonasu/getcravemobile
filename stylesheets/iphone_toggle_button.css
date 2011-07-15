@@ -1,0 +1,26 @@
+.x-field-toggle {
+  width: inherit;
+}
+.x-field-toggle .x-slider {
+  -webkit-border-radius: .3em;
+  height: 27px;
+  width: 94px;
+}
+
+.x-field-toggle .x-slider.x-toggle-on,  .x-field-toggle .x-slider.x-toggle-off {
+  background-image: url(../images/iphone_toggle.png);
+}
+
+.x-field-toggle .x-slider .x-thumb {
+  background: transparent;
+}
+
+.x-field-toggle .x-slider .x-thumb::before {
+  content: "";
+  position: absolute;
+  width: 48px;
+  height: 27px;
+  top: 0em;
+  left: 0em;
+  -webkit-border-radius: .3em;
+}

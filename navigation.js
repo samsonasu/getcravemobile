@@ -65,7 +65,7 @@ Crave.ratingDisplay = function(rating) {
   }
 }
 
-//call this and then put it in docketItems[]
+//call this and then put it in dockedItems[]
 //config.items is any buttons you want (back button, etc)
 Crave.create_titlebar = function(config) {
   return {

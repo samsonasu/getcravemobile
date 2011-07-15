@@ -1,8 +1,6 @@
 //Brian Samson Sencha Touch utility functions
 var TouchBS = {};
 
-
-
 Date.patterns = {
   ShortSlashes: "Y/m/d",
   ISO8601Long:"Y-m-d H:i:s",
@@ -56,6 +54,5 @@ TouchBS.pretty_date = function(date) {
   else if (day_diff < 31) return Math.ceil( day_diff / 7 ) + " weeks ago"
   else if (day_diff < 365) return Math.ceil(day_diff / 30) + " months ago"
   else return "Older"
-
 }
 
