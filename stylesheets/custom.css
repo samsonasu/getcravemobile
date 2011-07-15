@@ -120,15 +120,6 @@ font-weight: lighter;
 	padding: 3px 10px;
 	-webkit-box-shadow: none;
 }
-/*
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0.45, rgb(36,38,36)),
-        color-stop(0.73, rgb(65,66,68))
-    );
-*/
 #googleMap {height:100px;width:100px;}
 .foodImg {
     display:block;
@@ -484,7 +475,29 @@ text-rendering: optimizeLegibility;
    color: #888;
 }
 
+/*stuff for the followers and following lists */
+.followList .x-list-item {
+  padding: 0;
+}
+.followList .followUser {
+  height: 50px;
+}
+.followList .followUser IMG {
+  height: 50px;
+  float: left;
+}
 
+.followList .followUser SPAN.username{
+  font-size: 1em;
+  float: left;
+  margin-left: 4px;
+  margin-top: 14px;
+  font-weight: bold;
+  color: #333;
+}
+.followList .followUser SPAN.chevrony{
+  margin: 18px 6px 0 0;
+}
 
 .x-tabbar-dark {
 	background-color: #111;

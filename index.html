@@ -165,6 +165,16 @@
     </tpl>
 </textarea>
 
+<textarea id="followUserTemplate" class="x-hidden-display">
+  <tpl for=".">
+    <div class='followUser'>
+      <img src='{[this.get_user(values).user_profile_pic_url]}'>
+      <span class='username'>{[this.get_user(values).user_name]}</span>
+      <span class='chevrony'></span>
+    </div>
+  </tpl>
+</textarea>
+
 
 
 <!--                           ------

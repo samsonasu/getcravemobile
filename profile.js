@@ -100,16 +100,22 @@ var followerStore = new Ext.data.Store({
     }
   },
   getGroupString : function(record) {
-    return record.data.user.user_name[0].toUpperCase();
+    var user = record.data.user || record.data.following_user.user
+    return user.user_name[0].toUpperCase();
   }
 });
-
+var followTemplate = Ext.XTemplate.from('followUserTemplate', {
+  get_user: function(values) {
+    return values.user || values.following_user.user;
+  }
+});
 //people who follow me
 var followerList = new Ext.List({
-  itemTpl: "<div class='followUser'><img src='{user.user_profile_pic_url}'><span class='user_name'>{user.user_name}</span><span class='chevrony'></span></div>",
+  itemTpl: followTemplate,
   itemSelector: '.followUser',
   singleSelect: true,
   grouped: true,
+  cls: 'followList',
   data: {user: {}},
   indexBar: false,
   store: followerStore, //dishes.js
@@ -128,7 +134,8 @@ var followerList = new Ext.List({
 
 //people i'm following
 var followingList = new Ext.List({
-  itemTpl: "<div class='followUser'><img src='{user.user_profile_pic_url}'><span class='user_name'>{user.user_name}</span><span class='chevrony'></span></div>",
+  itemTpl: followTemplate,
+  cls: 'followList',
   itemSelector: '.followUser',
   singleSelect: true,
   grouped: true,
@@ -141,7 +148,7 @@ var followingList = new Ext.List({
   clearSectionOnDeactivate:true,
   listeners: {
     itemtap: function(dataView, index, item, e) {
-      var user_id = followerStore.getAt(index).data.user_id;
+      var user_id = followerStore.getAt(index).data.following_user_id;
       Crave.show_user_profile(user_id);
     }
   },
@@ -167,14 +174,14 @@ var userProfilePnl = new Ext.Panel({
         },
         items: [{
           flex: 1,
-          text: "<span class='chevrony'></span><span class='number' id='savedNumber'>142</span><span class='text'>Saved</span>",
+          text: "<span class='chevrony'></span><span class='number' id='savedNumber'></span><span class='text'>Saved</span>",
           handler: function() {
             profilePnl.setActiveItem(savedDishList);
             Ext.getCmp('backToProfileButton').show();
           }
         },{
           flex: 1,
-          text: "<span class='chevrony'></span><span class='number' id='followingNumber'>115</span><span class='text'>Following</span>",
+          text: "<span class='chevrony'></span><span class='number' id='followingNumber'></span><span class='text'>Following</span>",
           handler: function() {
             followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/following.json";
             followerStore.load();
@@ -183,7 +190,7 @@ var userProfilePnl = new Ext.Panel({
           }
         },{
           flex: 1,
-          text: "<span class='chevrony'></span><span class='number' id='followersNumber'>481</span><span class='text'>Followers</span>",
+          text: "<span class='chevrony'></span><span class='number' id='followersNumber'></span><span class='text'>Followers</span>",
           handler: function() {
             followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/followers.json";
             followerStore.load();
@@ -227,9 +234,9 @@ var userProfilePnl = new Ext.Panel({
           Ext.getCmp('userInfoPnl').update(html);
           Ext.getCmp('signOutButton').setVisible(is_self);
           
-          $("#savedNumber").innerHTML = user.saved_count;
-          $("#followingNumber").innerHTML = user.following_count;
-          $("#followersNumber").innerHTML = user.followers_count;
+          $("#savedNumber")[0].innerHTML = user.saved_count;
+          $("#followingNumber")[0].innerHTML = user.following_count;
+          $("#followersNumber")[0].innerHTML = user.followers_count;
         },
         failure: Ext.createDelegate(Crave.handle_failure, mainPnl)
       });

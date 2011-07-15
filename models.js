@@ -108,9 +108,13 @@ Ext.regModel('User', {
 });
 
 Ext.regModel('FollowUser', {
-  fields: ['user_name', 'id', 'user_id', 'following_user_id', 'user'],
-  belongsTo: {
+  fields: ['user_name', 'id', 'user_id', 'following_user_id', 'user', "following_user"],
+  belongsTo: [{
     model: 'User',
     name: 'user'
-  }
+  },{
+    model: 'User',
+    name: "following_user",
+    foreign_key: 'following_user_id'
+  }]
 });
