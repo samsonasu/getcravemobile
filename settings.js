@@ -20,9 +20,17 @@ Crave.buildSettingsPanel = function() {
           xtype: 'togglefield',
           id: 'facebookToggle',
           name: 'facebook_toggle',
-          value : 1,
+          value : 0,
           listeners: {
-
+            afterrender: function() {
+              this.actually_rendered = true;
+              //i hate ext, why would they fire the change event on the initial load
+            },
+            change: function(slider, thumb, newValue, oldValue) {
+              if (this.actually_rendered) {
+                alert('tell the server about this');
+              }
+            }
           }
         }]
       }]
@@ -31,7 +39,7 @@ Crave.buildSettingsPanel = function() {
       cls: 'framePanel',
       items: [{
          cls: 'settingItem header',
-         html: '<img src="/images/foursquare.png"><span class="title">Foursquare</span><span class="chevrony"></span>'
+         html: '<img src="/images/foursquare.png"><span class="title">Foursquare</span>'
       },{
         layout: 'hbox',
         cls: 'settingItem',
@@ -44,9 +52,17 @@ Crave.buildSettingsPanel = function() {
           xtype: 'togglefield',
           id: 'foursquareToggle',
           name: 'foursquare_toggle',
-          value : 1,
+          value : 0,
           listeners: {
-
+            afterrender: function() {
+              this.actually_rendered = true;
+              //i hate ext, why would they fire the change event on the initial load
+            },
+            change: function(slider, thumb, newValue, oldValue) {
+              if (this.actually_rendered && newValue === 1) {
+                location.href="/auth/foursquare";
+              }
+            }
           }
         }]
       }]
@@ -75,7 +91,7 @@ Crave.buildSettingsPanel = function() {
       items: [{
         cls: 'settingItem header last',
         bodyStyle: 'text-align: center',
-        html: "<span class='title'>Sign Out</span>"
+        html: "<span id='signoutText' class='title'>Sign Out</span>"
       }],
       listeners: {
         afterrender: function(c){
@@ -87,8 +103,48 @@ Crave.buildSettingsPanel = function() {
           });
         }
       }
-    }]
+    }], 
+    listeners: {
+      activate: function() {
+        if (!Crave.settingsPanel.user_loaded) {
+          Crave.settingsPanel.setLoading(true);
+          Ext.Ajax.request({
+            url: '/users/' + Crave.currentUserId() + '.json',
+            method: 'GET',
+            success: function(response, options) {
+              var user = Ext.decode(response.responseText).user;
+              Crave.settingsPanel.set_user(user);
+              Crave.settingsPanel.setLoading(false);
+            }
+          })
+        }
+      }
+    }
   });
+  
+  Crave.settingsPanel.set_user = function(user) {
+    var fbValue = 0;
+    var fsValue = 0;
+
+    Ext.each(user.authorizations, function(auth) {
+      if (auth.provider === 'facebook')
+        fbValue = 1;
+      else if (auth.provider === 'foursquare')
+        fsValue = 1;
+    });
+
+    var fbToggle = Ext.getCmp('facebookToggle');
+    var fsToggle = Ext.getCmp('foursquareToggle');
+    if (fbToggle.rendered) {
+      fbToggle.setValue(fbValue);
+      fsToggle.setValue(fsValue);
+    } else {
+      fbToggle.value = fbValue;
+      fsToggle.value = fsValue;
+    }
+    
+    Crave.settingsPanel.user_loaded = true;
+  }
   
   return Crave.settingsPanel;
 }

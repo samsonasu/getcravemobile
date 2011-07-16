@@ -236,6 +236,10 @@ var userProfilePnl = new Ext.Panel({
           $("#savedNumber")[0].innerHTML = user.saved_count;
           $("#followingNumber")[0].innerHTML = user.following_count;
           $("#followersNumber")[0].innerHTML = user.followers_count;
+          if (is_self) {
+            //set up the settings panel if we loaded our own profile, this saves us an ajax call later
+            Crave.settingsPanel.set_user(user);
+          }
         },
         failure: Ext.createDelegate(Crave.handle_failure, mainPnl)
       });
