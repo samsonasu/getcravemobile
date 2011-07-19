@@ -125,8 +125,8 @@ var followerList = new Ext.List({
   clearSectionOnDeactivate:true,
   listeners: {
     itemtap: function(dataView, index, item, e) {
-      var user_id = followerStore.getAt(index).data.user_id;
-      Crave.show_user_profile(user_id);
+      var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
+      Crave.show_user_profile(record.data.user_id);
     }
   },
   plugins: [new Ext.plugins.ListPagingPlugin()]
@@ -148,8 +148,8 @@ var followingList = new Ext.List({
   clearSectionOnDeactivate:true,
   listeners: {
     itemtap: function(dataView, index, item, e) {
-      var user_id = followerStore.getAt(index).data.following_user_id;
-      Crave.show_user_profile(user_id);
+      var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
+      Crave.show_user_profile(record.data.following_user_id);
     }
   },
   plugins: [new Ext.plugins.ListPagingPlugin()]
@@ -230,11 +230,11 @@ var userProfilePnl = new Ext.Panel({
           profilePnl.displayed_user_id = user_id;
           var user = Ext.decode(response.responseText).user;
           var html = '<div class="userTopPnl"><div class="userPic">';
-          html = html + '<img src="'+user.user_profile_pic_url+'?type=large" width="100" height="100"></div>'
+          html = html + '<img src="'+user.user_profile_pic_url+'?type=large"></div>'
           html = html + '<div class="userInfo"><div class="userName">' + user.user_name+ '</div>';
           html = html + '<div class="reviewCount">' + user.user_ratings_count + ' reviews</div>';
           if (!is_self && isLoggedIn()) { //can't follow if not logged in yet
-            html = html + '<button id="followButton" onclick="Crave.follow_user(' + user_id + ');" class="follow">+ Follow</button>';
+            html = html + '<button id="followButton" onclick="Crave.follow_user(' + user_id + ');" class="follow"><b>+</b> Follow</button>';
           }
           Ext.getCmp('userInfoPnl').update(html);
           
@@ -244,6 +244,10 @@ var userProfilePnl = new Ext.Panel({
           if (is_self) {
             //set up the settings panel if we loaded our own profile, this saves us an ajax call later
             Crave.settingsPanel.set_user(user);
+            Ext.getCmp('profileSettingsButton').show();
+          } else {
+            Crave.remove_tabbar_highlight();
+            Ext.getCmp('profileSettingsButton').hide();
           }
         },
         failure: Ext.createDelegate(Crave.handle_failure, mainPnl)
@@ -278,21 +282,30 @@ var profilePnl = new Ext.Panel({
   dockedItems: Crave.create_titlebar({
     items:[{
       text: "Back",
+      pressed: true,
       hidden: true,
       id: "backToProfileButton",
       ui: 'back',
       handler: function(btn) {
-        profilePnl.setActiveItem(userProfilePnl);
+        var anim = profilePnl.cardSwitchAnimation;
+        if (profilePnl.getActiveItem() === Crave.settingsPanel) {
+          //if we're coming back from the settings panel
+          anim = {type: 'slide', direction: 'right'};
+          Ext.getCmp('profileSettingsButton').show();  
+        }
+        profilePnl.setActiveItem(userProfilePnl, anim);
         btn.hide();
-        Ext.getCmp('profileSettingsButton').show();
+        
       }
     },{
+       xtype : 'spacer'
+    },{
       text:'Settings',
-      hidden: !isLoggedIn(),
+      hidden: true,
       id: 'profileSettingsButton',
       ui:'normal',
       handler: function(b,e) {
-        profilePnl.setActiveItem(Crave.settingsPanel);
+        profilePnl.setActiveItem(Crave.settingsPanel, 'slide');
         Ext.getCmp('backToProfileButton').show();
         b.hide();
       }

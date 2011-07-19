@@ -186,8 +186,8 @@ Ext.setup({
       if(target == "nearBy") {
 
       } else if (target == "me") {
+        $(e).closest('.x-tab').addClass('x-tab-active'); //make sure the highlight is here in case we removed it earlier
         var amiLoggedIn = isLoggedIn();
-        console.log("targeted ME");
         if(amiLoggedIn) {
           var uid = localStorage.getItem('uid');
           profilePnl.setActiveItem(userProfilePnl);
@@ -235,7 +235,7 @@ Ext.setup({
       },
       width:'100%',
       height:'100%',
-      cardSwitchAnimation: 'slide',
+      cardSwitchAnimation: 'pop',
       direction:'horizontal',
       dockedItems: [{
         id: 'topPanel',

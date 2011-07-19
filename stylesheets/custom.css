@@ -74,13 +74,11 @@ padding: .3em .3em;
 }
 
 .framePanel .x-toolbar.x-toolbar-fancy .x-button.x-button-pressed{
-	background-color: #E8553A;
-	/*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
-	
-	-moz-box-shadow: inset 0px 0px 3px 3px #333333;
-	
-	border-top: 1px solid #B13320;
+  background-color: #E8553A;
+  /*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
+  -moz-box-shadow: inset 0px 0px 3px 3px #333333;
+  border-top: 1px solid #B13320;
 }
 
 .framePanel .x-panel {
@@ -257,31 +255,40 @@ font-weight: lighter;
 .x-toolbar-light .x-button.x-button-pressed,
 .x-toolbar-light .x-button.x-button-pressed::after,
 .x-toolbar-light .x-button.x-button-active,
-.x-toolbar-light .x-button.x-button-active::after,
-.x-toolbar .x-toolbar-light .x-button.x-button-pressed,
-.x-toolbar .x-toolbar-light .x-button.x-button-pressed::after,
-.x-toolbar .x-toolbar-light .x-button.x-button-active,
-.x-toolbar .x-toolbar-light .x-button.x-button-active::after {
-	background-color: #E8553A;
-	/*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
-	-webkit-box-shadow: inset 0px 0px 3px 3px #000;
-	-moz-box-shadow: inset 0px 0px 3px 3px #333333;
-	box-shadow: inset 0px 0px 3px 3px #000;
-	border-top: 1px solid #B13320;
+.x-toolbar-light .x-button.x-button-active::after {
+  background-color: #E8553A;
+  /*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
+  -webkit-box-shadow: inset 0px 0px 3px 3px #000;
+  -moz-box-shadow: inset 0px 0px 3px 3px #333333;
+  box-shadow: inset 0px 0px 3px 3px #000;
+  border-top: 1px solid #B13320;
 }
+.x-toolbar-light .x-button.x-button-back.x-button-pressed,
+.x-toolbar-light .x-button.x-button-back.x-button-pressed::after,
+.x-toolbar-light .x-button.x-button-back.x-button-active,
+.x-toolbar-light .x-button.x-button-back.x-button-active::after {
+  
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+
+
 .x-toolbar-light .x-button.x-button-pressed, .x-toolbar-light .x-button.x-button-active, .x-toolbar .x-toolbar-light .x-button.x-button-pressed, .x-toolbar .x-toolbar-light .x-button.x-button-active, .x-toolbar-light .x-field-select .x-input-text.x-button-pressed, .x-toolbar-light .x-field-select .x-input-text.x-button-active, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-pressed, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-active, .x-toolbar-light .x-field-select::before.x-button-pressed, .x-toolbar-light .x-field-select::before.x-button-active, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-pressed, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-active
 {
-	-webkit-box-shadow: inset 0px 0px 1px 1px #B13320;
-	-moz-box-shadow: inset 0px 0px 1px 1px #B13320;
-	box-shadow: inset 0px 0px 1px 1px #B13320;
+  -webkit-box-shadow: inset 0px 0px 1px 1px #B13320;
+  -moz-box-shadow: inset 0px 0px 1px 1px #B13320;
+  box-shadow: inset 0px 0px 1px 1px #B13320;
 }
 .x-toolbar-light .x-button, .x-toolbar-light .x-button.x-button-back::after, .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar .x-toolbar-light .x-button, .x-toolbar .x-toolbar-light .x-button.x-button-back::after, .x-toolbar .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar-light .x-field-select .x-input-text, .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar-light .x-field-select::before, .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar-light .x-field-select::before.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::after
 {
-	/*background-image: -webkit-linear-gradient(top, #F9735B 0%,#E4381A 100%);*/
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #F9735B), color-stop(100%, #E4381A));
-	background-color: #E4381A;
+  /*background-image: -webkit-linear-gradient(top, #F9735B 0%,#E4381A 100%);*/
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #F9735B), color-stop(100%, #E4381A));
+  background-color: #E4381A;
 }
+
 .x-toolbar-light .x-button, .x-toolbar .x-toolbar-light .x-button, .x-toolbar-light .x-field-select .x-input-text, .x-toolbar .x-toolbar-light .x-field-select .x-input-text, .x-toolbar-light .x-field-select::before, .x-toolbar .x-toolbar-light .x-field-select::before
 {
     border:0.1em solid #b1422e;
@@ -301,21 +308,21 @@ font-weight: lighter;
     background:#b1422e;
 }
 .x-toolbar-light .x-toolbar-title {
-	color: #ffffff;
-	font-size: 20px;
-	text-shadow: 0px -1px #6A281C;
-	}
+  color: #ffffff;
+  font-size: 20px;
+  text-shadow: 0px -1px #6A281C;
+}
 
 .x-toolbar-light {
-background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F6745D), color-stop(1, #E64E33) );
-border-top: 1px solid #F8907D;
+  background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F6745D), color-stop(1, #E64E33) );
+  border-top: 1px solid #F8907D;
 }
 .x-toolbar.x-docked-top {
 border-bottom: .1em solid #73271A;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
-margin-right:4px;
+  margin-right:4px;
 }
 
 .x-form .x-panel-body {
@@ -471,6 +478,12 @@ text-rendering: optimizeLegibility;
 }
 .userTopPnl .userPic {
   float:left;
+  height: 100px;
+  width: 100px;
+}
+.userTopPnl .userPic IMG {
+  max-width:  100px;
+  max-height:  100px;
 }
 .userTopPnl .userInfo {
   margin-left: 100px;
@@ -488,12 +501,15 @@ text-rendering: optimizeLegibility;
 }
 
 .userTopPnl .userInfo BUTTON.follow {
-  border-radius: .8em;
+  border-radius: .6em;
   font-size: .8em;
   margin-top: 6px;
   width: 100px;
   text-align: center;
-  color: #00679a;
+  color: #008FD6;
+  border: none;
+  background: #eee;
+  background-image: -webkit-linear-gradient(top, #ffffff, #dddddd);
 }
 
 .profileToolbar {
@@ -548,10 +564,10 @@ text-rendering: optimizeLegibility;
 }
 
 .x-tabbar-dark {
-	background-color: #111;
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#56595c), color-stop(2%,#434346), color-stop(100%,#232523));
-	border-top:1px solid #56595c;
-	height:50px;
+  background-color: #111;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#56595c), color-stop(2%,#434346), color-stop(100%,#232523));
+  border-top:1px solid #56595c;
+  height:50px;
 }
 
 .x-tabbar-dark.x-docked-bottom .x-tab-active {

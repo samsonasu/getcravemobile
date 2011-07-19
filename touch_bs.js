@@ -56,3 +56,46 @@ TouchBS.pretty_date = function(date) {
   else return "Older"
 }
 
+
+// Sencha touch has a serious bug in the mapping between stores and grouped lists
+// this is taken from here: 
+// http://www.sencha.com/forum/showthread.php?135533-OPEN-TOUCH-138-Serious-flaw-with-List-Selection-(revised)&s=357ef603e36a51372ae1ed131a71a630
+Ext.override(Ext.List, {
+  displayIndexToRecordIndex: function (targetIndex) {
+    if (this.grouped) {
+      var groups = this.getStore().getGroups();
+      
+      for (var g = 0; g < groups.length; g++) {
+        var group = groups[g].children;
+        
+        if (targetIndex < group.length)
+          return this.getStore().indexOf(group[targetIndex]);
+          
+        targetIndex -= group.length;
+      }  
+    }
+    else
+      return targetIndex;
+  },
+
+  recordIndexToDisplayIndex: function (targetIndex) {
+    if (this.grouped) {
+      var rec = this.getStore().getAt(targetIndex);
+
+      var groups = this.getStore().getGroups();
+      var currentIndex = 0;
+      
+      for (var g = 0; g < groups.length; g++) {
+        var group = groups[g].children;
+        
+        for (var i = 0; i < group.length; i++)
+          if (group[i] == rec)
+            return currentIndex;
+          else
+            currentIndex++;
+      }  
+    }
+    else
+      return targetIndex;
+  }
+});

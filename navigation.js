@@ -79,4 +79,13 @@ Crave.create_titlebar = function(config) {
     },
     items: config.items
   }
-}
+};
+
+
+//many panels are contained within the main panel, i.e. the profile panel.  Howver
+//when viewing someone else's profile, we don't want the "Me" tab on the bottom highlighted. 
+//there's no way to do this in Ext so I just manually remove the class if you call this function
+Crave.remove_tabbar_highlight = function() {
+  $('.x-tabbar .x-tab.x-tab-active').removeClass('x-tab-active');
+  
+};
