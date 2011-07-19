@@ -149,7 +149,7 @@ var filterListPnl = new Ext.Panel({
 
 dishTemplate = new Ext.XTemplate.from('dishesTemplate', {
   distDisplay: function(miles) {
-    feet = Math.round(miles * 5280);
+    var feet = Math.round(miles * 5280);
     if(feet<1000) {
       return feet+" feet";
     } else {
@@ -172,8 +172,7 @@ var dishStore = new Ext.data.Store({
     clearOnPageLoad: false,
     sorters: [{property: 'arating', direction: 'ASC'}],
     getGroupString : function(record) {
-        var rating = parseInt(record.get('rating'));
-        return Crave.ratingDisplay(rating);
+        return Crave.ratingDisplay(record.get('rating'));
     },
     proxy: {
        type:'ajax',
@@ -263,28 +262,16 @@ function dishDisplay(response) {
     if(responseObject.menu_item.description!="") {
         htmlString += '<div class="dataSection"><div class="sectionHead">Description</div><div class="sectionBody">'+responseObject.menu_item.description+'</div></div>';
     }
-    /*for(i=0;i<responseObject[0].ingredients.length;i++) {
-     htmlString += responseObject[0].ingredients[i].item;
-        if(i<responseObject[0].ingredients.length - 1) {
-            htmlString += ", ";
-        }
-    }*/
+    
     htmlString += "</div>";
-    /*
-    for(i=0;i<responseObject[0].images.length;i++) {
-        object = new Object();
-        object.html = '<div class="foodImg"><img width="100" src="'+responseObject[0].images[i].file+'"></div>';
-        object.xtype = 'panel';
-        Ext.getCmp('carouselPnl').add(object);
-    }
-    */
-    if(responseObject.menu_item.menu_item_ratings) {
+  
+    if(responseObject.menu_item.menu_item_ratings && responseObject.menu_item.menu_item_ratings.length > 0) {
         reviewString = '<div class="dataSection"><div class="sectionHead">Reviews</div><div class="sectionBody">';
         for(i=0;i<responseObject.menu_item.menu_item_ratings.length;i++) {
 
-
+            var profile_pic_url = responseObject.menu_item.menu_item_ratings[i].user.user_profile_pic_url || "../images/no-image-default.png";
             reviewString += '<div class="picanddata">';
-            reviewString += '<div class="pic"><img src="'+responseObject.menu_item.menu_item_ratings[i].user.user_profile_pic_url+'"></div>';
+            reviewString += '<div class="pic"><img src="'+profile_pic_url+'"></div>';
             reviewString += '<div class="data"><div class="username">'+responseObject.menu_item.menu_item_ratings[i].user.user_name+'</div>'+ Crave.ratingDisplay(responseObject.menu_item.menu_item_ratings[i].rating)+'</div>';
             reviewString += '<div class="reviewtext">'+responseObject.menu_item.menu_item_ratings[i].review+'</div>';
             reviewString += '</div>';
@@ -304,8 +291,10 @@ function dishDisplay(response) {
     Ext.getCmp('detailPnl').doLayout();
 }
 
+
+//this is the new dish display, and it's not done yet so don't use it.
 Crave.buildDishDisplayPanel = function() {
-  
+
   Crave.dishDisplayPanel = new Ext.Panel({
     layout: 'vbox',
     width: '100%',
@@ -344,7 +333,7 @@ Crave.buildDishDisplayPanel = function() {
       xtype: 'panel',
       cls: 'framePanel',
       width: '100%',
-      id: 'dishLabelsPanel',
+      id: 'dishDescriptionPanel',
       dockedItems: [{
         dock : 'top',
         xtype: 'toolbar',
@@ -357,15 +346,14 @@ Crave.buildDishDisplayPanel = function() {
       xtype: 'panel',
       cls: 'framePanel',
       width: '100%',
-      id: 'dishLabelsPanel',
+      id: 'dishReviewsPanel',
       dockedItems: [{
         dock : 'top',
         xtype: 'toolbar',
         cls: 'title',
         title: 'Reviews'
       }],
-      tpl: '<div class="dishLables">{[values.labels.join(",")]}</div>',
-      data: {labels: ["test", "label", "somelabel"]}
+      data: {menu_item_ratings: []}
     }],
     load_dish_data: function(dish_id) {
       Ext.Ajax.request({

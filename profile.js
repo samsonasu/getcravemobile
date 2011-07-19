@@ -88,7 +88,14 @@ var followerStore = new Ext.data.Store({
   model: "FollowUser",
   clearOnPageLoad: false,
   autoLoad: false,
-  sorters: [{property: 'user.user_name', direction: 'ASC'}],
+  sorters: [{
+    sorterFn: function(o1, o2) {
+      var v1 = o1.data.following_user.user.user_name[0].toUpperCase();
+      var v2 = o2.data.following_user.user.user_name[0].toUpperCase();
+
+      return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+    }
+  }],
   proxy: {
     type:'ajax',
     extraParams: {},
@@ -178,6 +185,7 @@ var userProfilePnl = new Ext.Panel({
           handler: function() {
             profilePnl.setActiveItem(savedDishList);
             Ext.getCmp('backToProfileButton').show();
+            Ext.getCmp('profileSettingsButton').hide();  
           }
         },{
           flex: 1,
@@ -187,6 +195,7 @@ var userProfilePnl = new Ext.Panel({
             followerStore.load();
             profilePnl.setActiveItem(followingList);
             Ext.getCmp('backToProfileButton').show();
+            Ext.getCmp('profileSettingsButton').hide();  
           }
         },{
           flex: 1,
@@ -196,6 +205,7 @@ var userProfilePnl = new Ext.Panel({
             followerStore.load();
             profilePnl.setActiveItem(followerList);
             Ext.getCmp('backToProfileButton').show();
+            Ext.getCmp('profileSettingsButton').hide();  
           }
         },]
       }]
@@ -291,7 +301,10 @@ var profilePnl = new Ext.Panel({
         if (profilePnl.getActiveItem() === Crave.settingsPanel) {
           //if we're coming back from the settings panel
           anim = {type: 'slide', direction: 'right'};
-          Ext.getCmp('profileSettingsButton').show();  
+        }
+        
+        if (profilePnl.displayed_user_id === user_id) {
+          Ext.getCmp('profileSettingsButton').show();
         }
         profilePnl.setActiveItem(userProfilePnl, anim);
         btn.hide();

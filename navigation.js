@@ -59,7 +59,10 @@ Crave.show_restaurant = function(restaurant_id) {
 
 Crave.ratingDisplay = function(rating) {
   try {
-    return "<img class='stars' src='../images/rating-my-" + parseInt(rating)+ ".png' >"
+    
+    var intRating = parseInt(rating);
+    if (isNaN(intRating)) return "unrated";
+    return "<img class='stars' src='../images/rating-my-" + intRating+ ".png' >"
   } catch(ex) {
     return "unrated";
   }
@@ -87,5 +90,4 @@ Crave.create_titlebar = function(config) {
 //there's no way to do this in Ext so I just manually remove the class if you call this function
 Crave.remove_tabbar_highlight = function() {
   $('.x-tabbar .x-tab.x-tab-active').removeClass('x-tab-active');
-  
 };

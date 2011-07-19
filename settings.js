@@ -7,7 +7,7 @@ Crave.buildSettingsPanel = function() {
       cls: 'framePanel',
       items: [{
          cls: 'settingItem header',
-         html: '<img src="/images/facebook.png"><span class="title">Facebook</span>'
+         html: '<img src="../images/facebook.png"><span class="title">Facebook</span>'
       },{
         layout: 'hbox',
         cls: 'settingItem',
@@ -39,7 +39,7 @@ Crave.buildSettingsPanel = function() {
       cls: 'framePanel',
       items: [{
          cls: 'settingItem header',
-         html: '<img src="/images/foursquare.png"><span class="title">Foursquare</span>'
+         html: '<img src="../images/foursquare.png"><span class="title">Foursquare</span>'
       },{
         layout: 'hbox',
         cls: 'settingItem',

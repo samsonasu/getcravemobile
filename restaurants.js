@@ -286,7 +286,7 @@ var aRestaurantList = new Ext.List({
     layout:{type:'vbox'},
     fullscreen:false,
     store: singleRestaurantStore,
-
+    scroll: false,
     width:'100%',
     height:'334px',
     modal:true,

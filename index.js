@@ -289,6 +289,7 @@ Ext.setup({
 
     var placePnl = new Ext.Panel({
       id: 'placePnl',
+      scroll: 'vertical',
       items: [restPnl, aRestaurantList],
       layout: {
         type: 'vbox',
