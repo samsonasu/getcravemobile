@@ -77,7 +77,7 @@
 <textarea id="dishesTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="adish">
-            <img src="../images/no-image-default.png" class="dishImg">
+            <img src="{[this.photo_url(values)]}" class="dishImg">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">@{restaurant_name}</span>
@@ -87,6 +87,20 @@
             </span>
         </div>
     </tpl>
+</textarea>
+<textarea id="restaurantTemplate" class="x-hidden-display">
+  <tpl for=".">
+    <div class="aplace">
+      <img src="../images/no-image-default.png" class="dishImg">
+      <div class="dishListinfo">
+        <span class="dishname">{name}</span>
+        <span class="distanceFigure">{[this.distDisplay(values.distance)]}</span>
+      </div>
+      <span class="chevrony"></span>
+        
+      </span>
+    </div>
+</tpl>
 </textarea>
 
 <textarea id="restDishTemplate" class="x-hidden-display">

@@ -7,7 +7,8 @@
 
 Ext.regModel('Dish',
 {
-    fields: ['name','id','price','description','restaurant_id','restaurant','distance','menu_item_avg_rating_count','avg_rating',
+    fields: ['name','id','price','description','restaurant_id','restaurant',
+      'distance','menu_item_avg_rating_count','avg_rating', 'menu_item_photos',
       {
         name: 'rating',
         convert: function(value, record) {

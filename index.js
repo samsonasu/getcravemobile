@@ -62,13 +62,11 @@ Ext.setup({
 
     var placesList = new Ext.List({
       itemTpl: restaurantTemplate,
+      itemSelector: '.aplace',
       singleSelect: true,
       grouped: false,
       indexBar: false,
       store: places,
-      floating:true,
-      centered:true,
-      modal:true,
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
       plugins: [new Ext.plugins.ListPagingPlugin()]
@@ -252,7 +250,7 @@ Ext.setup({
           items:[{
             text: "All",
             id: 'allButton',
-            pressed: true,
+            pressed: false,
             hidden: true,
             handler:function () {
               listPnl.setActiveItem(dishPlacesList);
@@ -262,7 +260,7 @@ Ext.setup({
           },{
             text:'Food',
             id:'dishesButton',
-            pressed:false,
+            pressed:true,
             handler:function () {
               listPnl.setActiveItem(dishList);
             },
@@ -346,7 +344,7 @@ Ext.setup({
     Crave.viewport = new Ext.Panel({
       fullscreen: true,
       layout: 'card',
-      items: [mainPnl, filterListPnl, Crave.dishDisplayPanel]
+      items: [mainPnl, filterListPnl, Crave.buildDishDisplayPanel()]
     });
 
     $(".starcover").live("click",function(event) {

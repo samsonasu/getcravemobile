@@ -155,6 +155,15 @@ dishTemplate = new Ext.XTemplate.from('dishesTemplate', {
     } else {
       return parseFloat(miles).toFixed(1)+' miles';
     }
+  },
+  //right now this just grabs the first image
+  photo_url: function(menu_item) {
+    if (menu_item.menu_item_photos && menu_item.menu_item_photos.length > 0) {
+      var photo_url = menu_item.menu_item_photos[0].photo;
+      return "http://src.sencha.io/" + photo_url;
+    } 
+    
+    return "../images/no-image-default.png";
   }
 });
 
@@ -247,7 +256,7 @@ function dishDisplay(response) {
     htmlString += '@'+responseObject.menu_item.restaurant.name+'<br>';
     //htmlString += '$ '+responseObject.menu_item.price+'<br>';
     if(responseObject.menu_item.menu_item_avg_rating_count) {
-        htmlString += ratingDisplay(responseObject.menu_item.menu_item_avg_rating_count.avg_rating);
+        htmlString += Crave.ratingDisplay(responseObject.menu_item.menu_item_avg_rating_count.avg_rating);
         htmlString += ' '+responseObject.menu_item.menu_item_avg_rating_count.count+' ratings';
     }
     htmlString += "</div>";
@@ -276,7 +285,7 @@ function dishDisplay(response) {
 
             reviewString += '<div class="picanddata">';
             reviewString += '<div class="pic"><img src="'+responseObject.menu_item.menu_item_ratings[i].user.user_profile_pic_url+'"></div>';
-            reviewString += '<div class="data"><div class="username">'+responseObject.menu_item.menu_item_ratings[i].user.user_name+'</div>'+ ratingDisplay(responseObject.menu_item.menu_item_ratings[i].rating)+'</div>';
+            reviewString += '<div class="data"><div class="username">'+responseObject.menu_item.menu_item_ratings[i].user.user_name+'</div>'+ Crave.ratingDisplay(responseObject.menu_item.menu_item_ratings[i].rating)+'</div>';
             reviewString += '<div class="reviewtext">'+responseObject.menu_item.menu_item_ratings[i].review+'</div>';
             reviewString += '</div>';
         }
@@ -295,50 +304,79 @@ function dishDisplay(response) {
     Ext.getCmp('detailPnl').doLayout();
 }
 
-Crave.dishDisplayPanel = new Ext.Panel({
-  layout: 'vbox',
-  width: '100%',
-  dockedItems: Crave.create_titlebar({
+Crave.buildDishDisplayPanel = function() {
+  
+  Crave.dishDisplayPanel = new Ext.Panel({
+    layout: 'vbox',
+    width: '100%',
+    dockedItems: Crave.create_titlebar({
+      items: [{
+        text: 'Back',
+        handler: function() {
+          Crave.viewport.setActiveItem(Ext.getCmp('mainPnl'));
+        }
+      }]
+    }),
     items: [{
-      text: 'Back',
-      handler: function() {
-        Crave.viewport.setActiveItem(Ext.getCmp('mainPnl'));
-      }
-    }]
-  }),
-  items: [{
-    xtype: 'panel',
-    width: '100%',
-    id: 'dishDetailHeader',
-    height: 100,
-    tpl: '<div class="dishinfo"><div class="dishDetails"><b>{name}</b><br/>' +
-         '@ {restaurant.name}<br>' +
-         '{[Crave.ratingDisplay(values.menu_item_avg_rating_count.avg_rating)]}' +
-         '{menu_item_avg_rating_count.count} ratings</div>',
-    data: {restaurant: {}, menu_item_avg_rating_count: {}}
-  },{
-    xtype: 'panel',
-    cls: 'framePanel',
-    width: '100%',
-    id: 'dishLabelsPanel',
-    dockedItems: [{
-      dock : 'top',
-      xtype: 'toolbar',
-      cls: 'title',
-      title: 'Labels'
+      xtype: 'panel',
+      width: '100%',
+      id: 'dishDetailHeader',
+      height: 100,
+      tpl: '<div class="dishinfo"><div class="dishDetails"><b>{name}</b><br/>' +
+           '@ {restaurant.name}<br>' +
+           '{[Crave.ratingDisplay(values.menu_item_avg_rating_count.avg_rating)]}' +
+           '{menu_item_avg_rating_count.count} ratings</div>',
+      data: {restaurant: {}, menu_item_avg_rating_count: {}}
+    },{
+      xtype: 'panel',
+      cls: 'framePanel',
+      width: '100%',
+      id: 'dishLabelsPanel',
+      dockedItems: [{
+        dock : 'top',
+        xtype: 'toolbar',
+        cls: 'title',
+        title: 'Labels'
+      }],
+      tpl: '<div class="dishLables">{[values.labels.join(",")]}</div>',
+      data: {labels: ["test", "label", "somelabel"]}
+    },{
+      xtype: 'panel',
+      cls: 'framePanel',
+      width: '100%',
+      id: 'dishLabelsPanel',
+      dockedItems: [{
+        dock : 'top',
+        xtype: 'toolbar',
+        cls: 'title',
+        title: 'Description'
+      }],
+      tpl: '<div class="dishDescription">{description}</div>',
+      data: {}
+    },{
+      xtype: 'panel',
+      cls: 'framePanel',
+      width: '100%',
+      id: 'dishLabelsPanel',
+      dockedItems: [{
+        dock : 'top',
+        xtype: 'toolbar',
+        cls: 'title',
+        title: 'Reviews'
+      }],
+      tpl: '<div class="dishLables">{[values.labels.join(",")]}</div>',
+      data: {labels: ["test", "label", "somelabel"]}
     }],
-    tpl: '<div class="dishLables">{[values.labels.join(",")]}</div>',
-    data: {labels: ["test", "label", "somelabel"]}
-
-  }],
-  load_dish_data: function(dish_id) {
-    Ext.Ajax.request({
-      method: "GET",
-      url: '/items/' + dish_id + '.json',
-      success: function(response, options) {
-        var menu_item = Ext.decode(response.responseText).menu_item;
-        Ext.getCmp('dishDetailHeader').update(menu_item);
-      }
-    })
-  }
-});
+    load_dish_data: function(dish_id) {
+      Ext.Ajax.request({
+        method: "GET",
+        url: '/items/' + dish_id + '.json',
+        success: function(response, options) {
+          var menu_item = Ext.decode(response.responseText).menu_item;
+          Ext.getCmp('dishDetailHeader').update(menu_item);
+        }
+      });
+    }
+  });
+  return Crave.dishDisplayPanel; 
+}

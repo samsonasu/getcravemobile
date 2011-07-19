@@ -207,6 +207,11 @@ var userProfilePnl = new Ext.Panel({
     id: 'userProfilePnl',
     height:'100%',
     width:'100%',
+    listeners: {
+      activate: function() {
+        userDishList.refresh();  //herp derp
+      }
+    },
     load_user_data: function(user_id) {
       if (profilePnl.displayed_user_id === user_id) {
         return;
@@ -252,8 +257,6 @@ var userProfilePnl = new Ext.Panel({
       });
       savedDishStore.proxy.url = "/users/" + user_id + "/saved.json";
       savedDishStore.load();
-      
-      
     }
 });
 
@@ -280,7 +283,6 @@ var profilePnl = new Ext.Panel({
       ui: 'back',
       handler: function(btn) {
         profilePnl.setActiveItem(userProfilePnl);
-        userDishList.refresh();  //herp derp
         btn.hide();
         Ext.getCmp('profileSettingsButton').show();
       }
@@ -297,7 +299,10 @@ var profilePnl = new Ext.Panel({
     }]
   }),
   cardSwitchAnimation: 'pop',
-  direction:'horizontal'
+  direction:'horizontal',
+  activate: function(p) {
+    userDishList.refresh();  //herp derp
+  }
 });
 
 
