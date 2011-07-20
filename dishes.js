@@ -288,7 +288,8 @@ function dishDisplay(response) {
         Ext.getCmp('userId').setValue(myUID);
         Ext.getCmp('menuId').setValue(responseObject.menu_item.id);
     }
-    Ext.getCmp('detailPnl').doLayout();
+    //Ext.getCmp('detailPnl').doLayout();
+    Crave.viewport.setActiveItem(detailPnl);
 }
 
 

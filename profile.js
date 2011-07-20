@@ -260,7 +260,7 @@ var userProfilePnl = new Ext.Panel({
             Ext.getCmp('profileSettingsButton').hide();
           }
         },
-        failure: Ext.createDelegate(Crave.handle_failure, mainPnl)
+        failure: Crave.handle_failure
       });
       //load reviews
       userDishStore.proxy.url = '/users/' + user_id + "/ratings.json";
@@ -275,7 +275,7 @@ var userProfilePnl = new Ext.Panel({
 });
 
 profileLoginPnl = new Ext.Panel({
-  html:'<div class="fancyImage"><img class="logoutButton" src="../images/profile-cold-food.png"></div><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="/auth/facebook" class="loginButton"></a>',
+  html:'<div class="fancyImage"><img class="logoutButton" src="../images/profile-cold-food.png"></div><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="http://getcrave.com/auth/facebook" class="loginButton"></a>',
   id: 'profileLoginPnl',
   scroll:'vertical'
 });

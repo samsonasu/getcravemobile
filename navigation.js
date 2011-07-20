@@ -1,12 +1,11 @@
 var backHandler = function(b,e) {
    //this should be much better
-   Crave.viewport.setActiveItem(0);
-   Ext.getCmp('mainPnl').setActiveItem(listPnl);
+   Crave.viewport.setActiveItem(listPnl);
    listPnl.setActiveItem(1);
 }
 var rateHandler = function(b,e) {
     if(b.getText() == "Rate") {
-        Ext.getCmp('mainPnl').setActiveItem(reviewFormPnl);
+        Crave.viewport.setActiveItem(reviewFormPnl);
     }
 
     if(b.getText() == "Submit") {
@@ -28,8 +27,7 @@ var rateHandler = function(b,e) {
 }
 
 Crave.show_user_profile = function(user_id) {
-  var mainPnl = Ext.getCmp('mainPnl');
-  mainPnl.setActiveItem(profilePnl);
+  Crave.viewport.setActiveItem(profilePnl);
   profilePnl.setActiveItem(userProfilePnl);
   userProfilePnl.load_user_data(user_id);
 };
@@ -45,7 +43,7 @@ Crave.show_menu_item = function(menu_item_id) {
       dishDisplay(response);
     }
   });
-  Ext.getCmp('mainPnl').setActiveItem(0);
+  Crave.viewport.setActiveItem(detailPnl);
 
   
   //Crave.viewport.setActiveItem(Crave.dishDisplayPanel);

@@ -196,11 +196,13 @@ Ext.setup({
           profilePnl.setActiveItem(profileLoginPnl);
           profilePnl.doLayout();
         }
+        Ext.getCmp('backToProfileButton').hide();
+        
       } 
     } //end session handler
 
    
-    var detailPnl = new Ext.Panel({
+    detailPnl = new Ext.Panel({
       items: [infoPnl,reviewPnl],
       id: 'detailPnl',
       layout: {
@@ -287,7 +289,7 @@ Ext.setup({
       ]
     });
 
-    var placePnl = new Ext.Panel({
+    placePnl = new Ext.Panel({
       id: 'placePnl',
       scroll: 'vertical',
       items: [restPnl, aRestaurantList],
@@ -311,24 +313,19 @@ Ext.setup({
       ]
     });
 
-
-    var mainPnl = new Ext.TabPanel({
-      id: 'mainPnl',
-      activeItem:1,
-      items: [{
-        items:[detailPnl]
-      },listPnl,
-      Crave.activityPanel,
-      profilePnl,
-      placePnl, {
-        width:0,
-        items:[newDishForm]
-      },{
-        width:0,
-        items:[reviewFormPnl]
-      }],
-      tabBar: {
+    Crave.viewport = new Ext.Panel({
+      fullscreen: true,
+      layout: 'card',
+      activeItem: 0,
+      items: [listPnl, detailPnl, filterListPnl, Crave.activityPanel, 
+        profilePnl, placePnl, newDishForm, reviewFormPnl,
+        Crave.buildDishDisplayPanel()],
+      cardSwitchAnimation: 'slide',
+      direction:'horizontal',
+      dockedItems: [new Ext.TabBar({
         dock: 'bottom',
+        //xtype: 'toolbar',
+        id: 'mainTabbar',
         ui: 'dark',
         listeners: {
           click: sessionHandler,
@@ -336,16 +333,36 @@ Ext.setup({
         },
         layout: {
           pack: 'center'
+        }, 
+        items: [{
+          xtype: 'tab',
+          //pressedCls: 'x-tab-active',
+          text: 'Nearby', 
+          iconCls: 'nearBy',
+          card: listPnl,
+          pressed: true
+        },{
+          text: "Saved",
+          iconCls: 'saved', 
+          pressed: false
+        },{
+          text: "Activity",
+          iconCls: 'activity', 
+          card: Crave.activityPanel,
+          pressed: false
+        },{
+          text: "Me",
+          iconCls: 'me', 
+          pressed: false,
+          card: profilePnl
+        }]
+      })],
+      listeners: {
+        afterlayout: function(viewport) {
+          var tb = Ext.getCmp('mainTabbar');
+          tb.cardLayout = viewport.layout;
         }
-      },
-      cardSwitchAnimation: 'slide',
-      direction:'horizontal'
-    });
-
-    Crave.viewport = new Ext.Panel({
-      fullscreen: true,
-      layout: 'card',
-      items: [mainPnl, filterListPnl, Crave.buildDishDisplayPanel()]
+      }
     });
 
     $(".starcover").live("click",function(event) {
@@ -381,6 +398,7 @@ $(".newDish").live("click",function() {
   Ext.getCmp('mainPnl').setActiveItem(3);
   return false;
 });
+
 $(".logoutButton").live("click", function() {
   localStorage.setItem("uid","");
 });

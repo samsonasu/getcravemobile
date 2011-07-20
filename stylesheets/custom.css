@@ -471,7 +471,9 @@ min-height: 2.6em;
 display: -webkit-box;
 display: box;
 }
-.x-tabbar.x-docked-bottom .x-tab .x-button-label, .x-tabbar.x-docked-bottom .x-tab .x-hasbadge .x-badge, .x-hasbadge .x-tabbar.x-docked-bottom .x-tab .x-badge {
+
+.x-tabbar.x-docked-bottom .x-tab .x-button-label, 
+.x-tabbar.x-docked-bottom .x-tab .x-hasbadge .x-badge, .x-hasbadge .x-tabbar.x-docked-bottom .x-tab .x-badge {
 margin: 0;
 font-size: 10px;
 line-height: 12px;

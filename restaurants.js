@@ -60,8 +60,7 @@ var singleRestaurantStore = new Ext.data.Store({
 function placeDisplay(restaurant_id) {
     singleRestaurantStore.proxy.url = ('/places/'+restaurant_id+'/items.json');
 
-    console.log('set to 4');
-    Ext.getCmp('mainPnl').setActiveItem(4);
+    Crave.viewport.setActiveItem(placePnl);
     singleRestaurantStore.load(function(){
         console.log('store loaded');
         totalRatings = 0;
@@ -280,30 +279,18 @@ var reviewFormPnl = new Ext.Panel({
 var aRestaurantList = new Ext.List({
     id:'aRestaurantList',
     itemTpl: restaurantDishTemplate,
+    itemSelector: '.adish',
     singleSelect: true,
     grouped: true,
     indexBar: false,
     layout:{type:'vbox'},
-    fullscreen:false,
     store: singleRestaurantStore,
     scroll: false,
     width:'100%',
-    height:'334px',
-    modal:true,
     hideOnMaskTap: false
 });
 
 aRestaurantList.on('itemtap', function(dataView, index, item, e) {
-    record = dataView.store.data.items[index];
-    console.log(urlPrefix+'/items/'+record.data.id+'.json');
-    Ext.Ajax.request({
-        url: (urlPrefix+'/items/'+record.data.id+'.json'),
-        reader: {
-             type: 'json'
-        },
-        success: function(response) {
-            dishDisplay(response);
-        }
-    });
-    Ext.getCmp('mainPnl').setActiveItem(0);
+  record = dataView.store.data.items[index];
+  Crave.show_menu_item(record.data.id);
 });
