@@ -291,6 +291,9 @@ var aRestaurantList = new Ext.List({
 });
 
 aRestaurantList.on('itemtap', function(dataView, index, item, e) {
-  record = dataView.store.data.items[index];
+  var record = dataView.store.data.items[index];
+  Crave.back_stack.push({
+    panel: placePnl
+  });
   Crave.show_menu_item(record.data.id);
 });

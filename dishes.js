@@ -137,7 +137,7 @@ var filterListPnl = new Ext.Panel({
     items:[{
       text:'Cancel',
       ui:'normal',
-      handler:backHandler
+      handler: Crave.back_handler
     },{
       text:'Search',
       ui:'normal',
@@ -192,7 +192,7 @@ var newDishForm = new Ext.form.FormPanel({
            xtype:'toolbar',
            ui:'light',
            title:'Crave',
-           items:[{text:'Back',ui:'back', handler:backHandler}]
+           items:[{text:'Back',ui:'back', handler:Crave.back_handler}]
        }
     ],
     items: [
@@ -302,9 +302,7 @@ Crave.buildDishDisplayPanel = function() {
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
-        handler: function() {
-          Crave.viewport.setActiveItem(Ext.getCmp('mainPnl'));
-        }
+        handler: Crave.back_handler
       }]
     }),
     items: [{

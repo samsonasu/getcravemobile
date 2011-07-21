@@ -40,6 +40,9 @@ var restaurantSearchList = new Ext.List({
 
 restaurantSearchList.on('itemtap', function(dataView, index, item, e) {
     record = dataView.store.data.items[index];
+    Crave.back_stack.push({
+      panel: listPnl
+    });
     placeDisplay(record.data.id);
 });
 
@@ -54,6 +57,9 @@ var dishSearchList = new Ext.List({
 
 dishSearchList.on('itemtap', function(dataView, index, item, e) {
     record = dataView.store.data.items[index];
+    Crave.back_stack.push({
+      panel: listPnl
+    });
     Crave.show_menu_item(record.data.id);
 });
 

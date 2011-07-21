@@ -72,7 +72,10 @@ Ext.setup({
       plugins: [new Ext.plugins.ListPagingPlugin()]
     });
     placesList.on('itemtap', function(dataView, index, item, e) {
-      record = dataView.store.data.items[index];
+      var record = dataView.store.data.items[index];
+      Crave.back_stack.push({
+        panel: listPnl
+      });
       placeDisplay(record.data.id);
     });
 
@@ -92,6 +95,7 @@ Ext.setup({
 
     dishList.on('itemtap', function(dataView, index, item, e) {
       var thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
+      Crave.back_stack.push({panel: listPnl});
       Crave.show_menu_item(thisId);
     });
 
@@ -128,7 +132,10 @@ Ext.setup({
       plugins: [new Ext.plugins.ListPagingPlugin()],
       listeners: {
         itemtap: function(dataView, index, item, e) {
-          
+          Crave.back_stack.push({
+            panel: listPnl
+          });
+          //dish_or_place_display
         }
       }
     });
@@ -180,27 +187,6 @@ Ext.setup({
       scroll: 'vertical',
       id: 'reviewPnl'
     });
-
-    var sessionHandler = function(b,e) {
-      var target = $(e).attr("class");
-      if(target == "nearBy") {
-
-      } else if (target == "me") {
-        $(e).closest('.x-tab').addClass('x-tab-active'); //make sure the highlight is here in case we removed it earlier
-        var amiLoggedIn = isLoggedIn();
-        if(amiLoggedIn) {
-          var uid = localStorage.getItem('uid');
-          profilePnl.setActiveItem(userProfilePnl);
-          userProfilePnl.load_user_data(uid);
-        } else {
-          profilePnl.setActiveItem(profileLoginPnl);
-          profilePnl.doLayout();
-        }
-        Ext.getCmp('backToProfileButton').hide();
-        
-      } 
-    } //end session handler
-
    
     detailPnl = new Ext.Panel({
       items: [infoPnl,reviewPnl],
@@ -217,7 +203,7 @@ Ext.setup({
         items:[{
           text:'Back',
           ui:'back',
-          handler:backHandler
+          handler: Crave.back_handler
         },{
           text:'Rate',
           ui:'normal',
@@ -237,7 +223,6 @@ Ext.setup({
       },
       width:'100%',
       height:'100%',
-      cardSwitchAnimation: 'pop',
       direction:'horizontal',
       dockedItems: [{
         id: 'topPanel',
@@ -282,7 +267,14 @@ Ext.setup({
           xtype:'button',
           iconCls:'filtersButton',
           handler: function() {
-            filterListPnl.ownerCt.setActiveItem(filterListPnl);
+            Crave.back_stack.push({
+              panel: listPnl, 
+              anim: {
+                type: 'slide', 
+                direction: 'down'
+              }
+            });
+            Crave.viewport.setActiveItem(filterListPnl, {type: 'slide', direction: 'up'});
           }
         }]
       },searchForm
@@ -307,55 +299,54 @@ Ext.setup({
         items:[{
           text:'Back',
           ui:'back',
-          handler: backHandler
+          handler: Crave.back_handler
         }]
-      }
-      ]
+      }]
     });
+
+    Crave.myProfilePanel = Crave.create_profile_panel(true);
+    Crave.otherProfilePanel = Crave.create_profile_panel(false);
 
     Crave.viewport = new Ext.Panel({
       fullscreen: true,
       layout: 'card',
       activeItem: 0,
-      items: [listPnl, detailPnl, filterListPnl, Crave.activityPanel, 
-        profilePnl, placePnl, newDishForm, reviewFormPnl,
-        Crave.buildDishDisplayPanel()],
+      items: [listPnl, Crave.activityPanel, Crave.myProfilePanel, detailPnl, filterListPnl,  
+        placePnl, newDishForm, reviewFormPnl,
+        Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  Crave.otherProfilePanel],
       cardSwitchAnimation: 'slide',
       direction:'horizontal',
       dockedItems: [new Ext.TabBar({
         dock: 'bottom',
         //xtype: 'toolbar',
+        cardSwitchAnimation: 'slide',
         id: 'mainTabbar',
         ui: 'dark',
-        listeners: {
-          click: sessionHandler,
-          element: 'body'
-        },
         layout: {
           pack: 'center'
         }, 
         items: [{
-          xtype: 'tab',
-          //pressedCls: 'x-tab-active',
           text: 'Nearby', 
           iconCls: 'nearBy',
-          card: listPnl,
-          pressed: true
+          card: listPnl
         },{
           text: "Saved",
-          iconCls: 'saved', 
-          pressed: false
+          iconCls: 'saved',
+          hidden: true
         },{
           text: "Activity",
           iconCls: 'activity', 
-          card: Crave.activityPanel,
-          pressed: false
+          card: Crave.activityPanel
         },{
           text: "Me",
-          iconCls: 'me', 
-          pressed: false,
-          card: profilePnl
-        }]
+          iconCls: 'me',
+          card: Crave.myProfilePanel
+        }],
+        listeners: {
+          change: function() {
+            Crave.back_stack = []; //clear back stack when they explicitly click a tab
+          }
+        }
       })],
       listeners: {
         afterlayout: function(viewport) {

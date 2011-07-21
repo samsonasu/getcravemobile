@@ -151,9 +151,9 @@
             <img src="../images/no-image-default.png" class="dishImg">
             <div class="ratingListItem">
                 <span class="ratingDescription">
-                  <a style="font-weight: bold;" href="#" onclick="Crave.show_user_profile({user.id});">{user.user_name}</a>
-                  rated <a href="#" onclick="Crave.show_menu_item({menu_item.id})">{menu_item.name}</a>
-                  @ <a href="#" onclick="Crave.show_restaurant({menu_item.restaurant.id})">{menu_item.restaurant.name}</a></span><br/>
+                  <a style="font-weight: bold;" href="#" onclick="Crave.back_stack.push({panel: Crave.activityPanel});Crave.show_user_profile({user.id});">{user.user_name}</a>
+                  rated <a href="#" onclick="Crave.back_stack.push({panel: Crave.activityPanel});Crave.show_menu_item({menu_item.id})">{menu_item.name}</a>
+                  @ <a href="#" onclick="Crave.back_stack.push({panel: Crave.activityPanel});Crave.show_restaurant({menu_item.restaurant.id})">{menu_item.restaurant.name}</a></span><br/>
                 {[this.ratingDisplay(values.rating)]}<br/>
                 <span class="review">{review}</span>
             </div>

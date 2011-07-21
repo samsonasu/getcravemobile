@@ -2,6 +2,13 @@
 Crave.buildSettingsPanel = function() {
   Crave.settingsPanel = new Ext.Panel({
     scroll: 'vertical',
+    dockedItems: Crave.create_titlebar({
+      items:[{
+        text: "Back", 
+        ui: 'back', 
+        handler: Crave.back_handler
+      }]
+    }),
     items: [{
       layout: 'vbox',
       cls: 'framePanel',
@@ -97,9 +104,6 @@ Crave.buildSettingsPanel = function() {
         afterrender: function(c){
           c.el.on('click', function(){
             Crave.sign_out();
-            Ext.getCmp('backToProfileButton').hide();
-            Ext.getCmp('profileSettingsButton').hide();
-            profilePnl.setActiveItem(profileLoginPnl);
           });
         }
       }
