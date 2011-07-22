@@ -207,7 +207,12 @@ Ext.setup({
         },{
           text:'Rate',
           ui:'normal',
-          handler:rateHandler
+          handler: function() {
+            Crave.back_stack.push({
+              panel: detailPnl
+            });
+            Crave.viewport.setActiveItem(reviewFormPnl);
+          }
         }]
       })
     });

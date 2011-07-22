@@ -1,31 +1,3 @@
-var backHandler = function(b,e) {
-   //this should be much better
-   Crave.viewport.setActiveItem(listPnl);
-   listPnl.setActiveItem(1);
-}
-var rateHandler = function(b,e) {
-    if(b.getText() == "Rate") {
-        Crave.viewport.setActiveItem(reviewFormPnl);
-    }
-
-    if(b.getText() == "Submit") {
-        reviewForm.submit({
-            url: '/ratings?mobile=1',
-            method: 'post',
-            submitDisabled: true,
-            waitMsg: 'Saving Data...Please wait.',
-            success: function (objForm,httpRequest) {
-                var mbox = new Ext.MessageBox({});
-                mbox.alert("Record Saved");
-            },
-            failure: function() {
-                console.log('submissionFailed');
-            }
-        })
-    }
-
-}
-
 Crave.show_user_profile = function(user_id) {
   Crave.viewport.setActiveItem(Crave.otherProfilePanel);
   Crave.otherProfilePanel.load_user_data(user_id);

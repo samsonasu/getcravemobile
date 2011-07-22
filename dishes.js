@@ -52,7 +52,6 @@ filterList.on('itemtap', function(dataView, index, item, e) {
 //add listener to button, add distance parameter to search string
 
 var searchHandler = function(b,e) {
-    backHandler();
     dishSearchStore.proxy.extraParams.q = labelString;
     var dfb = Ext.getCmp('distanceFilterButton').getPressed();
     dishSearchStore.proxy.extraParams.within = dfb.filter_value;
