@@ -423,7 +423,8 @@ border-top: 1px solid #ffffff;
 	padding-top:10px;
 }
 .fancyImage {
-	margin-top: -5px;
+  background: white;
+  height: 100%;
 }
 
 .x-field-clear-container {

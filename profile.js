@@ -278,9 +278,8 @@ Crave.create_profile_panel = function(mine) {
   });
 
   var profileLoginPnl = new Ext.Panel({
-    html:'<div class="fancyImage"><img class="logoutButton" src="../images/profile-cold-food.png"></div><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="http://getcrave.com/auth/facebook" class="loginButton"></a>',
-    id: 'profileLoginPnl',
-    scroll:'vertical'
+    html:'<div class="fancyImage"><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="http://getcrave.com/auth/facebook" class="loginButton"></a>',
+    height: '100%'
   });
 
   var backButton = new Ext.Button({
