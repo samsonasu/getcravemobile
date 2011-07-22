@@ -99,3 +99,54 @@ Ext.override(Ext.List, {
       return targetIndex;
   }
 });
+
+
+//taken from http://snippets.dzone.com/posts/show/2426
+TouchBS.rails_serializer = {
+ 
+  serialize : function(object) {
+    var values = []; 
+    var prefix = '';
+    
+    values = this.recursive_serialize(object, values, prefix);
+    
+    var param_string = values.join('&');
+    return param_string;
+  },
+  
+  recursive_serialize : function(object, values, prefix) {
+    for (var key in object) {
+      if (typeof object[key] == 'object') {
+        
+        if (prefix.length > 0) {
+          prefix += '['+key+']';         
+        } else {
+          prefix += key;
+        }
+        
+        values = this.recursive_serialize(object[key], values, prefix);
+        
+        var prefixes = prefix.split('[');
+        
+        if (prefixes.length > 1) {
+          prefix = prefixes.slice(0,prefixes.length-1).join('[');
+        } else {
+          prefix = prefixes[0];
+        }
+        
+      } else {
+        var value = encodeURIComponent(object[key]);
+        var prefixed_key;
+        if (prefix.length > 0) {
+          prefixed_key = prefix+'['+key+']'          
+        } else {
+          prefixed_key = key
+        }
+        prefixed_key = encodeURIComponent(prefixed_key);
+        if (value) values.push(prefixed_key + '=' + value);
+      }
+    }
+    return values;
+  }
+}
+
