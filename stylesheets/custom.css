@@ -640,3 +640,8 @@ IMG.stars {
 .arating .ratingDescription A:hover {
   text-decoration: underlione;
 }
+
+/*fix for flickering slide animations */
+.x-tabpanel > .x-panel-body .x-panel {
+    -webkit-backface-visibility: hidden;
+}
