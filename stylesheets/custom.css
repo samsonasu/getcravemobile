@@ -404,12 +404,19 @@ border-top: 1px solid #ffffff;
 	border-bottom-right-radius: 10px;
 }
 
+.loginPanel {
+  background: white;
+  height: 100%;
+}
+.loginPanel IMG {
+  display: block;
+}
 .loginButton {
     background: url("../../images/facebook-button.png") no-repeat;
     width: 302px;
     height: 36px;
     border: none;
-    margin: 12px;
+    margin: 12px auto;
     display:block;
 }
 .explanation {
@@ -421,11 +428,6 @@ border-top: 1px solid #ffffff;
 	font-size: 16px;
 	text-align: center;
 	padding-top:10px;
-}
-
-.fancyImage {
-  background: white;
-  height: 100%;
 }
 
 .x-field-clear-container {
