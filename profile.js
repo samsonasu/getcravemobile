@@ -39,10 +39,22 @@ Crave.buildProfilePanel = function(mine) {
       plugins: [new Ext.plugins.ListPagingPlugin()]
   });
 
-  var savedDishStore = new Ext.data.Store({
+  
+
+  var savedDishList = null;
+  var savedDishStore = null;
+  if (mine) {
+    savedDishList = new Ext.Panel({
+      html: "Nothing to see here"
+    });
+  } else {
+    savedDishStore = new Ext.data.Store({
       model: 'savedDish',
       clearOnPageLoad: false,
-      sorters: [{property: 'rating', direction: 'DESC'}],
+      sorters: [{
+        property: 'rating', 
+        direction: 'DESC'
+      }],
       getGroupString : function(record) {
         try {
           var rating = parseInt(record.data.menu_item.menu_item_avg_rating_count.avg_rating);
@@ -52,38 +64,40 @@ Crave.buildProfilePanel = function(mine) {
         }
       },
       proxy: {
-         type:'ajax',
-         url:'',
-         reader: {
-             type:'json',
-             model: 'savedDish',
-             record:'user_saved_menu_item'
-         }
+        type:'ajax',
+        url:'',
+        reader: {
+          type:'json',
+          model: 'savedDish',
+          record:'user_saved_menu_item'
+        }
       }
-  });
+    });
+    savedDishList = new Ext.List({
+      itemTpl: Crave.savedDishTemplate,
+      itemSelector: '.adish',
+      singleSelect: true,
+      grouped: true,
+      indexBar: false,
+      store: savedDishStore, //dishes.js
+      scroll:'vertical',
+      hideOnMaskTap: false,
+      width:'100%',
+      height:'100%',
+      clearSectionOnDeactivate:true,
+      listeners: {
+        itemtap: function(dataView, index, item, e) {
+          var dish_id = savedDishStore.getAt(index).data.menu_item.id;
+          Crave.back_stack.push(makeBackStack());
+          Crave.show_menu_item(dish_id);
+        }
+      },
+      plugins: [new Ext.plugins.ListPagingPlugin()]
+    });
+  }
+    
 
-
-  var savedDishList = new Ext.List({
-    itemTpl: Ext.XTemplate.from(savedDishTemplate),
-    itemSelector: '.adish',
-    singleSelect: true,
-    grouped: true,
-    indexBar: false,
-    store: savedDishStore, //dishes.js
-    scroll:'vertical',
-    hideOnMaskTap: false,
-    width:'100%',
-    height:'100%',
-    clearSectionOnDeactivate:true,
-    listeners: {
-      itemtap: function(dataView, index, item, e) {
-        var dish_id = savedDishStore.getAt(index).data.menu_item.id;
-        Crave.back_stack.push(makeBackStack());
-        Crave.show_menu_item(dish_id);
-      }
-    },
-    plugins: [new Ext.plugins.ListPagingPlugin()]
-  });
+  
 
   var followerStore = new Ext.data.Store({
     model: "FollowUser",
@@ -208,12 +222,12 @@ Crave.buildProfilePanel = function(mine) {
         text: "<span class='chevrony'></span><span class='number saved'></span><span class='text'>Saved</span>",
         handler: function() {
           if (mine) {
-            Crave.viewport.setActiveItem(Crave.savedPanel);
+            Crave.viewport.setActiveItem(Crave.savedPanel, {type: 'slide', direction: 'right'});
           } else {
-            profilePnl.setActiveItem(savedDishList);
+            profilePnl.setActiveItem(savedDishList, 'pop');
             Crave.back_stack.push({
               fn: function() {
-                profilePnl.setActiveItem(userProfilePnl);
+                profilePnl.setActiveItem(userProfilePnl, 'pop');
                 if (Crave.back_stack.length === 0) {
                   backButton.hide();
                 }
@@ -231,13 +245,13 @@ Crave.buildProfilePanel = function(mine) {
           followerStore.load();
           Crave.back_stack.push({
             fn: function() {
-              profilePnl.setActiveItem(userProfilePnl);
+              profilePnl.setActiveItem(userProfilePnl, 'pop');
               if (Crave.back_stack.length === 0) {
                 backButton.hide();
               }
             }
           });
-          profilePnl.setActiveItem(followingList);
+          profilePnl.setActiveItem(followingList, 'pop');
           backButton.show();
           settingsButton.hide();  
         }
@@ -249,13 +263,13 @@ Crave.buildProfilePanel = function(mine) {
           followerStore.load();
           Crave.back_stack.push({
             fn: function() {
-              profilePnl.setActiveItem(userProfilePnl);
+              profilePnl.setActiveItem(userProfilePnl, 'pop');
               if (Crave.back_stack.length === 0) {
                 backButton.hide();
               }
             }
           });
-          profilePnl.setActiveItem(followerList);
+          profilePnl.setActiveItem(followerList, 'pop');
           backButton.show();
           settingsButton.hide();  
         }
@@ -328,7 +342,8 @@ Crave.buildProfilePanel = function(mine) {
           return;          
         } 
         if (mine) {
-          p.setActiveItem(userProfilePnl);
+          //make sure the user data is loaded
+          //this will do nothign on subsequest calls
           p.load_user_data(Crave.currentUserId());
         }
         userDishList.refresh();  //herp derp 
@@ -381,8 +396,11 @@ Crave.buildProfilePanel = function(mine) {
           page: 1
         }
       });
-      savedDishStore.proxy.url = "/users/" + user_id + "/saved.json";
-      savedDishStore.load();
+      
+      if (!mine) {
+        savedDishStore.proxy.url = "/users/" + user_id + "/saved.json";
+        savedDishStore.load();
+      }
     }
   });
   return profilePnl;

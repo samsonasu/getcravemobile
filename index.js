@@ -348,8 +348,11 @@ Ext.setup({
           card: Crave.myProfilePanel
         }],
         listeners: {
-          change: function() {
+          change: function(tabbar, tab, card) {
             Crave.back_stack = []; //clear back stack when they explicitly click a tab
+            if(tab.text === "Me") {
+              Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
+            }
           }
         }
       })],
