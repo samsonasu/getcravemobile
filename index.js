@@ -80,7 +80,7 @@ Ext.setup({
     });
 
     var dishList = new Ext.List({
-      itemTpl: dishTemplate,
+      itemTpl: Crave.dishTemplate,
       itemSelector: '.adish',
       singleSelect: true,
       grouped: true,
@@ -245,7 +245,7 @@ Ext.setup({
             pressed: false,
             hidden: true,
             handler:function () {
-              listPnl.setActiveItem(dishPlacesList);
+              listPnl.setActiveItem(dishPlaceList);
             },
             ui: 'round',
             width: '110'
@@ -309,14 +309,14 @@ Ext.setup({
       }]
     });
 
-    Crave.myProfilePanel = Crave.create_profile_panel(true);
-    Crave.otherProfilePanel = Crave.create_profile_panel(false);
+    Crave.myProfilePanel = Crave.buildProfilePanel(true);
+    Crave.otherProfilePanel = Crave.buildProfilePanel(false);
 
     Crave.viewport = new Ext.Panel({
       fullscreen: true,
       layout: 'card',
       activeItem: 0,
-      items: [listPnl, Crave.activityPanel, Crave.myProfilePanel, detailPnl, filterListPnl,  
+      items: [listPnl, Crave.buildSavedPanel(), Crave.activityPanel, Crave.myProfilePanel, detailPnl, filterListPnl,  
         placePnl, newDishForm, reviewFormPnl,
         Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  Crave.otherProfilePanel],
       cardSwitchAnimation: 'slide',
@@ -337,7 +337,7 @@ Ext.setup({
         },{
           text: "Saved",
           iconCls: 'saved',
-          hidden: true
+          card: Crave.savedPanel
         },{
           text: "Activity",
           iconCls: 'activity', 

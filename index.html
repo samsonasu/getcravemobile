@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="stylesheets/apple.css" type="text/css" />
     <link rel="stylesheet" href="stylesheets/custom.css" type="text/css" />
     <link rel="stylesheet" href="stylesheets/iphone_toggle_button.css" type="text/css" />
-	<link rel="apple-touch-icon-precomposed" href="apple-touch-icon.png"/>
-	<link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72.png" sizes="72x72"/>
-	<link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114.png" sizes="114x114"/>
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon.png"/>
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72.png" sizes="72x72"/>
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114.png" sizes="114x114"/>
 
     <meta name="viewport" content="width = device-width">
     <style type="text/css">
@@ -68,6 +68,29 @@
 	pageTracker._trackPageview();
 	} catch(err) {} 
 	</script>
+        
+        <!-- Phone Gap includes (uncomment when builing in xcode) 
+        <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />   
+        <script type="text/javascript" charset="utf-8" src="phonegap.0.9.6.min.js"></script>
+        <script type="text/javascript" charset="utf-8">
+          function onBodyLoad()
+          {     
+            document.addEventListener("deviceready",onDeviceReady,false);
+          }
+          
+          /* When this function is called, PhoneGap has been initialized and is ready to roll */
+          /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+            see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+            for more details -jm */
+          function onDeviceReady()
+          {
+            // do your thing!
+            navigator.notification.alert("PhoneGap is working")
+          }
+          
+        </script>
+        <!-- End Phone Gap -->
+
 </head>
 
 <body>
@@ -80,7 +103,7 @@
             <img src="{[this.photo_url(values)]}" class="dishImg">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
-                <span class="restaurantName">@{restaurant_name}</span>
+                <span class="restaurantName">@{restaurant.name}</span>
                 <span class="distanceFigure">{[this.distDisplay(values.distance)]}</span>
             </div>
             <span class="chevrony"></span>
@@ -123,7 +146,7 @@
             <img src="../images/no-image-default.png" class="dishImg">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
-                <span class="restaurantName">@{restaurant_name}</span>
+                <span class="restaurantName">@{restaurant.name}</span>
             </div>
             <span class="chevrony"></span>
             </span>
@@ -133,15 +156,7 @@
 
 <textarea id="savedDishTemplate" class="x-hidden-display">
     <tpl for="menu_item">
-        <div class="adish">
-            <img src="../images/no-image-default.png" class="dishImg">
-            <div class="dishListinfo">
-                <span class="dishname">{name}</span>
-                <span class="restaurantName">@{restaurant.name}</span>
-            </div>
-            <span class="chevrony"></span>
-            </span>
-        </div>
+      {[this.render_dish(values)]}
     </tpl>
 </textarea>
 

@@ -9,7 +9,7 @@ Crave.activityStore = new Ext.data.Store({
   clearOnPageLoad: false,
   proxy: {
     type:'ajax',
-    extraParams: isLoggedIn() ? {} : {all: true},
+    extraParams: Crave.isLoggedIn() ? {} : {all: true},
     url: '/activity.json',
     reader: {
       type:'json',
@@ -38,7 +38,7 @@ Crave.activityPanel = new Ext.Panel({
       xtype:'segmentedbutton',
       items:[{
         text: 'Following',
-        pressed: isLoggedIn() ? true : false,
+        pressed: Crave.isLoggedIn() ? true : false,
         handler:function() {
           delete Crave.activityStore.proxy.extraParams.all;
           Crave.activityStore.load(function() {
@@ -50,7 +50,7 @@ Crave.activityPanel = new Ext.Panel({
         width:'110'
       },{
         text:'All Foodies',
-        pressed: isLoggedIn() ? false : true,
+        pressed: Crave.isLoggedIn() ? false : true,
         handler:function() {
           Crave.activityStore.proxy.extraParams.all = "true";
           Crave.activityStore.load(function() {

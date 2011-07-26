@@ -1,11 +1,11 @@
 
-function isLoggedIn() {
-    var myUID = localStorage.getItem("uid");
-    if(myUID!="" && myUID!=null) {
-        return true;
-    } else {
-        return false;
-    }
+Crave.isLoggedIn = function() {
+  var myUID = localStorage.getItem("uid");
+  if(myUID!="" && myUID!=null) {
+      return true;
+  } else {
+      return false;
+  }
 }
 
 Crave.currentUserId = function() {

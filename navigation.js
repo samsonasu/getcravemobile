@@ -86,7 +86,7 @@ Crave.back_handler = function() {
           type: 'slide', 
           direction: 'right'
         };
-        Crave.viewport.setActiveItem(backInfo.panel, backInfo.anim);
+        Crave.viewport.setActiveItem(backInfo.panel, anim);
       } 
       if (backInfo.callback) { backInfo.callback(backInfo);}
     }

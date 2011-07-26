@@ -18,12 +18,8 @@ Ext.regModel('Dish',
                 return "unrated";
             }
         }
-      },{
-        name: 'restaurant_name',
-        convert: function(value, record) {
-            return record.get('restaurant').name.toString();
-        }
-    }]
+      }
+    ]
 });
 
 Ext.regModel('savedDish',
@@ -35,6 +31,35 @@ Ext.regModel('savedDish',
     }
 });
 
+Crave.dishTemplateConfig = {
+  distDisplay: function(miles) {
+    if (miles === undefined) {
+      return "";
+    }
+    var feet = Math.round(miles * 5280);
+    if(feet<1000) {
+      return feet+" feet";
+    } else {
+      return parseFloat(miles).toFixed(1)+' miles';
+    }
+  },
+  //right now this just grabs the first image
+  photo_url: function(menu_item) {
+    if (menu_item.menu_item_photos && menu_item.menu_item_photos.length > 0) {
+      var photo_url = menu_item.menu_item_photos[0].photo;
+      return "http://src.sencha.io/" + photo_url;
+    } 
+    
+    return "../images/no-image-default.png";
+  },
+  render_dish: function(menu_item) {
+    return Crave.dishTemplate.apply(menu_item);
+  }
+};
+
+Crave.dishTemplate = new Ext.XTemplate.from('dishesTemplate', Crave.dishTemplateConfig);
+
+Crave.savedDishTemplate = Ext.XTemplate.from("savedDishTemplate", Crave.dishTemplateConfig);
 
 
 //activity.js
@@ -85,11 +110,6 @@ Ext.regModel('RestaurantDish',
             } else {
                 return "";
             }
-        }
-    },{
-        name: 'restaurant_name',
-        convert: function(value, record) {
-            return record.get('restaurant').name.toString();
         }
     }]
 });

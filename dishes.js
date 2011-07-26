@@ -146,26 +146,6 @@ var filterListPnl = new Ext.Panel({
 });
 
 
-dishTemplate = new Ext.XTemplate.from('dishesTemplate', {
-  distDisplay: function(miles) {
-    var feet = Math.round(miles * 5280);
-    if(feet<1000) {
-      return feet+" feet";
-    } else {
-      return parseFloat(miles).toFixed(1)+' miles';
-    }
-  },
-  //right now this just grabs the first image
-  photo_url: function(menu_item) {
-    if (menu_item.menu_item_photos && menu_item.menu_item_photos.length > 0) {
-      var photo_url = menu_item.menu_item_photos[0].photo;
-      return "http://src.sencha.io/" + photo_url;
-    } 
-    
-    return "../images/no-image-default.png";
-  }
-});
-
 var dishStore = new Ext.data.Store({
     model: 'Dish',
     clearOnPageLoad: false,
