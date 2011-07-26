@@ -1,5 +1,20 @@
 //mine is true for the "my profile" panel and false for the other people's one.
 Crave.buildProfilePanel = function(mine) {
+  
+  var setupBackStack = function(subPanel) {
+    Crave.back_stack.push({
+      panel: profilePnl,
+      user_id: profilePnl.displayed_user_id,
+      callback: function(backInfo) {
+        if (!mine) {
+          //they just returned to the "other" profile panel via the back button, which means they were on someone else's profile
+          profilePnl.load_user_data(backInfo.user_id);
+        }
+        profilePnl.setActiveItem(subPanel);
+      }
+    });
+  }
+  
   var userDishStore = new Ext.data.Store({
       model: 'MenuItemRating',
       clearOnPageLoad: false,
@@ -26,13 +41,13 @@ Crave.buildProfilePanel = function(mine) {
       grouped: true,
       indexBar: false,
       store: userDishStore,
-      loadingText: undefined,
+      loadingText: "Loading",
       scroll: false,
       clearSectionOnDeactivate:true,
       listeners: {
         itemtap:  function(dataView, index, item, e) {
           var record = userDishStore.getAt(index);
-          Crave.back_stack.push(makeBackStack());
+          setupBackStack(userProfilePnl);
           Crave.show_menu_item(record.data.id);
         }
       },
@@ -88,7 +103,7 @@ Crave.buildProfilePanel = function(mine) {
       listeners: {
         itemtap: function(dataView, index, item, e) {
           var dish_id = savedDishStore.getAt(index).data.menu_item.id;
-          Crave.back_stack.push(makeBackStack());
+          setupBackStack(savedDishList);
           Crave.show_menu_item(dish_id);
         }
       },
@@ -152,17 +167,7 @@ Crave.buildProfilePanel = function(mine) {
     listeners: {
       itemtap: function(dataView, index, item, e) {
         var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
-        Crave.back_stack.push({
-          panel: profilePnl,
-          user_id: profilePnl.displayed_user_id,
-          callback: function(backInfo) {
-            if (!mine) {
-              //they just returned to the "other" profile panel via the back button, which means they were on someone else's profile
-              profilePnl.load_user_data(backInfo.user_id);
-            }
-            profilePnl.setActiveItem(followerList);
-          }
-        });
+        setupBackStack(followerList);
         Crave.show_user_profile(record.data.user_id);
       }
     },
@@ -186,17 +191,7 @@ Crave.buildProfilePanel = function(mine) {
     listeners: {
       itemtap: function(dataView, index, item, e) {
         var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
-        Crave.back_stack.push({
-          panel: profilePnl,
-          user_id: profilePnl.displayed_user_id,
-          callback: function(backInfo) {
-            if (!mine) {
-              //they just returned to the "other" profile panel via the back button, which means they were on someone else's profile
-              profilePnl.load_user_data(backInfo.user_id);
-            }
-            profilePnl.setActiveItem(followingList);
-          }
-        });
+        setupBackStack(followingList);
         Crave.show_user_profile(record.data.following_user_id);
       }
     },
@@ -355,6 +350,7 @@ Crave.buildProfilePanel = function(mine) {
       }
       profilePnl.setActiveItem(userProfilePnl, 'pop');
       profilePnl.setLoading(true);
+      userProfilePnl.scroller.scrollTo({ x: 0, y: 0 });
       //load basic info
       Ext.Ajax.request({
         method: "GET",
