@@ -216,68 +216,6 @@ var newRestaurant = new Ext.form.FormPanel({
     ]
 });
 
-var reviewForm = new Ext.form.FormPanel({
-  items: [{
-    xtype: 'textfield',
-    name: 'menu_item_rating[rating]',
-    id:'menuRating',
-    hidden:true
-  },{
-    xtype: 'textfield',
-    name: 'menu_item_rating[review]',
-    width:'100%',
-    height:'200',
-    placeHolder: 'Write a review',
-    cls:'reviewField',
-    id: 'review'
-  },{
-    xtype: 'textfield',
-    name: 'menu_item_rating[menu_item_id]',
-    id: 'menuId',
-    hidden:true
-  },{
-    xtype: 'textfield',
-    name: 'menu_item_rating[user_id]',
-    id: 'userId',
-    hidden:true
-  }]
-});
-
-var reviewFormPnl = new Ext.Panel({
-  id: 'reviewFormPnl',
-  dockedItems:[Crave.create_titlebar({
-    items:[{
-      text:'Back',
-      ui:'back', 
-      handler:Crave.back_handler
-    },{xtype: 'spacer'},{
-      text:'Submit',
-      ui:'normal', 
-      handler:function() {
-        reviewForm.submit({
-            url: '/ratings?mobile=1',
-            method: 'post',
-            submitDisabled: true,
-            waitMsg: 'Saving Data...Please wait.',
-            success: function (objForm,httpRequest) {
-                var mbox = new Ext.MessageBox({});
-                mbox.alert("Record Saved");
-            },
-            failure: function() {
-                console.log('submissionFailed');
-            }
-        })
-      }
-    }]
-  })],
-  items: [{
-    html: '<div class="starContainer"><div class="starLabel">Have you tried this</div><div class="starRating ratingOf0"><button class="starcover" id="id-star1"></button><button class="starcover" id="id-star2"></button><button class="starcover" id="id-star3"></button><button class="starcover" id="id-star4"></button><button class="starcover" id="id-star5"></button></div></div>',
-    height:'80',
-    width:'100%'
-  },reviewForm
-  ]
-});
-
 var aRestaurantList = new Ext.List({
     id:'aRestaurantList',
     itemTpl: restaurantDishTemplate,

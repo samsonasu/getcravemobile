@@ -4,27 +4,32 @@ Crave.show_user_profile = function(user_id) {
 };
 
 Crave.show_menu_item = function(menu_item_id) {
-  Ext.Ajax.request({
-    method: 'GET', // REST is fun
-    url: '/items/'+menu_item_id+'.json',
-    reader: {
-      type: 'json'
-    },
-    success: function(response) {
-      dishDisplay(response);
-    }
-  });
-  Crave.viewport.setActiveItem(detailPnl);
+//  Ext.Ajax.request({
+//    method: 'GET', // REST is fun
+//    url: '/items/'+menu_item_id+'.json',
+//    reader: {
+//      type: 'json'
+//    },
+//    success: function(response) {
+//      dishDisplay(response);
+//    }
+//  });
+  //Crave.viewport.setActiveItem(detailPnl);
 
   
-  //Crave.viewport.setActiveItem(Crave.dishDisplayPanel);
-  //Crave.dishDisplayPanel.load_dish_data(menu_item_id);
+  Crave.viewport.setActiveItem(Crave.dishDisplayPanel);
+  Crave.dishDisplayPanel.load_dish_data(menu_item_id);
 
 };
 
 Crave.show_restaurant = function(restaurant_id) {
   placeDisplay(restaurant_id);
 };
+
+Crave.new_dish_rating = function(menu_item) {
+  Crave.viewport.setActiveItem(Crave.rateDishPanel);
+  Crave.rateDishPanel.set_menu_item(Crave.dishDisplayPanel.current_menu_item);
+}
 
 Crave.ratingDisplay = function(rating) {
   try {

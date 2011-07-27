@@ -36,6 +36,13 @@ TouchBS.get_date = function(date) {
              }
           }
       }
+      if (date[date.length-1] === 'Z') {
+        //UTC time in the db, but javascript will think that is in localtime, so we need to
+        //subtract the current localtime offset (which is in minutes)
+        //this will give us the real time with the right local tz offset
+        var real_date = new Date(d.getTime() - (d.getTimezoneOffset() * 60 * 1000));
+        return real_date;
+      }
       return d;
    }
 };

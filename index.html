@@ -10,52 +10,6 @@
     <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114.png" sizes="114x114"/>
 
     <meta name="viewport" content="width = device-width">
-    <style type="text/css">
-        .reviewField {border:none;}
-        .starContainer {background-color:#ccc;  }
-        .starLabel {
-            float:left;
-            height: 80px;
-            padding: 3px;
-            width: 100px;
-        }
-        .starRating {
-            width: 200px;
-            float: left;
-            height: 80px;
-        }
-        .ratingOf0 {
-            background:url("../images/rating-my-0.png") no-repeat;
-        }
-        .ratingOf1 {
-            background:url("../images/rating-my-1.png") no-repeat;
-        }
-        .ratingOf2 {
-            background:url("../images/rating-my-2.png") no-repeat;
-        }
-        .ratingOf3 {
-            background:url("../images/rating-my-3.png") no-repeat;
-        }
-        .ratingOf4 {
-            background:url("../images/rating-my-4.png") no-repeat;
-        }
-        .ratingOf5 {
-            background:url("../images/rating-my-5.png") no-repeat;
-        }
-        .x-form .x-panel-body {
-            border:none;
-        }
-        .starcover {
-            height: 33px;
-            width: 37px;
-            float: left;
-            margin: 0 1px 0 0;
-            display:block;
-            border: none;
-            background: transparent;
-        }
-        .x-tab-pressed {}
-    </style>
     <link rel="Fav Icon" href="../favicon.ico" type="image/vnd.microsoft.icon">
 
     <script type="text/javascript">
@@ -195,6 +149,21 @@
     </tpl>
 </textarea>
 
+<-- For the list of ratings on the dish detail page -->
+<textarea id="dishRatingTemplate" class="x-hidden-display">
+    <tpl for=".">
+        <div class="arating">
+            <img src="{[Crave.photo_url(values.user)]}" class="dishImg">
+            <div class="ratingListItem">
+                <span class="ratingDescription">
+                  <a style="font-weight: bold;" href="#" onclick="Crave.back_stack.push({panel: Crave.dishDisplayPanel});Crave.show_user_profile({user.id});">{user.user_name}</a>
+                {[Crave.ratingDisplay(values.rating)]}<br/>
+                <span class="review">{review}</span>
+            </div>
+        </div>
+    </tpl>
+</textarea>
+
 <textarea id="followUserTemplate" class="x-hidden-display">
   <tpl for=".">
     <div class='followUser'>
@@ -225,6 +194,8 @@
 <script type="text/javascript" src="settings.js"></script>
 <script type="text/javascript" src="profile.js"></script>
 <script type="text/javascript" src="activity.js"></script>
+<script type="text/javascript" src="review.js"></script>
+
 
 
 

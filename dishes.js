@@ -274,22 +274,78 @@ function dishDisplay(response) {
 
 //this is the new dish display, and it's not done yet so don't use it.
 Crave.buildDishDisplayPanel = function() {
-
-  Crave.dishDisplayPanel = new Ext.Panel({
-    layout: 'vbox',
+  
+  var imageCarousel = new Ext.Carousel({
+    height: 100,
     width: '100%',
+    items: [{
+        xtype: 'panel',
+        html: '<p>No Image Available</p>'
+    },{
+        xtype: 'panel',
+        html: '<p>No Image Available</p>'
+    }]
+  });
+  
+  
+  var reviewStore = new Ext.data.Store({
+    model: 'MenuItemRating',
+    data : [],
+    proxy: {
+      type: 'memory',
+      reader: {
+        type: 'json'
+      }
+    }
+  });
+  
+  var marker = null;
+  
+  var reviewsPanel = new Ext.Panel({
+    layout: 'fit',
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
         handler: Crave.back_handler
       }]
     }),
-    items: [{
+    items: new Ext.List({
+      itemTpl: new Ext.XTemplate.from('dishRatingTemplate'),
+      itemSelector: '.arating',
+      singleSelect: true,
+      grouped: false,
+      indexBar: false,
+      store: reviewStore,
+      loadingText: "Loading",
+      scroll: 'vertical',
+      clearSectionOnDeactivate:true
+    })
+  })
+  
+  var dishPanel = new Ext.Panel({
+    layout: 'vbox',
+    width: '100%',
+    scroll: 'vertical',
+    dockedItems: Crave.create_titlebar({
+      items: [{
+        text: 'Back',
+        handler: Crave.back_handler
+      }, {
+        text: "Rate", 
+        handler: function() {
+          Crave.back_stack.push({
+            panel: Crave.dishDisplayPanel
+          });
+          Crave.new_dish_rating(Crave.dishDisplayPanel.current_menu_item);
+        }
+      }]
+    }),
+    items: [imageCarousel,{
       xtype: 'panel',
       width: '100%',
       id: 'dishDetailHeader',
       height: 100,
-      tpl: '<div class="dishinfo"><div class="dishDetails"><b>{name}</b><br/>' +
+      tpl: '<div class="dishInfo"><b>{name}</b><br/>' +
            '@ {restaurant.name}<br>' +
            '{[Crave.ratingDisplay(values.menu_item_avg_rating_count.avg_rating)]}' +
            '{menu_item_avg_rating_count.count} ratings</div>',
@@ -303,9 +359,9 @@ Crave.buildDishDisplayPanel = function() {
         dock : 'top',
         xtype: 'toolbar',
         cls: 'title',
-        title: 'Labels'
+        title: 'Dish Labels'
       }],
-      tpl: '<div class="dishLables">{[values.labels.join(",")]}</div>',
+      tpl: '<div class="dishLabels">{[values.labels.join(",")]}</div>',
       data: {labels: ["test", "label", "somelabel"]}
     },{
       xtype: 'panel',
@@ -324,34 +380,164 @@ Crave.buildDishDisplayPanel = function() {
       xtype: 'panel',
       cls: 'framePanel',
       width: '100%',
-      id: 'dishReviewsPanel',
+      id: 'dishRatingPanel',
       dockedItems: [{
         dock : 'top',
         xtype: 'toolbar',
-        cls: 'title',
-        title: 'Reviews'
+        cls: 'title clickable',
+        title: 'Reviews',
+        listeners: {  
+          afterrender: function(c){
+            c.el.on('click', function(){
+              Crave.back_stack.push({
+                fn: function() {
+                  Crave.dishDisplayPanel.setActiveItem(dishPanel, {type: 'slide', direction: 'right'});
+                }
+              })
+              Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
+            });
+          }
+        }
       }],
-      data: {menu_item_ratings: []}
-    }],
+      items: {
+        id: 'dishDisplayRating',
+        tpl: new Ext.XTemplate.from('dishRatingTemplate'),
+        data: {user: {}}
+      }
+    },{
+      xtype: 'panel', 
+      cls: 'framePanel',
+      width: '100%',
+      dockedItems: [{
+        dock : 'top',
+        xtype: 'toolbar',
+        cls: 'title clickable',
+        style: 'margin: 0;',
+        title: 'Address',
+        listeners: {  
+          afterrender: function(c){
+            c.el.on('click', function(){
+              Crave.back_stack.push({
+                fn: function() {
+                  Crave.dishDisplayPanel.setActiveItem(dishPanel, {type: 'slide', direction: 'right'});
+                }
+              })
+              Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
+            });
+          }
+        }
+      }],
+      items: [{
+        id: 'dishMap',
+        xtype: 'map',
+        useCurrentLocation: false,
+        height: 125,
+        width: '100%',
+        mapOptions : {
+          center : new google.maps.LatLng(37.774518,-122.420101),  //SF
+          //not really centering here, just putting it in top right corner
+          zoom : 17,
+          mapTypeId : google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true,
+          navigationControl: false
+        }
+      },{
+        xtype: 'panel', 
+        id: 'dishAddress', 
+        tpl: '<div class="dishAddress">{street_address}<br/>{city}, {state} {zip}</div>',
+        data: {}
+      }]
+    }]
+    
+  });
+  
+  Crave.dishDisplayPanel = new Ext.Panel({
+    layout: 'card', 
+    items: [dishPanel, reviewsPanel],
+    activeItem: 0, 
     load_dish_data: function(dish_id) {
       Ext.Ajax.request({
         method: "GET",
         url: '/items/' + dish_id + '.json',
         success: function(response, options) {
           var menu_item = Ext.decode(response.responseText).menu_item;
+          Crave.dishDisplayPanel.current_menu_item = menu_item;
+          
+          //Set up the image carousel at the top
+          if (menu_item.menu_item_photos) {
+            //imageCarousel.removeAll();
+            var items = [];
+            Ext.each(menu_item.menu_item_photos, function(photo) {
+              items.push(new Ext.Panel({
+                cls: 'dishCarouselImage', 
+                html: '<img onload="Crave.dishImageLoaded(this);" src="' + photo.photo + '">'
+              }));
+            });
+            imageCarousel.removeAll();
+            imageCarousel.add(items);
+            imageCarousel.doLayout();
+          }
+          //Dish header is easy, so is description
           Ext.getCmp('dishDetailHeader').update(menu_item);
+          Ext.getCmp('dishDescriptionPanel').update(menu_item);
+          
+          //Update ratings or hide if there aren't any
+          if (menu_item.menu_item_ratings.length > 0) {
+            Ext.getCmp('dishDisplayRating').update(menu_item.menu_item_ratings[0]);
+            Ext.getCmp('dishRatingPanel').getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
+            Ext.getCmp('dishRatingPanel').show();
+            reviewStore.loadData(menu_item.menu_item_ratings);
+          } else {
+            Ext.getCmp('dishRatingPanel').hide();
+          }
+          
+          // Update labels
+          var label_map = {};
+          Ext.each(menu_item.menu_label_associations, function(assoc) {
+            var l = assoc.menu_label.menu_label;
+            if (!label_map[l]) {label_map[l] = 0;}
+            label_map[l]++;
+          });
+          var labels = [];
+          for (var l in label_map) {
+            labels.push(l + " (" + label_map[l] + ")");
+          }
+          
+          Ext.getCmp('dishLabelsPanel').update({labels: labels});
+          
+          //update the map
+          Ext.getCmp('dishMap').update(menu_item.restaurant);
+          if (marker) {
+            marker.setMap(null);
+          }
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(menu_item.restaurant.latitude,menu_item.restaurant.longitude),
+            map: Ext.getCmp('dishMap').map,
+            title: 'restaurant'
+          });
+          Ext.getCmp('dishAddress').update(menu_item.restaurant);
         }
       });
     }
-  });
+  })
   return Crave.dishDisplayPanel; 
 }
 
-Crave.photo_url = function(menu_item) {
-  if (menu_item.menu_item_photos && menu_item.menu_item_photos.length > 0) {
-    var photo_url = menu_item.menu_item_photos[0].photo;
+Crave.dishImageLoaded = function(img) {
+  var y = img.height / 2;
+  img.style["-webkit-transform"] = "translate(0, -" + y + "px)";
+}
+
+//obj is something with a photo, so far either a menu item or a user
+Crave.photo_url = function(obj) {
+  if (obj.menu_item_photos && obj.menu_item_photos.length > 0) {
+    var photo_url = obj.menu_item_photos[0].photo;
     return "http://src.sencha.io/" + photo_url;
   } 
+  
+  if (obj.user_profile_pic_url) {
+    return "http://src.sencha.io/" + obj.user_profile_pic_url;
+  }
 
   return "../images/no-image-default.png";
 };

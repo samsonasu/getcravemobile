@@ -498,20 +498,6 @@ Crave.buildSavedPanel = function() {
   
   Crave.savedPanel = new Ext.Panel({
     dockedItems: Crave.create_titlebar({
-//      items:[{
-//        text:'Back',
-//        ui:'back',
-//        handler: Crave.back_handler
-//      },{
-//        text:'Rate',
-//        ui:'normal',
-//        handler: function() {
-//          Crave.back_stack.push({
-//            panel: detailPnl
-//          });
-//          Crave.viewport.setActiveItem(reviewFormPnl);
-//        }
-//      }]
     }),
     items: savedList,
     listeners: {

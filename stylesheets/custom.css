@@ -93,9 +93,25 @@ padding: .3em .3em;
 .framePanel .x-toolbar.title .x-toolbar-title {
   padding-left: 1em;
   text-align: left;
-  font-weight: normal;
+  text-shadow: none;
+  font-weight: bold;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  background-image: -webkit-linear-gradient(#ccc, #eee);
   font-size: 1em;
   color: #333;
+}
+.framePanel .x-toolbar.title.clickable .x-toolbar-title::after {
+  content: "";
+  background: url('../../images/arrow-gray.png') no-repeat 0 .5em;
+  height: 2em;
+  width: 16px;
+  float: right;
+}
+
+.framePanel .x-toolbar.title.clickable .count {
+  color: #888;
+  margin-left: 4px;
 }
 
 .framePanel .x-toolbar.x-docked-top  {
@@ -209,11 +225,34 @@ font-weight: lighter;
     margin:12px auto;
 }
 .dishInfo {background-color: white;}
-.dishinfo, #reviewPnl {
-	padding: 12px;
-	font-size: 16px;
-	line-height: 24px;
-	}
+.dishInfo, #reviewPnl {
+  padding: 12px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.dishCarouselImage IMG {
+  width: 100%;
+}
+
+.dishLabels {
+  padding-left: 1em;
+  padding-right: 1em;
+  color: #aaa;
+}
+
+.dishDescription {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.dishAddress {
+  padding: 1em;
+  color: #aaa;
+  
+  
+}
+
 .picanddata .pic {float:left;padding:0 10px 0 0;}
 .picanddata .data {
 	float: left;
@@ -309,26 +348,71 @@ font-weight: lighter;
 
 
 
-.x-toolbar-light .x-button.x-button-pressed, .x-toolbar-light .x-button.x-button-active, .x-toolbar .x-toolbar-light .x-button.x-button-pressed, .x-toolbar .x-toolbar-light .x-button.x-button-active, .x-toolbar-light .x-field-select .x-input-text.x-button-pressed, .x-toolbar-light .x-field-select .x-input-text.x-button-active, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-pressed, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-active, .x-toolbar-light .x-field-select::before.x-button-pressed, .x-toolbar-light .x-field-select::before.x-button-active, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-pressed, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-active
+.x-toolbar-light .x-button.x-button-pressed,
+.x-toolbar-light .x-button.x-button-active, 
+.x-toolbar .x-toolbar-light .x-button.x-button-pressed, 
+.x-toolbar .x-toolbar-light .x-button.x-button-active, 
+.x-toolbar-light .x-field-select .x-input-text.x-button-pressed, 
+.x-toolbar-light .x-field-select .x-input-text.x-button-active, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-pressed, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-active, 
+.x-toolbar-light .x-field-select::before.x-button-pressed, 
+.x-toolbar-light .x-field-select::before.x-button-active, 
+.x-toolbar .x-toolbar-light .x-field-select::before.x-button-pressed, 
+.x-toolbar .x-toolbar-light .x-field-select::before.x-button-active
 {
   -webkit-box-shadow: inset 0px 0px 1px 1px #B13320;
   -moz-box-shadow: inset 0px 0px 1px 1px #B13320;
   box-shadow: inset 0px 0px 1px 1px #B13320;
 }
-.x-toolbar-light .x-button, .x-toolbar-light .x-button.x-button-back::after, .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar .x-toolbar-light .x-button, .x-toolbar .x-toolbar-light .x-button.x-button-back::after, .x-toolbar .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar-light .x-field-select .x-input-text, .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar-light .x-field-select::before, .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar-light .x-field-select::before.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::after
+
+.x-toolbar-light .x-button, 
+.x-toolbar-light .x-button.x-button-back::after, 
+.x-toolbar-light .x-button.x-button-forward::after, 
+.x-toolbar .x-toolbar-light .x-button, 
+.x-toolbar .x-toolbar-light .x-button.x-button-back::after, 
+.x-toolbar .x-toolbar-light .x-button.x-button-forward::after, 
+.x-toolbar-light .x-field-select .x-input-text, 
+.x-toolbar-light .x-field-select .x-input-text.x-button-back::after, 
+.x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, 
+.x-toolbar-light .x-field-select::before, 
+.x-toolbar-light .x-field-select::before.x-button-back::after, 
+.x-toolbar-light .x-field-select::before.x-button-forward::after, 
+.x-toolbar .x-toolbar-light .x-field-select::before, 
+.x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::after, 
+.x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::after
 {
   /*background-image: -webkit-linear-gradient(top, #F9735B 0%,#E4381A 100%);*/
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #F9735B), color-stop(100%, #E4381A));
   background-color: #E4381A;
 }
 
-.x-toolbar-light .x-button, .x-toolbar .x-toolbar-light .x-button, .x-toolbar-light .x-field-select .x-input-text, .x-toolbar .x-toolbar-light .x-field-select .x-input-text, .x-toolbar-light .x-field-select::before, .x-toolbar .x-toolbar-light .x-field-select::before
+.x-toolbar-light .x-button, 
+.x-toolbar .x-toolbar-light .x-button, 
+.x-toolbar-light .x-field-select .x-input-text, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text, 
+.x-toolbar-light .x-field-select::before, 
+.x-toolbar .x-toolbar-light .x-field-select::before
 {
     border:0.1em solid #b1422e;
 	border-top: 1px solid #F3A598;
 }
 
-.x-toolbar-light .x-button.x-button-back::before, .x-toolbar-light .x-button.x-button-forward::before, .x-toolbar .x-toolbar-light .x-button.x-button-back::before, .x-toolbar .x-toolbar-light .x-button.x-button-forward::before, .x-toolbar-light .x-field-select .x-input-text.x-button-back::before, .x-toolbar-light .x-field-select .x-input-text.x-button-forward::before, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::before, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::before, .x-toolbar-light .x-field-select::before.x-button-back::before, .x-toolbar-light .x-field-select::before.x-button-forward::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::before
+.x-toolbar-light .x-button.x-button-back::before, 
+.x-toolbar-light .x-button.x-button-forward::before, 
+.x-toolbar .x-toolbar-light .x-button.x-button-back::before, 
+.x-toolbar .x-toolbar-light .x-button.x-button-forward::before, 
+.x-toolbar-light .x-field-select .x-input-text.x-button-back::before, 
+.x-toolbar-light .x-field-select .x-input-text.x-button-forward::before, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::before, 
+.x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::before, 
+.x-toolbar-light .x-field-select::before.x-button-back::before, 
+.x-toolbar-light .x-field-select::before.x-button-forward::before, 
+.x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::before, 
+.x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::before
 {
     background:#b1422e;
 }
@@ -351,11 +435,11 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .x-form .x-panel-body {
-padding: 1em;
-background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F8F7F5), color-stop(1, #ECEBE7) );
-border-bottom: 1px solid #BAB9B7;
-border-top: 1px solid white;
-height: 45px;
+  padding: 1em;
+  background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F8F7F5), color-stop(1, #ECEBE7) );
+  border-bottom: 1px solid #BAB9B7;
+  border-top: 1px solid white;
+  height: 45px;
 }
 
 .x-field input, .x-field textarea, .x-field select, .x-field .x-field-slider {
@@ -627,10 +711,10 @@ margin-top: -2px;
 }
 
 .dishDetails {
-	background: white;
-	margin: -12px -12px 12px;
-	padding: 10px;
-	bottom-border:1px solid #cccccc;
+  background: white;
+  margin: -12px -12px 12px;
+  padding: 10px;
+  bottom-border:1px solid #cccccc;
 }
 
 IMG.stars {
@@ -666,4 +750,69 @@ IMG.stars {
 /*fix for flickering slide animations */
 .x-tabpanel > .x-panel-body .x-panel {
     -webkit-backface-visibility: hidden;
+}
+
+.reviewField {border:none;}
+.newReviewContainer {
+  background-image: -webkit-linear-gradient(#282523, #404143 );
+  height: 48px;
+  padding: 4px;
+}
+.newReviewContainer .starLabel {
+    float:left;
+    height: 40px;
+    color: #eee;
+    font-weight: 100;
+    letter-spacing: 1px;
+    font-size: 15px;
+    padding: 2px 0 2px 6px;
+    width: 90px;
+}
+.newReviewContainer .starRating {
+    width: 200px;
+    margin-left: 8px;
+    margin-top: 2px;
+    float: left;
+    height: 40px;
+}
+
+.rateDishPanel .x-panel, 
+.rateDishPanel .x-form-field-container, 
+.rateDishPanel .x-panel-body {
+  padding: 0;
+  margin: 0;
+}
+.rateDishPanel TEXTAREA {
+  width: 100%;
+  border-radius: 0px;
+  height: 340px;
+}
+
+.ratingOf0 {
+    background:url("../images/rating-my-0.png") no-repeat;
+}
+.ratingOf1 {
+    background:url("../images/rating-my-1.png") no-repeat;
+}
+.ratingOf2 {
+    background:url("../images/rating-my-2.png") no-repeat;
+}
+.ratingOf3 {
+    background:url("../images/rating-my-3.png") no-repeat;
+}
+.ratingOf4 {
+    background:url("../images/rating-my-4.png") no-repeat;
+}
+.ratingOf5 {
+    background:url("../images/rating-my-5.png") no-repeat;
+}
+
+.starcover {
+    height: 33px;
+    width: 37px;
+    float: left;
+    margin: 0 1px 0 0;
+    display:block;
+    border: none;
+    background: transparent;
 }
