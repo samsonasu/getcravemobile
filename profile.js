@@ -328,25 +328,28 @@ Crave.buildProfilePanel = function(mine) {
     }),
     listeners: {
       activate: function(p) {
-        if (!Crave.isLoggedIn()){
-          p.setActiveItem(profileLoginPnl);
-          return;          
-        } 
         if (mine) {
-          //make sure the user data is loaded
-          //this will do nothign on subsequest calls
-          p.load_user_data(Crave.currentUserId());
+          if (!Crave.isLoggedIn()){
+            p.setActiveItem(profileLoginPnl);
+          } else { 
+            //make sure the user data is loaded
+            //this will do nothign on subsequest calls
+            p.load_user_data(Crave.currentUserId());
+          }
         }
         userDishList.refresh();  //herp derp 
       }
     },
     load_user_data: function(user_id) {
+  
+      profilePnl.setActiveItem(userProfilePnl, 'pop');
+      userProfilePnl.scroller.scrollTo({ x: 0, y: 0 });
+  
       if (profilePnl.displayed_user_id === user_id) {
         return;
       }
-      profilePnl.setActiveItem(userProfilePnl, 'pop');
+
       profilePnl.setLoading(true);
-      userProfilePnl.scroller.scrollTo({ x: 0, y: 0 });
       //load basic info
       Ext.Ajax.request({
         method: "GET",
@@ -356,6 +359,8 @@ Crave.buildProfilePanel = function(mine) {
         },
         success: function(response, options) {
           profilePnl.setLoading(false);
+          profilePnl.setActiveItem(userProfilePnl, 'pop');
+          userProfilePnl.scroller.scrollTo({ x: 0, y: 0 });
           profilePnl.displayed_user_id = user_id;
           var user = Ext.decode(response.responseText).user;
           var html = '<div class="userTopPnl"><div class="userPic">';
