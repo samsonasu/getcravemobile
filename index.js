@@ -50,7 +50,7 @@ Ext.setup({
         "long": coords.longitude,
         limit: 25
       }
-
+      
       places.load();
       Crave.activityStore.load();
     }, function() {
@@ -171,8 +171,7 @@ Ext.setup({
     var restInfoPnl = new Ext.Panel({
       html: '',
       id: 'restInfoPnl',
-      height:'100%',
-      width:'100%'
+      flex: 1
     });
     var restPnl = new Ext.Panel({
       id: 'restPnl',

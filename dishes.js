@@ -346,3 +346,12 @@ Crave.buildDishDisplayPanel = function() {
   });
   return Crave.dishDisplayPanel; 
 }
+
+Crave.photo_url = function(menu_item) {
+  if (menu_item.menu_item_photos && menu_item.menu_item_photos.length > 0) {
+    var photo_url = menu_item.menu_item_photos[0].photo;
+    return "http://src.sencha.io/" + photo_url;
+  } 
+
+  return "../images/no-image-default.png";
+};

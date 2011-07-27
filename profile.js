@@ -24,13 +24,9 @@ Crave.buildProfilePanel = function(mine) {
         url: '',
         reader: {
           type:'json',
-          record:'menu_item_rating'
+          model: 'MenuItemRating',
+          record: 'menu_item_rating'
         }
-      },
-      sorters: [{property: 'rating', direction: 'DESC'}],
-      getGroupString : function(record) {
-          var rating = parseInt(record.get('rating'));
-          return Crave.ratingDisplay(rating);
       }
   });
 
@@ -38,7 +34,7 @@ Crave.buildProfilePanel = function(mine) {
       itemTpl: new Ext.XTemplate.from('profileRatingTemplate'),
       itemSelector: '.arating',
       singleSelect: true,
-      grouped: true,
+      grouped: false,
       indexBar: false,
       store: userDishStore,
       loadingText: "Loading",
@@ -363,7 +359,7 @@ Crave.buildProfilePanel = function(mine) {
           profilePnl.displayed_user_id = user_id;
           var user = Ext.decode(response.responseText).user;
           var html = '<div class="userTopPnl"><div class="userPic">';
-          html = html + '<img src="'+user.user_profile_pic_url+'?type=large"></div>'
+          html = html + '<img onload="Crave.squareFitImage(this);" src="'+user.user_profile_pic_url+'?type=large"></div>'
           html = html + '<div class="userInfo"><div class="userName">' + user.user_name+ '</div>';
           html = html + '<div class="reviewCount">' + user.user_ratings_count + ' reviews</div>';
           if (!mine && Crave.isLoggedIn()) { //can't follow if not logged in yet
@@ -410,7 +406,7 @@ Crave.follow_user_toggle = function(user_id, button) {
   if (following) {
     Ext.Ajax.request({
       method: "DELETE",
-      url: '/user_followings.json',
+      url: '/following.json',
       jsonData:{
         user_following: {
           user_id: Crave.currentUserId(),
@@ -529,3 +525,14 @@ Crave.buildSavedPanel = function() {
   
   return Crave.savedPanel;
 };
+
+
+Crave.squareFitImage = function(img) {
+  if (img.width > img.height) {
+    img.style.height = "100px";
+    img.style.width = "";
+  } else {
+    img.style.width = "100px";
+    img.style.height = "";
+  }
+}

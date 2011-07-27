@@ -100,7 +100,7 @@
 <textarea id="dishesTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="adish">
-            <img src="{[this.photo_url(values)]}" class="dishImg">
+            <img src="{[Crave.photo_url(values)]}" class="dishImg">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">@{restaurant.name}</span>
@@ -179,13 +179,15 @@
 <textarea id="profileRatingTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="arating">
-            <img src="../images/no-image-default.png" class="dishImg">
+            <img src="{[Crave.photo_url(values.menu_item)]}" class="dishImg">
             <div class="ratingListItem">
+                <span class="chevrony"></span>
                 <span class="ratingDescription">
                   <b>{menu_item.name}</b>
-                  @ {menu_item.restaurant.name}<br/>
-                </span>
-                <span class="chevrony"></span>
+                  @ {menu_item.restaurant.name}
+                </span><br/>
+                {[Crave.ratingDisplay(values.rating)]}
+                
             </div>
         </div>
     </tpl>

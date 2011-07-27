@@ -44,14 +44,7 @@ Crave.dishTemplateConfig = {
     }
   },
   //right now this just grabs the first image
-  photo_url: function(menu_item) {
-    if (menu_item.menu_item_photos && menu_item.menu_item_photos.length > 0) {
-      var photo_url = menu_item.menu_item_photos[0].photo;
-      return "http://src.sencha.io/" + photo_url;
-    } 
-    
-    return "../images/no-image-default.png";
-  },
+  photo_url: Crave.photo_url,
   render_dish: function(menu_item) {
     return Crave.dishTemplate.apply(menu_item);
   }
@@ -61,28 +54,25 @@ Crave.dishTemplate = new Ext.XTemplate.from('dishesTemplate', Crave.dishTemplate
 
 Crave.savedDishTemplate = Ext.XTemplate.from("savedDishTemplate", Crave.dishTemplateConfig);
 
+Ext.regModel('Restaurant', {
+  fields: ['city', 'distance', 'name', 'id', 'country', 'created_at', 'state', 'street_address', 'telephone', 'twitter', 'zip']
+});
+
+Ext.regModel('User', {
+  fields: ['facebook_id', 'id', 'user_ratings_count', 'user_profile_pic_url', 'user_name', 'twitter_id']
+});
+
+Ext.regModel('FollowUser', {
+  fields: ['user_name', 'id', 'user_id', 'following_user_id', 'user', "following_user"]
+});
 
 //activity.js
 
 Ext.regModel("MenuItemRating", {
-  fields: ["user", "rating","created_at", "updated_at", "review", "id", "user_id", "menu_item_id", "menu_item"],
-  belongsTo: [{
-    model: 'Dish',
-    name: 'menu_item',
-    belongsTo: {
-      model: 'Restaurant',
-      name: 'restaurant'
-    }
-  },{
-    model: 'User',
-    name: 'user'
-  }]
+  fields: ["user", "rating", "created_at", "updated_at", "review", "id", "user_id", "menu_item_id", 'menu_item']
 });
 
 
-Ext.regModel('Restaurant', {
-  fields: ['name', 'id']
-});
 
 
 //used in restaurants.js
@@ -114,28 +104,8 @@ Ext.regModel('RestaurantDish',
     }]
 });
 
-Ext.regModel('Restaurants',
-{
-    fields: ['distance','name','id']
-});
-
 Ext.regModel('DishSearch',
 {
   fields: ['name','id','price','description','restaurant_id']
 });
 
-Ext.regModel('User', {
-  fields: ['facebook_id', 'id', 'user_ratings_count', 'user_profile_pic_url', 'user_name', 'twitter_id']
-});
-
-Ext.regModel('FollowUser', {
-  fields: ['user_name', 'id', 'user_id', 'following_user_id', 'user', "following_user"],
-  belongsTo: [{
-    model: 'User',
-    name: 'user'
-  },{
-    model: 'User',
-    name: "following_user",
-    foreign_key: 'following_user_id'
-  }]
-});

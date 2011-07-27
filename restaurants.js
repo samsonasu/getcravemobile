@@ -11,16 +11,16 @@ restaurantTemplate = Ext.XTemplate.from('restaurantTemplate',
 restaurantDishTemplate = Ext.XTemplate.from('restDishTemplate');
 
 var places = new Ext.data.Store({
-   model: 'Restaurants',
+   model: 'Restaurant',
    id: 'places',
    clearOnPageLoad: false,
    proxy: {
-       type:'ajax',
-       url: '/places.json',
-       reader: {
-           type:'json',
-           record:'restaurant'
-       }
+     type:'ajax',
+     url: '/places.json',
+     reader: {
+       type: 'json',
+       record: 'restaurant'
+     }
    }
 });
 
