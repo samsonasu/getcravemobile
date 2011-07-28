@@ -493,7 +493,7 @@ Crave.buildSavedPanel = function() {
         Crave.show_menu_item(dish_id);
       }
     },
-    plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin()]
+    plugins: [new Ext.plugins.ListPagingPlugin()]
   });
   
   Crave.savedPanel = new Ext.Panel({

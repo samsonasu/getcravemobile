@@ -90,7 +90,15 @@ Ext.setup({
       scroll:'vertical',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
-      plugins: [new Ext.plugins.ListPagingPlugin()]
+      plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
+        refreshFn: function(cb, scope) {
+          
+          dishStore.load({
+            scope: scope,
+            callback: cb
+          });
+        }
+      })]
     });
 
     dishList.on('itemtap', function(dataView, index, item, e) {

@@ -500,6 +500,29 @@ word-wrap:break-word;
   maring: 0;
 }
 
+.x-field-clear-container {
+  /*min-height: 2.5em;*/
+  background-color: white;
+  display: -webkit-box;
+  display: box;
+  -webkit-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-box-align: center;
+  box-align: center;
+  -webkit-box-pack: center;
+  box-pack: center;
+  padding: 0;
+}
+
+.x-field-clear {
+  position:absolute;
+  top:12px;
+  right:20px;
+  width: 1em;
+  height: 1em;
+  line-height: .8em;
+}
+
 .x-tab img.nearBy, .x-button img.x-icon-mask.nearBy {
 	-webkit-mask-image:url('../../images/nearby-on.png');
 }
@@ -562,29 +585,6 @@ border-top: 1px solid #ffffff;
     font-size: 16px;
     text-align: center;
     padding-top:10px;
-}
-
-.x-field-clear-container {
-  /*min-height: 2.5em;*/
-  background-color: white;
-  display: -webkit-box;
-  display: box;
-  -webkit-box-orient: horizontal;
-  box-orient: horizontal;
-  -webkit-box-align: center;
-  box-align: center;
-  -webkit-box-pack: center;
-  box-pack: center;
-  padding: 0;
-}
-
-.x-field-clear {
-  position:absolute;
-  top:8px;
-  right:20px;
-  width: 1em;
-  height: 1em;
-  line-height: .8em;
 }
 
 .x-form-field-container {

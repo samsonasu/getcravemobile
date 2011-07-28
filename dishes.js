@@ -477,7 +477,7 @@ Crave.buildDishDisplayPanel = function() {
         Ext.each(menu_item.menu_item_photos, function(photo) {
           items.push(new Ext.Panel({
             cls: 'dishCarouselImage', 
-            html: '<img onload="Crave.dishImageLoaded(this);" src="' + photo.photo + '">'
+            html: '<img onload="Crave.dishImageLoaded(this);" src="http://src.sencha.io/' + photo.photo + '">'
           }));
         });
         imageCarousel.removeAll();
