@@ -227,51 +227,6 @@ var newDishForm = new Ext.form.FormPanel({
     ]
 });
 
-function dishDisplay(response) {
-    var responseObject =Ext.decode(response.responseText);
-    //instead of making this into a string I should create javascript object, apply template
-    htmlString = '<div class="dishinfo"><div class="dishDetails"><b>'+responseObject.menu_item.name+'</b><br/>';
-    htmlString += '@'+responseObject.menu_item.restaurant.name+'<br>';
-    //htmlString += '$ '+responseObject.menu_item.price+'<br>';
-    if(responseObject.menu_item.menu_item_avg_rating_count) {
-        htmlString += Crave.ratingDisplay(responseObject.menu_item.menu_item_avg_rating_count.avg_rating);
-        htmlString += ' '+responseObject.menu_item.menu_item_avg_rating_count.count+' ratings';
-    }
-    htmlString += "</div>";
-    if(responseObject.menu_item.description!="") {
-        htmlString += '<div class="dataSection"><div class="sectionHead">Description</div><div class="sectionBody">'+responseObject.menu_item.description+'</div></div>';
-    }
-    
-    htmlString += "</div>";
-  
-    if(responseObject.menu_item.menu_item_ratings && responseObject.menu_item.menu_item_ratings.length > 0) {
-        reviewString = '<div class="dataSection"><div class="sectionHead">Reviews</div><div class="sectionBody">';
-        for(i=0;i<responseObject.menu_item.menu_item_ratings.length;i++) {
-
-            var profile_pic_url = responseObject.menu_item.menu_item_ratings[i].user.user_profile_pic_url || "../images/no-image-default.png";
-            reviewString += '<div class="picanddata">';
-            reviewString += '<div class="pic"><img src="'+profile_pic_url+'"></div>';
-            reviewString += '<div class="data"><div class="username">'+responseObject.menu_item.menu_item_ratings[i].user.user_name+'</div>'+ Crave.ratingDisplay(responseObject.menu_item.menu_item_ratings[i].rating)+'</div>';
-            reviewString += '<div class="reviewtext">'+responseObject.menu_item.menu_item_ratings[i].review+'</div>';
-            reviewString += '</div>';
-        }
-        reviewString += '</div></div>';
-        Ext.getCmp('detailPnl').add(reviewPnl);
-        Ext.getCmp('reviewPnl').update(reviewString);
-    }
-    //Ext.getCmp('detailPnl').add(carouselPnl);
-    Ext.getCmp('infoPnl').update(htmlString);
-    myUID = localStorage.getItem("uid");
-    if(myUID!="" && myUID!=null) {
-        //Ext.getCmp('detailPnl').add(reviewForm);
-        Ext.getCmp('userId').setValue(myUID);
-        Ext.getCmp('menuId').setValue(responseObject.menu_item.id);
-    }
-    //Ext.getCmp('detailPnl').doLayout();
-    Crave.viewport.setActiveItem(detailPnl);
-}
-
-
 //this is the new dish display, and it's not done yet so don't use it.
 Crave.buildDishDisplayPanel = function() {
   
@@ -327,6 +282,41 @@ Crave.buildDishDisplayPanel = function() {
     })
   });
   
+  var addSheet = new Ext.ActionSheet({
+    items: [{
+      text: 'Add a Review',
+      handler: function() {
+        Crave.dishDisplayPanel.setup_back_stack(dishPanel);
+        Crave.new_dish_rating(Crave.dishDisplayPanel.current_menu_item);
+        addSheet.hide();
+      }
+    },{
+      text: 'Add a Label',
+      handler: function() {
+        
+      }
+    },{
+      text: "Take a Photo", 
+      hidden: !Crave.phonegap,
+      handler: function() {
+        
+      }
+    },{
+      text: "Use an Existing Photo", 
+      hidden: !Crave.phonegap,
+      handler: function() {
+        
+      }
+    },{
+      text: 'Cancel',
+      ui: 'confirm',
+      handler: function() {
+        addSheet.hide();
+      }
+    }]
+  });
+
+  
   var dishPanel = new Ext.Panel({
     layout: 'vbox',
     width: '100%',
@@ -334,12 +324,12 @@ Crave.buildDishDisplayPanel = function() {
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
+        ui: 'back',
         handler: Crave.back_handler
       }, {
-        text: "Rate", 
+        text: "Add", 
         handler: function() {
-          Crave.dishDisplayPanel.setup_back_stack(dishPanel);
-          Crave.new_dish_rating(Crave.dishDisplayPanel.current_menu_item);
+          addSheet.show();
         }
       }]
     }),
@@ -529,7 +519,7 @@ Crave.buildDishDisplayPanel = function() {
       });
       Ext.getCmp('dishAddress').update(menu_item.restaurant);
 
-      dishPanel.scroller.scrollTo({ x: 0, y: 0 });
+      dishPanel.scroller.scrollTo({x: 0, y: 0});
     },
     setup_back_stack: function(subPanel) {
       Crave.back_stack.push({
