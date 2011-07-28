@@ -306,11 +306,16 @@ Crave.buildDishDisplayPanel = function() {
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
+        ui: 'back',
         handler: Crave.back_handler
       }]
     }),
     items: new Ext.List({
-      itemTpl: new Ext.XTemplate.from('dishRatingTemplate'),
+      itemTpl: new Ext.XTemplate.from('dishRatingTemplate', {
+        getBackPanelIndex: function() {
+          return Crave.dishDisplayPanel.items.indexOf(reviewsPanel);
+        }
+      }),
       itemSelector: '.arating',
       singleSelect: true,
       grouped: false,
@@ -320,7 +325,7 @@ Crave.buildDishDisplayPanel = function() {
       scroll: 'vertical',
       clearSectionOnDeactivate:true
     })
-  })
+  });
   
   var dishPanel = new Ext.Panel({
     layout: 'vbox',
@@ -333,9 +338,7 @@ Crave.buildDishDisplayPanel = function() {
       }, {
         text: "Rate", 
         handler: function() {
-          Crave.back_stack.push({
-            panel: Crave.dishDisplayPanel
-          });
+          Crave.dishDisplayPanel.setup_back_stack(dishPanel);
           Crave.new_dish_rating(Crave.dishDisplayPanel.current_menu_item);
         }
       }]
@@ -347,9 +350,11 @@ Crave.buildDishDisplayPanel = function() {
       height: 100,
       tpl: '<div class="dishInfo"><b>{name}</b><br/>' +
            '@ {restaurant.name}<br>' +
+           '<tpl if="menu_item_avg_rating_count">' +
            '{[Crave.ratingDisplay(values.menu_item_avg_rating_count.avg_rating)]}' +
-           '{menu_item_avg_rating_count.count} ratings</div>',
-      data: {restaurant: {}, menu_item_avg_rating_count: {}}
+           '{menu_item_avg_rating_count.count} ratings</div>' + 
+           '</tpl>',
+      data: {restaurant: {}}
     },{
       xtype: 'panel',
       cls: 'framePanel',
@@ -385,24 +390,24 @@ Crave.buildDishDisplayPanel = function() {
         dock : 'top',
         xtype: 'toolbar',
         cls: 'title clickable',
-        title: 'Reviews',
-        listeners: {  
-          afterrender: function(c){
-            c.el.on('click', function(){
-              Crave.back_stack.push({
-                fn: function() {
-                  Crave.dishDisplayPanel.setActiveItem(dishPanel, {type: 'slide', direction: 'right'});
-                }
-              })
-              Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
-            });
-          }
-        }
+        title: 'Reviews'
       }],
       items: {
         id: 'dishDisplayRating',
-        tpl: new Ext.XTemplate.from('dishRatingTemplate'),
+        tpl: new Ext.XTemplate.from('dishRatingTemplate', {
+          getBackPanelIndex: function() {
+            return Crave.dishDisplayPanel.items.indexOf(dishPanel);
+          }
+        }),
         data: {user: {}}
+      },
+      listeners: {  
+        afterrender: function(c){
+          c.el.on('click', function(){
+            Crave.dishDisplayPanel.setup_back_stack(dishPanel);
+            Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
+          });
+        }
       }
     },{
       xtype: 'panel', 
@@ -417,12 +422,7 @@ Crave.buildDishDisplayPanel = function() {
         listeners: {  
           afterrender: function(c){
             c.el.on('click', function(){
-              Crave.back_stack.push({
-                fn: function() {
-                  Crave.dishDisplayPanel.setActiveItem(dishPanel, {type: 'slide', direction: 'right'});
-                }
-              })
-              Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
+              alert('address details go here?')
             });
           }
         }
@@ -456,66 +456,90 @@ Crave.buildDishDisplayPanel = function() {
     items: [dishPanel, reviewsPanel],
     activeItem: 0, 
     load_dish_data: function(dish_id) {
+      dishPanel.setLoading('Loading');
       Ext.Ajax.request({
         method: "GET",
         url: '/items/' + dish_id + '.json',
         success: function(response, options) {
           var menu_item = Ext.decode(response.responseText).menu_item;
-          Crave.dishDisplayPanel.current_menu_item = menu_item;
-          
-          //Set up the image carousel at the top
-          if (menu_item.menu_item_photos) {
-            //imageCarousel.removeAll();
-            var items = [];
-            Ext.each(menu_item.menu_item_photos, function(photo) {
-              items.push(new Ext.Panel({
-                cls: 'dishCarouselImage', 
-                html: '<img onload="Crave.dishImageLoaded(this);" src="' + photo.photo + '">'
-              }));
-            });
-            imageCarousel.removeAll();
-            imageCarousel.add(items);
-            imageCarousel.doLayout();
+          Crave.dishDisplayPanel.load_dish(menu_item);
+          //and we're done
+          dishPanel.setLoading(false);
+        }
+      });
+    },
+    load_dish: function(menu_item) {
+      Crave.dishDisplayPanel.current_menu_item = menu_item;    
+      //Set up the image carousel at the top
+      if (menu_item.menu_item_photos) {
+        //imageCarousel.removeAll();
+        var items = [];
+        Ext.each(menu_item.menu_item_photos, function(photo) {
+          items.push(new Ext.Panel({
+            cls: 'dishCarouselImage', 
+            html: '<img onload="Crave.dishImageLoaded(this);" src="' + photo.photo + '">'
+          }));
+        });
+        imageCarousel.removeAll();
+        if (items.length > 0) {
+          imageCarousel.add(items);
+          imageCarousel.show();
+          imageCarousel.doLayout();
+        } else {
+          imageCarousel.hide();
+        }
+      }
+      //Dish header is easy, so is description
+      Ext.getCmp('dishDetailHeader').update(menu_item);
+      Ext.getCmp('dishDescriptionPanel').update(menu_item);
+
+      //Update ratings or hide if there aren't any
+      if (menu_item.menu_item_ratings.length > 0) {
+        Ext.getCmp('dishDisplayRating').update(menu_item.menu_item_ratings[0]);
+        Ext.getCmp('dishRatingPanel').getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
+        Ext.getCmp('dishRatingPanel').show();
+        reviewStore.loadData(menu_item.menu_item_ratings);
+      } else {
+        Ext.getCmp('dishRatingPanel').hide();
+      }
+
+      // Update labels
+      var label_map = {};
+      Ext.each(menu_item.menu_label_associations, function(assoc) {
+        var l = assoc.menu_label.menu_label;
+        if (!label_map[l]) {label_map[l] = 0;}
+        label_map[l]++;
+      });
+      var labels = [];
+      for (var l in label_map) {
+        labels.push(l + " (" + label_map[l] + ")");
+      }
+
+      Ext.getCmp('dishLabelsPanel').update({labels: labels});
+
+      //update the map
+      Ext.getCmp('dishMap').update(menu_item.restaurant);
+      if (marker) {
+        marker.setMap(null);
+      }
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(menu_item.restaurant.latitude,menu_item.restaurant.longitude),
+        map: Ext.getCmp('dishMap').map,
+        title: 'restaurant'
+      });
+      Ext.getCmp('dishAddress').update(menu_item.restaurant);
+
+      dishPanel.scroller.scrollTo({ x: 0, y: 0 });
+    },
+    setup_back_stack: function(subPanel) {
+      Crave.back_stack.push({
+        panel: Crave.dishDisplayPanel,
+        menu_item: Crave.dishDisplayPanel.current_menu_item,
+        callback: function(backInfo) {
+          if (backInfo.menu_item.id !== Crave.dishDisplayPanel.current_menu_item.id) {
+            Crave.dishDisplayPanel.load_dish(backInfo.menu_item);
           }
-          //Dish header is easy, so is description
-          Ext.getCmp('dishDetailHeader').update(menu_item);
-          Ext.getCmp('dishDescriptionPanel').update(menu_item);
-          
-          //Update ratings or hide if there aren't any
-          if (menu_item.menu_item_ratings.length > 0) {
-            Ext.getCmp('dishDisplayRating').update(menu_item.menu_item_ratings[0]);
-            Ext.getCmp('dishRatingPanel').getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
-            Ext.getCmp('dishRatingPanel').show();
-            reviewStore.loadData(menu_item.menu_item_ratings);
-          } else {
-            Ext.getCmp('dishRatingPanel').hide();
-          }
-          
-          // Update labels
-          var label_map = {};
-          Ext.each(menu_item.menu_label_associations, function(assoc) {
-            var l = assoc.menu_label.menu_label;
-            if (!label_map[l]) {label_map[l] = 0;}
-            label_map[l]++;
-          });
-          var labels = [];
-          for (var l in label_map) {
-            labels.push(l + " (" + label_map[l] + ")");
-          }
-          
-          Ext.getCmp('dishLabelsPanel').update({labels: labels});
-          
-          //update the map
-          Ext.getCmp('dishMap').update(menu_item.restaurant);
-          if (marker) {
-            marker.setMap(null);
-          }
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(menu_item.restaurant.latitude,menu_item.restaurant.longitude),
-            map: Ext.getCmp('dishMap').map,
-            title: 'restaurant'
-          });
-          Ext.getCmp('dishAddress').update(menu_item.restaurant);
+          Crave.dishDisplayPanel.setActiveItem(subPanel, {type: 'slide', direction: 'right'});
         }
       });
     }

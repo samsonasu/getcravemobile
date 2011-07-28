@@ -37,14 +37,14 @@ Crave.buildProfilePanel = function(mine) {
       grouped: false,
       indexBar: false,
       store: userDishStore,
-      loadingText: "Loading",
+      loadingText: "Loading...",
       scroll: false,
       clearSectionOnDeactivate:true,
       listeners: {
         itemtap:  function(dataView, index, item, e) {
           var record = userDishStore.getAt(index);
           setupBackStack(userProfilePnl);
-          Crave.show_menu_item(record.data.id);
+          Crave.show_menu_item(record.data.menu_item_id);
         }
       },
       plugins: [new Ext.plugins.ListPagingPlugin()]

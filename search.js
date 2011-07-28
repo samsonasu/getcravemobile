@@ -85,7 +85,6 @@ var nearBySearchToolbar = new Ext.Toolbar({
 var searchForm = new Ext.form.FormPanel({
   id: 'searchForm',
   layout: 'auto',
-  bodyStyle: 'padding: 4px;',
   items: [{
     xtype: 'searchfield',
     name: 'searchString',
@@ -114,6 +113,5 @@ var searchForm = new Ext.form.FormPanel({
         }
       }
     }
-  }
-  ]
+  }]
 });

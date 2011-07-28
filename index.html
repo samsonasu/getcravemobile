@@ -156,7 +156,7 @@
             <img src="{[Crave.photo_url(values.user)]}" class="dishImg">
             <div class="ratingListItem">
                 <span class="ratingDescription">
-                  <a style="font-weight: bold;" href="#" onclick="Crave.back_stack.push({panel: Crave.dishDisplayPanel});Crave.show_user_profile({user.id});">{user.user_name}</a>
+                  <a style="font-weight: bold;" href="#" onclick="Crave.dishDisplayPanel.setup_back_stack({[this.getBackPanelIndex()]});Crave.show_user_profile({user.id});">{user.user_name}</a>
                 {[Crave.ratingDisplay(values.rating)]}<br/>
                 <span class="review">{review}</span>
             </div>
