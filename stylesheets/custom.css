@@ -15,8 +15,8 @@ body {
   margin: 28px 3px 0 0;
 }
 .adish {overflow:hidden;}
-.dishListinfo {float:left;margin:2px 0 0 3px;font-size:14px;color:#282828;line-height: 20px;width: 210px;}
-.dishImg {display:block;float:left;width:60px;margin:3px;-webkit-border-radius:5px;}
+.dishListinfo {float:left;margin:0;font-size:14px;color:#282828;line-height: 20px;width: 210px;}
+.dishImg {display:block;float:left;width:60px;margin:3px;-webkit-border-radius:5px;margin-right:10px;}
 .dishname {font-weight:bold;}
 .restaurantName {display:block;}
 .distanceFigure {display:block;color:#5d5d5d;}
@@ -31,7 +31,7 @@ body {
 }
 
 .x-button img {
-width: 1.0em;
+width: 30px;
 height: 1.0em;
 }
 .x-toolbar .x-button {
@@ -76,31 +76,37 @@ padding: .3em .3em;
 
 /** frame panel thing used on the filters screen and probably elsewhere **/
 .framePanel {
-  margin: .5em .5em 1em .5em;
-  border-radius: 1em;
-  background: white;
-  padding-bottom: .75em;
-  font-size: 14px;
+	margin: .5em .5em .4em .5em;
+	border-radius: 1em;
+	background: white;
+	padding-bottom: .75em;
+	font-size: 14px;
+	border: 1px solid #B2B2B2;
 }
 
 .framePanel .x-toolbar.title {
-  height: 2em;
+  height: 35px;
   border-top-left-radius: 1em;
   border-top-right-radius: 1em;
   background: #ddd;
   margin-bottom: .5em;
+  margin-left: -1px;
+  margin-top: -1px;
 }
+
 .framePanel .x-toolbar.title .x-toolbar-title {
-  padding-left: 1em;
-  text-align: left;
-  text-shadow: none;
-  font-weight: bold;
-  border-top-left-radius: 1em;
-  border-top-right-radius: 1em;
-  background-image: -webkit-linear-gradient(#ccc, #eee);
-  font-size: 1em;
-  color: #333;
+	padding-left: 1em;
+	text-align: left;
+	text-shadow: 0px 1px white;
+	font-weight: bold;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
+	font-size: 14px;
+	color: #333;
+	padding-top: 3px;
 }
+
 .framePanel .x-toolbar.title.clickable .x-toolbar-title::after {
   content: "";
   background: url('../../images/arrow-gray.png') no-repeat 0 .5em;
@@ -110,8 +116,13 @@ padding: .3em .3em;
 }
 
 .framePanel .x-toolbar.title.clickable .count {
-  color: #888;
-  margin-left: 4px;
+	height: 35px;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+	background: #DDD;
+	margin-bottom: .5em;
+	margin-left: -1px;
+	margin-top: -1px;
 }
 
 .framePanel .x-toolbar.x-docked-top  {
@@ -175,7 +186,7 @@ padding: .3em .3em;
 
 .dishListinfo {
 float: left;
-margin: 2px 0 0 7px;
+margin: 0;
 font-size: 14px;
 color: #282828;
 line-height: 21px;
@@ -226,9 +237,11 @@ font-weight: lighter;
 }
 .dishInfo {background-color: white;}
 .dishInfo, #reviewPnl {
-  padding: 12px;
-  font-size: 16px;
-  line-height: 24px;
+	padding: 12px;
+	font-size: 16px;
+	line-height: 24px;
+	border-bottom: 1px solid #CCC;
+	color:#333333;
 }
 
 .dishCarouselImage IMG {
@@ -238,7 +251,7 @@ font-weight: lighter;
 .dishLabels {
   padding-left: 1em;
   padding-right: 1em;
-  color: #aaa;
+  color: #333;
 }
 
 .dishDescription {
@@ -247,10 +260,9 @@ font-weight: lighter;
 }
 
 .dishAddress {
-  padding: 1em;
-  color: #aaa;
-  
-  
+  	padding: 1em;
+	color: #333;
+	line-height: 21px;
 }
 
 .picanddata .pic {float:left;padding:0 10px 0 0;}
@@ -331,11 +343,9 @@ font-weight: lighter;
 .x-toolbar-light .x-button.x-button-active::after {
   background-color: #E8553A;
   /*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
-  -webkit-box-shadow: inset 0px 0px 3px 3px #000;
-  -moz-box-shadow: inset 0px 0px 3px 3px #333333;
-  box-shadow: inset 0px 0px 3px 3px #000;
-  border-top: 1px solid #B13320;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d24731), color-stop(100%, #c6321d));
+	border-bottom:1px solid #b1311a;
+	-webkit-box-shadow: inset 0px 1px 2px 0px #000;
 }
 .x-toolbar-light .x-button.x-button-back.x-button-pressed,
 .x-toolbar-light .x-button.x-button-back.x-button-pressed::after,
@@ -364,6 +374,7 @@ font-weight: lighter;
   -webkit-box-shadow: inset 0px 0px 1px 1px #B13320;
   -moz-box-shadow: inset 0px 0px 1px 1px #B13320;
   box-shadow: inset 0px 0px 1px 1px #B13320;
+
 }
 
 .x-toolbar-light .x-button, 
@@ -437,9 +448,9 @@ input[type="search"]::-webkit-search-cancel-button {
 .x-form .x-panel-body {
   padding: 1em;
   background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F8F7F5), color-stop(1, #ECEBE7) );
-  border-bottom: 1px solid #BAB9B7;
   border-top: 1px solid white;
   height: 45px;
+
 }
 
 .x-field input, .x-field textarea, .x-field select, .x-field .x-field-slider {
@@ -612,7 +623,7 @@ text-rendering: optimizeLegibility;
 }
 .userTopPnl .userInfo {
   margin-left: 100px;
-  padding: 8px;
+  padding: 10px;
 }
 .userTopPnl .userInfo .userName {
   font-size: 1em;
@@ -622,19 +633,22 @@ text-rendering: optimizeLegibility;
 .userTopPnl .userInfo .reviewCount {
   font-size: .8em;
   margin-top: 6px;
-  color: #aaa;
+  color: #666;
 }
 
 .userTopPnl .userInfo BUTTON.follow {
-  border-radius: .6em;
-  font-size: .8em;
-  margin-top: 6px;
-  width: 100px;
-  text-align: center;
-  color: #008FD6;
-  border: none;
-  background: #eee;
-  background-image: -webkit-linear-gradient(top, #ffffff, #dddddd);
+	border-radius: 10px;
+	font-size: 14px;
+	margin-top: 6px;
+	width: 100px;
+	text-align: center;
+	color: #069;
+	border: 1px solid #B2B2B2;
+	background: #EEE;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
+	font-family: helvetica neue,helvetica,sans-serif;
+	height: 30px;
+	padding-top: 3px;
 }
 
 .profileToolbar {
@@ -656,12 +670,16 @@ text-rendering: optimizeLegibility;
    display: block;
    font-size: 14px;
    padding-left: 4px;
+	color: #333;
+	text-shadow: 0px 1px #ffffff;
 }
 
 .profileToolbar .x-button SPAN.text {
    display: block;
    font-size: 12px;
-   color: #888;
+	color: #999;
+	font-weight: normal;
+	text-shadow: 0px 1px #ffffff;
 }
 
 /*stuff for the followers and following lists */
@@ -728,8 +746,13 @@ margin-top: -2px;
 
 IMG.stars {
    height: 14px;
+	padding-right: 5px;
+	margin-top: 1px;
 }
 
+.arating {
+	padding: 0 10px;
+}
 .arating .ratingListItem {
   padding-left: 68px;
 }
@@ -739,10 +762,10 @@ IMG.stars {
 }
 
 .arating .ratingListItem SPAN.review {
-  color: #888;
-  font-size: 13px;
-  line-height: 20px;
-  text-shadow: none;
+	color: #333;
+	font-size: 14px;
+	line-height: 21px;
+	text-shadow: none;
 }
 
 .arating .ratingDescription A {
@@ -825,3 +848,54 @@ IMG.stars {
     border: none;
     background: transparent;
 }
+
+.x-button, .x-button.x-button-back::after, .x-button.x-button-forward::after, .x-toolbar .x-button, .x-toolbar .x-button.x-button-back::after, .x-toolbar .x-button.x-button-forward::after {
+background-color: #CCC;
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
+background-image: linear-gradient(#EFEFEF,#D9D9D9 50%,#CCC 51%,#DDD);
+}
+
+..x-toolbar.x-docked-bottom {
+	border:none;
+}
+
+.x-button, .x-toolbar .x-button {
+	border: 1px solid #B2B2B2;
+	color: #333;
+	text-shadow: rgba(255, 255, 255, 0.25) 0 0.08em 0;
+	-webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 0.1em 0;
+	border-right: none;
+}
+
+.x-list-paging .x-list-paging-msg {
+text-align: center;
+color: #069;
+padding-top: 15px;
+-webkit-border-radius: 6px;
+border-radius: 6px;
+font-size: 16px;
+text-shadow: 0px 1px #ffffff;
+}
+
+.x-list-paging {
+height: 50px;
+background: #F1F1F1;
+border-top: 1px solid #CCC;
+}
+
+.x-segmentedbutton .x-button:not(:first-child) {
+border-left: 0;
+/*border-top-left-radius: 0.4em;
+border-bottom-left-radius: 0.4em;*/
+}
+
+.x-toolbar-light .x-button, .x-toolbar-light .x-button.x-button-back::after, .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar .x-toolbar-light .x-button, .x-toolbar .x-toolbar-light .x-button.x-button-back::after, .x-toolbar .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar-light .x-field-select .x-input-text, .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar-light .x-field-select::before, .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar-light .x-field-select::before.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::after {
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5664f), color-stop(50%,#dc4c35), color-stop(51%,#d5402a), color-stop(100%,#dd492f));;
+	background-color: #E4381A;
+	color:#fff;	
+	text-shadow:0px -1px #666;
+	border:none;
+	border-bottom:1px solid #b1311a;
+	-webkit-box-shadow: inset 0px 1px 2px 0px #5f271d;
+}
+

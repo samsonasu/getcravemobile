@@ -420,7 +420,7 @@ Crave.follow_user_toggle = function(user_id, button) {
       },
       failure: Crave.handle_failure,
       success: function(response, options) {
-        button.innerHTML = "+ Follow";
+        button.innerHTML = "Follow";
       }
     })
   } else {
@@ -435,7 +435,7 @@ Crave.follow_user_toggle = function(user_id, button) {
       },
       failure: Crave.handle_failure,
       success: function(response, options) {
-        button.innerHTML = "- Unfollow";
+        button.innerHTML = "Unfollow";
       }
     })
   }
