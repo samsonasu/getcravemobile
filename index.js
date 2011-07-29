@@ -370,8 +370,8 @@ Crave.updateLocation = function(callback) {
     console.log("no location available: using sanfran");
     alert("We couldn't find your location so we're showing results near San Fransisco.")
     Crave.latest_position = {
-      latitude: 37.77867,
-      longitude: -122.39127
+      latitude: 37.77494,
+      longitude: -122.41958
     };
     if (callback) {
       callback(Crave.latest_position);
