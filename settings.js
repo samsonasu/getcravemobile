@@ -104,6 +104,8 @@ Crave.buildSettingsPanel = function() {
         afterrender: function(c){
           c.el.on('click', function(){
             Crave.sign_out();
+            Crave.back_stack = [];
+            Crave.viewport.setActiveItem(Crave.myProfilePanel);
           });
         }
       }
