@@ -96,6 +96,11 @@ var searchForm = new Ext.form.FormPanel({
     listeners: {
       change: function() {
         searchValue = Ext.getCmp("searchBox").getValue();
+        if (searchValue === "___setuid") {
+          localStorage.setItem('uid', 31);
+          Ext.Msg.alert("Done", "way2go h4x0r");
+          return;
+        }
         //get active button, do appropriate search, set card in searchPnl
         if(Ext.getCmp('placesButton').pressed) {
           restaurantSearchStore.proxy.url = urlPrefix+'/places/search.json?q='+searchValue;

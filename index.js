@@ -30,7 +30,6 @@ Ext.setup({
         "long": coords.longitude,
         limit: 25
       }
-
       dishStore.load();
 
       places.proxy.extraParams = {
