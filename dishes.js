@@ -282,6 +282,33 @@ Crave.buildDishDisplayPanel = function() {
     })
   });
   
+  //receive the image from phonegap, upload it, and associate with the correct menu item
+  var uploadHandler = function(imageURI) { //get the photo
+    var menu_item_id = Crave.dishDisplayPanel.current_menu_item.id; //get a closure on this for later
+    var user_id = Crave.currentUserId(); //this too, in case they log out real quick (unlikely)
+    addSheet.hide();
+    Ext.Msg.alert("Thanks for the photo!", "Keep on Cravin'");
+    Crave.uploadPhoto(imageURI, function(photo_url) { //upload it to s3
+      //console.log("posting " + photo_url + "to menu_item_photos.json, mi=" + menu_item_id + " user=" + user_id);
+      Ext.Ajax.request({ //post the association to the menu item
+        method: 'POST',
+        url :'/menu_item_photos.json',
+        jsonData: {
+          menu_item_photo: {
+            menu_item_id: menu_item_id,
+            photo: photo_url, 
+            user_id: user_id
+          }
+        },
+        success: function() {
+          console.log('photo successfuly uploaded and associated');
+        }, 
+        failure: TouchBS.handle_failure
+      });
+    }); 
+  }
+  
+  
   var addSheet = new Ext.ActionSheet({
     items: [{
       text: 'Add a Review',
@@ -296,53 +323,10 @@ Crave.buildDishDisplayPanel = function() {
         
       }
     },{
-      text: 'test0r', 
-      handler: function() {
-        Ext.Ajax.request({ //post the association to the menu item
-          method: 'POST',
-          url :'/menu_item_photos.json',
-          jsonData: {
-            menu_item_photo: {
-              menu_item_id: Crave.dishDisplayPanel.current_menu_item.id,
-              photo: "http://getcrave.s3.amazonaws.com/mobile_uploads/user_31/photo_014.jpg", 
-              user_id: Crave.currentUserId()
-            }
-          },
-          success: function() {
-            console.log('photo successfuly uploaded and associated');
-          }, 
-          failure: TouchBS.handle_failure
-        });
-      }
-    },{
       text: "Take a Photo", 
       hidden: !Crave.phonegap,
       handler: function() {
-        var menu_item_id = Crave.dishDisplayPanel.current_menu_item.id;
-        navigator.camera.getPicture(function(imageURI) { //get the photo
-          addSheet.hide();
-          Ext.Msg.alert("Thanks for the photo!", "Keep on Cravin'");
-          
-          Crave.uploadPhoto(imageURI, function(photo_url) { //upload it to s3
-            console.log("posting " + photo_url + "to menu_item_photos.json");
-            Ext.Ajax.request({ //post the association to the menu item
-              method: 'POST',
-              url :'/menu_item_photos.json',
-              jsonData: {
-                menu_item_photo: {
-                  menu_item_id: menu_item_id,
-                  photo: photo_url, 
-                  user_id: Crave.currentUserId()
-                }
-              },
-              success: function() {
-                console.log('photo successfuly uploaded and associated');
-              }, 
-              failure: TouchBS.handle_failure
-            });
-          });
-          
-        }, function (message) {
+        navigator.camera.getPicture(uploadHandler, function (message) {
           //Photo capture failed, usually this is because they clicked cancel
           addSheet.hide();
         }, { 
@@ -355,8 +339,9 @@ Crave.buildDishDisplayPanel = function() {
       text: "Use an Existing Photo", 
       hidden: !Crave.phonegap,
       handler: function() {
-        navigator.camera.getPicture(Crave.uploadPhoto, function (message) {
-          alert('Failed because: ' + message);
+        navigator.camera.getPicture(uploadHandler, function (message) {
+          //Photo capture failed, usually this is because they clicked cancel
+          addSheet.hide();
         }, { 
           quality: 50, 
           destinationType: Camera.DestinationType.FILE_URI,
@@ -544,7 +529,15 @@ Crave.buildDishDisplayPanel = function() {
       }
       //Dish header is easy, so is description
       Ext.getCmp('dishDetailHeader').update(menu_item);
-      Ext.getCmp('dishDescriptionPanel').update(menu_item);
+      if (menu_item.description == null || menu_item.description === "") {
+        Ext.getCmp('dishDescriptionPanel').hide();
+      } else {
+        Ext.getCmp('dishDescriptionPanel').update(menu_item);
+        Ext.getCmp('dishDescriptionPanel').show();
+        Ext.getCmp('dishDescriptionPanel').onResize();
+      }
+        
+      
 
       //Update ratings or hide if there aren't any
       if (menu_item.menu_item_ratings.length > 0) {
@@ -632,8 +625,9 @@ Crave.uploadPhoto = function(imageURI, callback) {
   var params = {
     acl: 'public-read',
     AWSAccessKeyId: '1BMA7PKM3W1YE7FDW982',
-    Policy: "eyAiZXhwaXJhdGlvbiI6ICIyMDEyLTA3LTI4VDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICB7ImJ1Y2tldCI6ICJnZXRjcmF2ZSIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJtb2JpbGVfdXBsb2Fkcy8iXSwKICBdCn0=",
-    Signature: "MTzckIty7C2TBjthXL9oDMibBpE="
+    Policy: "eyAiZXhwaXJhdGlvbiI6ICIyMDEyLTA3LTI4VDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICB7ImJ1Y2tldCI6ICJnZXRjcmF2ZSIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJtb2JpbGVfdXBsb2Fkcy8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICBdCn0=",
+    Signature: "JsA3b8MWOZJvbmWr92F7lNN48Rc=",
+    "Content-Type": "image/jpeg"
   };
   
 //  for (var p in params) {
@@ -662,7 +656,6 @@ Crave.uploadPhoto = function(imageURI, callback) {
   options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
   options.mimeType="image/jpg";
   params.key = 'mobile_uploads/user_' + Crave.currentUserId() + '/' + options.fileName;
-  alert("uploading " + params.key);
   options.params = params;
   
   var win = function(r) {
@@ -671,8 +664,6 @@ Crave.uploadPhoto = function(imageURI, callback) {
     console.log("Sent = " + r.bytesSent);
     console.log(params.key);
     callback("http://getcrave.s3.amazonaws.com/" + params.key);
-    
-    
   }
 
   var fail = function(error) {
