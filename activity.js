@@ -36,10 +36,17 @@ Crave.activityPanel = new Ext.Panel({
     },
     items:[{
       xtype:'segmentedbutton',
+      id: 'whoseActivityButton',
       items:[{
         text: 'Following',
         pressed: Crave.isLoggedIn() ? true : false,
-        handler:function() {
+        handler:function(btn) {
+          if (!Crave.isLoggedIn()) {
+            Ext.Msg.alert("Login", "Please log in to view followers' activity");
+            Ext.getCmp('whoseActivityButton').setPressed(1, true, true);
+            return;
+            
+          }
           delete Crave.activityStore.proxy.extraParams.all;
           Crave.activityStore.load(function() {
             Ext.getCmp('activityList').scroller.scrollTo({x: 0, y: 0}, false, null, true);
@@ -75,7 +82,7 @@ Crave.activityPanel = new Ext.Panel({
     grouped: true,
     indexBar: false,
     store: Crave.activityStore,
-    plugins: [new Ext.plugins.ListPagingPlugin()]
+    plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({})]
   }
 });
 

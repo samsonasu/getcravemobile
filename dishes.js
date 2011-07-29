@@ -296,6 +296,26 @@ Crave.buildDishDisplayPanel = function() {
         
       }
     },{
+      text: 'test0r', 
+      hidden: true,
+      handler: function() {
+        Ext.Ajax.request({ //post the association to the menu item
+          method: 'POST',
+          url :'/menu_item_photos.json',
+          jsonData: {
+           
+              menu_item_id: Crave.dishDisplayPanel.current_menu_item.id,
+              photo: "http://getcrave.s3.amazonaws.com/mobile_uploads/user_31/photo_014.jpg", 
+              user_id: Crave.currentUserId()
+            
+          },
+          success: function() {
+            console.log('photo successfuly uploaded and associated');
+          }, 
+          failure: TouchBS.handle_failure
+        });
+      }
+    },{
       text: "Take a Photo", 
       hidden: !Crave.phonegap,
       handler: function() {

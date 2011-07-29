@@ -23,40 +23,24 @@ Ext.setup({
         options.params.mobile = "true";
       }
     }, this);
-
-
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var coords = position.coords;
-      if(window.location.toString().indexOf("local")>-1) {
-        coords = {
-          latitude: 37.77867,
-          longitude: -122.39127
-        };
-      }
-
+    
+    Crave.updateLocation(function(coords) {
       dishStore.proxy.extraParams = {
         "lat": coords.latitude,
         "long": coords.longitude,
         limit: 25
       }
-      
-      dishStore.load(function() {
-        console.log('dish store loaded');
-        console.log(dishStore);
-      });
+
+      dishStore.load();
 
       places.proxy.extraParams = {
         "lat": coords.latitude,
         "long": coords.longitude,
         limit: 25
       }
-      
+
       places.load();
       Crave.activityStore.load();
-    }, function() {
-      //failure handler
-      console.log("no location available");
-      alert("We couldn't find your location, some features may be disabled because of this. ")
     });
 
 
@@ -92,10 +76,13 @@ Ext.setup({
       clearSectionOnDeactivate:true,
       plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
         refreshFn: function(cb, scope) {
-          
-          dishStore.load({
-            scope: scope,
-            callback: cb
+          Crave.updateLocation(function(coords) {
+            dishStore.proxy.extraParams.lat = coords.latitude;
+            dishStore.proxy.extraParams.lon = coords.longitude;
+            dishStore.load({
+              scope: scope,
+              callback: cb
+            });
           });
         }
       })]
@@ -373,3 +360,32 @@ Ext.setup({
     $(".startuppic").remove();
   }
 });
+
+
+Crave.updateLocation = function(callback) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    var coords = position.coords;
+    if(window.location.toString().indexOf("local")>-1) {
+      coords = {
+        latitude: 37.77867,
+        longitude: -122.39127
+      };
+    }
+    Crave.latest_position = coords;
+    
+    if (callback) {
+      callback(coords);
+    }
+  }, function() {
+    //failure handler
+    console.log("no location available: using sanfran");
+    alert("We couldn't find your location so we're showing results near San Fransisco.")
+    Crave.latest_position = {
+      latitude: 37.77867,
+      longitude: -122.39127
+    };
+    if (callback) {
+      callback(Crave.latest_position);
+    }
+  });
+}
