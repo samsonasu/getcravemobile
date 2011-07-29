@@ -40,10 +40,7 @@ Ext.setup({
         limit: 25
       }
       
-      dishStore.load(function() {
-        console.log('dish store loaded');
-        console.log(dishStore);
-      });
+      dishStore.load();
 
       places.proxy.extraParams = {
         "lat": coords.latitude,

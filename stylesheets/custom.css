@@ -899,3 +899,8 @@ border-bottom-left-radius: 0.4em;*/
 	-webkit-box-shadow: inset 0px 1px 2px 0px #5f271d;
 }
 
+.x-button-cancel {
+  background-color: #547503;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #304402), color-stop(10%, #425C02), color-stop(65%, #547503), color-stop(100%, #557803));
+  background-image: linear-gradient(#304402,#425C02 10%,#547503 65%,#557803);
+}
