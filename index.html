@@ -119,7 +119,7 @@
 <textarea id="ratingTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="arating">
-            <img src="../images/no-image-default.png" class="dishImg">
+            <img src="{[Crave.photo_url(values.user)]}" class="dishImg">
             <div class="ratingListItem">
                 <span class="ratingDescription">
                   <a style="font-weight: bold;" href="#" onclick="Crave.back_stack.push({panel: Crave.activityPanel});Crave.show_user_profile({user.id});">{user.user_name}</a>
@@ -159,6 +159,7 @@
                   <a style="font-weight: bold;" href="#" onclick="Crave.dishDisplayPanel.setup_back_stack({[this.getBackPanelIndex()]});Crave.show_user_profile({user.id});">{user.user_name}</a><br/>
                 {[Crave.ratingDisplay(values.rating)]}<br/>
                 <span class="review">{review}</span>
+                <div style="clear: both"></div>
             </div>
         </div>
     </tpl>

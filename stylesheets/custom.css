@@ -116,13 +116,12 @@ padding: .3em .3em;
 }
 
 .framePanel .x-toolbar.title.clickable .count {
-	height: 35px;
-	border-top-left-radius: 1em;
-	border-top-right-radius: 1em;
-	background: #DDD;
-	margin-bottom: .5em;
-	margin-left: -1px;
-	margin-top: -1px;
+  height: 35px;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  margin-bottom: .5em;
+  margin-left: -1px;
+  margin-top: -1px;
 }
 
 .framePanel .x-toolbar.x-docked-top  {
@@ -762,10 +761,11 @@ IMG.stars {
 }
 
 .arating .ratingListItem SPAN.review {
-	color: #333;
-	font-size: 14px;
-	line-height: 21px;
-	text-shadow: none;
+  color: #333;
+  font-size: 14px;
+  line-height: 21px;
+  text-shadow: none;
+  display:block;
 }
 
 .arating .ratingDescription A {

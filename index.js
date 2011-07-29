@@ -233,16 +233,6 @@ Ext.setup({
         items:[{
           xtype:'segmentedbutton',
           items:[{
-            text: "All",
-            id: 'allButton',
-            pressed: false,
-            hidden: true,
-            handler:function () {
-              listPnl.setActiveItem(dishPlaceList);
-            },
-            ui: 'round',
-            width: '110'
-          },{
             text:'Food',
             id:'dishesButton',
             pressed:true,

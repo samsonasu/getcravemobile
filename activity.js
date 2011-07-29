@@ -1,16 +1,10 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 Crave.activityStore = new Ext.data.Store({
   model: 'MenuItemRating',
   clearOnPageLoad: false,
   proxy: {
     type:'ajax',
     extraParams: Crave.isLoggedIn() ? {} : {all: true},
-    url: '/activity.json',
+    url: Crave.isLoggedIn() ? "/users/" + Crave.currentUserId() + "/following_reviews.json" : '/activity.json',
     reader: {
       type:'json',
       record:'menu_item_rating'
@@ -47,7 +41,7 @@ Crave.activityPanel = new Ext.Panel({
             return;
             
           }
-          delete Crave.activityStore.proxy.extraParams.all;
+          Crave.activityStore.proxy.url = "/users/" + Crave.currentUserId() + "/following_reviews.json";
           Crave.activityStore.load(function() {
             Ext.getCmp('activityList').scroller.scrollTo({x: 0, y: 0}, false, null, true);
           });
@@ -59,7 +53,7 @@ Crave.activityPanel = new Ext.Panel({
         text:'All Foodies',
         pressed: Crave.isLoggedIn() ? false : true,
         handler:function() {
-          Crave.activityStore.proxy.extraParams.all = "true";
+          Crave.activityStore.proxy.url = "/activity.json";
           Crave.activityStore.load(function() {
             Ext.getCmp('activityList').scroller.scrollTo({x: 0, y: 0}, false, null, true);
           });

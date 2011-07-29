@@ -67,13 +67,13 @@ var distancePnl = function() {
     items.push({
       text: d + " miles",
       ui: 'round',
+      pressed: d === '.5',
       width: 64,
       filter_value: d
     });
   });
   items.push({
     text: "All",
-    pressed: true,
     width: 35,
     ui: 'round'
   });
@@ -297,17 +297,16 @@ Crave.buildDishDisplayPanel = function() {
       }
     },{
       text: 'test0r', 
-      hidden: true,
       handler: function() {
         Ext.Ajax.request({ //post the association to the menu item
           method: 'POST',
           url :'/menu_item_photos.json',
           jsonData: {
-           
+            menu_item_photo: {
               menu_item_id: Crave.dishDisplayPanel.current_menu_item.id,
               photo: "http://getcrave.s3.amazonaws.com/mobile_uploads/user_31/photo_014.jpg", 
               user_id: Crave.currentUserId()
-            
+            }
           },
           success: function() {
             console.log('photo successfuly uploaded and associated');
@@ -470,14 +469,7 @@ Crave.buildDishDisplayPanel = function() {
         xtype: 'toolbar',
         cls: 'title clickable',
         style: 'margin: 0;',
-        title: 'Address',
-        listeners: {  
-          afterrender: function(c){
-            c.el.on('click', function(){
-              alert('address details go here?')
-            });
-          }
-        }
+        title: 'Address'
       }],
       items: [{
         id: 'dishMap',
@@ -491,14 +483,23 @@ Crave.buildDishDisplayPanel = function() {
           zoom : 17,
           mapTypeId : google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: true,
-          navigationControl: false
+          navigationControl: false,
+          draggable: false
         }
       },{
         xtype: 'panel', 
         id: 'dishAddress', 
         tpl: '<div class="dishAddress">{street_address}<br/>{city}, {state} {zip}</div>',
         data: {}
-      }]
+      }],
+      listeners: {  
+        afterrender: function(c){
+          c.el.on('click', function(){
+            var mi = Crave.dishDisplayPanel.current_menu_item;
+            window.open('http://maps.google.com/maps?ll=' + [mi.restaurant.latitude, mi.restaurant.longitude].join(','))
+          });
+        }
+      }
     }]
     
   });
@@ -548,8 +549,12 @@ Crave.buildDishDisplayPanel = function() {
       //Update ratings or hide if there aren't any
       if (menu_item.menu_item_ratings.length > 0) {
         Ext.getCmp('dishDisplayRating').update(menu_item.menu_item_ratings[0]);
-        Ext.getCmp('dishRatingPanel').getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
-        Ext.getCmp('dishRatingPanel').show();
+        var drp = Ext.getCmp('dishRatingPanel');
+        drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
+        drp.show();
+        //var new_height = drp.getEl().down('.review').dom.clientHeight;
+        
+        drp.onResize();
         reviewStore.loadData(menu_item.menu_item_ratings);
       } else {
         Ext.getCmp('dishRatingPanel').hide();
