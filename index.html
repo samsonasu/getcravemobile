@@ -72,7 +72,7 @@
 <textarea id="restaurantTemplate" class="x-hidden-display">
   <tpl for=".">
     <div class="aplace">
-      <img src="../images/no-image-default.png" class="dishImg">
+      <img src="../images/no-image-default.png" class="dishImg" style="height: 60px;">
       <div class="dishListinfo">
         <span class="dishname">{name}</span>
         <span class="distanceFigure">{[this.distDisplay(values.distance)]}</span>
@@ -87,7 +87,7 @@
 <textarea id="restDishTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="adish">
-            <img src="../images/no-image-default.png" class="dishImg">
+            <img src="../images/no-image-default.png" class="dishImg" style="height: 60px;">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">{rating_count}</span>
@@ -101,7 +101,7 @@
 <textarea id="reviewDishTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="adish">
-            <img src="../images/no-image-default.png" class="dishImg">
+            <img src="../images/no-image-default.png" class="dishImg" style="height: 60px;">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">@{restaurant.name}</span>
@@ -121,7 +121,7 @@
 <textarea id="ratingTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="arating">
-            <img src="{[Crave.photo_url(values.user)]}" class="dishImg">
+            <img src="{[Crave.photo_url(values.user)]}" class="dishImg" style="height: 60px;">
             <div class="ratingListItem">
                 <span class="ratingDescription">
                   <a style="font-weight: bold;" href="#" onclick="Crave.back_stack.push({panel: Crave.activityPanel});Crave.show_user_profile({user.id});">{user.user_name}</a>
@@ -137,7 +137,7 @@
 <textarea id="profileRatingTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="arating">
-            <img src="{[Crave.photo_url(values.menu_item)]}" class="dishImg">
+            <img src="{[Crave.photo_url(values.menu_item)]}" class="dishImg" style="height: 60px;">
             <div class="ratingListItem">
                 <span class="chevrony"></span>
                 <span class="ratingDescription">
@@ -155,7 +155,7 @@
 <textarea id="dishRatingTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="arating">
-            <img src="{[Crave.photo_url(values.user)]}" class="dishImg" >
+            <img src="{[Crave.photo_url(values.user)]}" class="dishImg" style="height: 60px;">
             <div class="ratingListItem">
                 <span class="ratingDescription">
                   <a style="font-weight: bold;" href="#" onclick="Crave.dishDisplayPanel.setup_back_stack({[this.getBackPanelIndex()]});Crave.show_user_profile({user.id});">{user.user_name}</a><br/>
