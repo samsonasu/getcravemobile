@@ -44,7 +44,7 @@ var singleRestaurantStore = new Ext.data.Store({
         if(rating==1) {
             return "<img src='../images/rating-stars/rating-dish-1.png'>";
         } else {
-            return "unrated";
+            return "Unrated";
         }
     },
     proxy: {

@@ -1,5 +1,5 @@
 body {
-	background: black;
+	background: #f4f4f4;
 }
 .restName {font-weight:bold;}
 .restAddress {
@@ -31,7 +31,7 @@ body {
 }
 
 .x-button img {
-width: 30px;
+width: 24px;
 height: 1.0em;
 }
 .x-toolbar .x-button {
@@ -105,6 +105,7 @@ padding: .3em .3em;
 	font-size: 14px;
 	color: #333;
 	padding-top: 3px;
+	border-bottom: 1px solid #CCC;
 }
 
 .framePanel .x-toolbar.title.clickable .x-toolbar-title::after {
@@ -122,6 +123,8 @@ padding: .3em .3em;
   margin-bottom: .5em;
   margin-left: -1px;
   margin-top: -1px;
+  font-weight: normal;
+  color: #999;
 }
 
 .framePanel .x-toolbar.x-docked-top  {
@@ -307,7 +310,7 @@ font-weight: lighter;
 	font-weight: bold;
 	color: #F39A8A;
 	text-shadow: 0px -1px #933223;
-	margin: 0px 19px;
+	margin: 0px 13px;
 	padding: 0px 0px 0px 25px;
 }
 #dishesButton.x-button-pressed span {
@@ -326,7 +329,7 @@ font-weight: lighter;
 	font-weight: bold;
 	color: #F39A8A;
 	text-shadow: 0px -1px #933223;
-	margin: 0px 16px;
+	margin: 0px 10px;
 	padding: 0px 0px 0px 0px;
 }
 #placesButton.x-button-pressed span {
@@ -344,8 +347,9 @@ font-weight: lighter;
   /*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d24731), color-stop(100%, #c6321d));
 	border-bottom:1px solid #b1311a;
-	-webkit-box-shadow: inset 0px 1px 2px 0px #000;
+	-webkit-box-shadow: inset 0px 1px 2px 0px #5F271D;
 }
+
 .x-toolbar-light .x-button.x-button-back.x-button-pressed,
 .x-toolbar-light .x-button.x-button-back.x-button-pressed::after,
 .x-toolbar-light .x-button.x-button-back.x-button-active,
@@ -370,9 +374,6 @@ font-weight: lighter;
 .x-toolbar .x-toolbar-light .x-field-select::before.x-button-pressed, 
 .x-toolbar .x-toolbar-light .x-field-select::before.x-button-active
 {
-  -webkit-box-shadow: inset 0px 0px 1px 1px #B13320;
-  -moz-box-shadow: inset 0px 0px 1px 1px #B13320;
-  box-shadow: inset 0px 0px 1px 1px #B13320;
 
 }
 
@@ -472,21 +473,20 @@ word-wrap:break-word;
 }
 
 #searchForm .x-input-search {
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.6))), url('data:image/png;base64,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');
-  -webkit-background-size: 1em 1em, 1em 1em;
-  background-repeat: no-repeat;
-  background-position: .5em 50%;
-  padding: 0 0 0 15px;
-  width: 100%;
-  font-size: 14px;
-  border-radius: 16px;
-  border: 1px solid #CCC;
-  -webkit-box-shadow: inset 1px 1px 2px #ccc;
+background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.6))), url('data:image/png;base64,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');
+-webkit-background-size: 1.2em;
+background-repeat: no-repeat;
+background-position: .5em 50%;
+padding: 0 0 0 25px;
+width: 100%;
+font-size: 14px;
+border-radius: 16px;
+border: 1px solid #CCC;
+-webkit-box-shadow: inset 1px 1px 2px #CCC;
 }
 
 #searchForm .x-form-field-container {
   margin: 0;
-  background: #F8F7F5;
   padding: 4px 10px 0px 10px;
 }
 
@@ -754,6 +754,7 @@ IMG.stars {
 }
 .arating .ratingListItem {
   padding-left: 68px;
+  
 }
 
 .arating .ratingListItem .chevrony {
@@ -766,6 +767,7 @@ IMG.stars {
   line-height: 21px;
   text-shadow: none;
   display:block;
+  margin-left: 5px;
 }
 
 .arating .ratingDescription A {
@@ -785,8 +787,9 @@ IMG.stars {
 }
 
 .reviewField {border:none;}
-.newReviewContainer {
-  background-image: -webkit-linear-gradient(#282523, #404143 );
+.newReviewContainer {v
+  background:#222222;
+  background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #282523), color-stop(1, #404143) );
   height: 48px;
   padding: 4px;
 }
@@ -794,15 +797,15 @@ IMG.stars {
     float:left;
     height: 40px;
     color: #eee;
-    font-weight: 100;
+    font-weight: normal;
     letter-spacing: 1px;
     font-size: 15px;
-    padding: 2px 0 2px 6px;
-    width: 90px;
+    padding: 4px 0 2px 5px;
+    width: 85px;
 }
 .newReviewContainer .starRating {
     width: 200px;
-    margin-left: 8px;
+    margin-left: 5px;
     margin-top: 2px;
     float: left;
     height: 40px;
@@ -897,10 +900,94 @@ border-bottom-left-radius: 0.4em;*/
 	border:none;
 	border-bottom:1px solid #b1311a;
 	-webkit-box-shadow: inset 0px 1px 2px 0px #5f271d;
+	padding: 0 8px;
 }
 
 .x-button-cancel {
   background-color: #547503;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #304402), color-stop(10%, #425C02), color-stop(65%, #547503), color-stop(100%, #557803));
   background-image: linear-gradient(#304402,#425C02 10%,#547503 65%,#557803);
+}
+
+.x-toolbar-light .x-button.x-button-back::before, .x-toolbar-light .x-button.x-button-forward::before, .x-toolbar .x-toolbar-light .x-button.x-button-back::before, .x-toolbar .x-toolbar-light .x-button.x-button-forward::before, .x-toolbar-light .x-field-select .x-input-text.x-button-back::before, .x-toolbar-light .x-field-select .x-input-text.x-button-forward::before, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::before, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::before, .x-toolbar-light .x-field-select::before.x-button-back::before, .x-toolbar-light .x-field-select::before.x-button-forward::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::before {
+background: #B1422E;
+width: 14px;
+}
+
+.x-button-forward::before, .x-button-forward::after, .x-button-back::before, .x-button-back::after {
+content: "";
+position: absolute;
+width: 10px;
+height: 60px;
+top: -14px;
+left: auto;
+z-index: 2;
+-webkit-mask: 1px 14px url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABGCAYAAADb7SQ4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAiNJREFUeNrEWb9LQlEUvj5BcHoQvMnVKXD1D3CLwqBJbHJsazQaWoSCxgbHJiMIAiNok6AhCDdXVycnJ8EQOgeOYaG+d39998KH+HyP753zzjnfd325xfdSgVeV8B6BScuEV0IRSbxHeCMk/AVFXCA8ScQKSXxPqK0fQBBfE5r/D+Y8VzUT9jb94DPimqRYIYkrhGcpKhhxIqTxrpNcExdlQJTTTnRJnCc8ykhUSOIOoZ71ZFfEZ4S2zgUu+rguxZRHEnPbfKRVsOtUl0RtYpOLTYljIS2Z3nVk2DY9SbNCEt8RDm0rUpe4La1jvXSqmtum72raZI24KuNQIYl/nSGSOJb0Jq61M0pxhjwK9304hUjHGSKILzc5Q5drUzttdYY+I97pDH1FzG0zNFUb04gTG4kzJS5kdYauiZtZnaFr4ooKsCIVaDHxKAQxt1NBnGIVHfGCcEQYh3jGU8KBfMKLiyM+lgzAq/qT0ArVTg+Ei1B9fEPoovV4fcfQd2HedScX39GprwGTNjJn0maTELN6IuSzECLB6T5x2eM66jQgnIeSxa60GnS3uL56tr7b1Ai0JPVwYi6yho2U2lgfKym19VxjMRHzEGbvS9K+RBPzetGVUpf29lZHSl2/DMnLvwh1ZMQrKW3Ic4fvJOZS6ZMQW5hpmpT63DvtlFLfm7bBNruM2C2yXb7y3U6ZpRS5P/4jpUjihRTbCJ3q1eL3GMMfAQYAJmB6SBO619IAAAAASUVORK5CYII=') no-repeat;
+-webkit-mask-size: 16px 32px;
+overflow: hidden;
+}
+
+.x-sheet {
+padding: 0.7em;
+border-top: 1px solid #37465A;
+background-color: rgba(36, 46, 58, 0.9);
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#898989), color-stop(1%,#4C4C4C), color-stop(13%,#4C4C4C), color-stop(14%,#333), color-stop(100%,#333));
+background-image: linear-gradient(rgba(65, 83, 105, 0.9),rgba(46, 58, 74, 0.9) 50%,rgba(36, 46, 58, 0.9) 51%,rgba(26, 33, 42, 0.9));
+border-top: 1px solid black;
+opacity: 0.95;
+}
+
+.x-button-label, .x-hasbadge .x-badge {
+-webkit-box-flex: 1;
+box-flex: 1;
+-webkit-box-align: center;
+box-align: center;
+white-space: nowrap;
+text-overflow: ellipsis;
+text-align: center;
+font-weight: bold;
+line-height: 1.2em;
+display: block;
+overflow: hidden;
+font-size: 20px;
+}
+
+.x-button.x-button-action, .x-toolbar .x-button.x-button-action, .x-button.x-button-action-round, .x-toolbar .x-button.x-button-action-round, .x-button.x-button-action-small, .x-toolbar .x-button.x-button-action-small {
+border: 0.1em solid black;
+border-top-color: black;
+color: white;
+text-shadow: rgba(0, 0, 0, 0.5) 0 -0.08em 0;
+-webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 0.1em 0;
+}
+
+.x-button.x-button-action, .x-button.x-button-action.x-button-back::after, .x-button.x-button-action.x-button-forward::after, .x-toolbar .x-button.x-button-action, .x-toolbar .x-button.x-button-action.x-button-back::after, .x-toolbar .x-button.x-button-action.x-button-forward::after, .x-button.x-button-action-round, .x-button.x-button-action-round.x-button-back::after, .x-button.x-button-action-round.x-button-forward::after, .x-toolbar .x-button.x-button-action-round, .x-toolbar .x-button.x-button-action-round.x-button-back::after, .x-toolbar .x-button.x-button-action-round.x-button-forward::after, .x-button.x-button-action-small, .x-button.x-button-action-small.x-button-back::after, .x-button.x-button-action-small.x-button-forward::after, .x-toolbar .x-button.x-button-action-small, .x-toolbar .x-button.x-button-action-small.x-button-back::after, .x-toolbar .x-button.x-button-action-small.x-button-forward::after {
+background-color: #333;
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#8D8D8D), color-stop(50%,#5E5E5E), color-stop(51%,#4C4C4C), color-stop(100%,#414141));
+height: 40px;
+padding-bottom: 6px;
+}
+
+div.x-sheet.x-msgbox {
+width: 15em;
+-webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0.1em 0.5em;
+-webkit-border-radius: 0.3em;
+border-radius: none;
+border: none;
+}
+
+/* pressed state for cancel button?
+.x-button.x-button-action.x-button-pressed,.x-button.x-button-action.x-button-pressed:after,.x-button.x-button-action.x-button-active,.x-button.x-button-action.x-button-active:after,.x-toolbar .x-button.x-button-action.x-button-pressed,.x-toolbar .x-button.x-button-action.x-button-pressed:after,.x-toolbar .x-button.x-button-action.x-button-active,.x-toolbar .x-button.x-button-action.x-button-active:after,.x-button.x-button-action-round.x-button-pressed,.x-button.x-button-action-round.x-button-pressed:after,.x-button.x-button-action-round.x-button-active,.x-button.x-button-action-round.x-button-active:after,.x-toolbar .x-button.x-button-action-round.x-button-pressed,.x-toolbar .x-button.x-button-action-round.x-button-pressed:after,.x-toolbar .x-button.x-button-action-round.x-button-active,.x-toolbar .x-button.x-button-action-round.x-button-active:after,.x-button.x-button-action-small.x-button-pressed,.x-button.x-button-action-small.x-button-pressed:after,.x-button.x-button-action-small.x-button-active,.x-button.x-button-action-small.x-button-active:after,.x-toolbar .x-button.x-button-action-small.x-button-pressed,.x-toolbar .x-button.x-button-action-small.x-button-pressed:after,.x-toolbar .x-button.x-button-action-small.x-button-active,.x-toolbar .x-button.x-button-action-small.x-button-active:after{
+	background-color:#1760bd;
+	background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #11498f), color-stop(10%, #1454a6), color-stop(65%, #1760bd), color-stop(100%, #1761bf));
+	background-image:linear-gradient(#11498f,#1454a6 10%,#1760bd 65%,#1761bf)
+	}
+*/
+
+.x-button.x-button-action, .x-button.x-button-action.x-button-back::after, .x-button.x-button-action.x-button-forward::after, .x-toolbar .x-button.x-button-action, .x-toolbar .x-button.x-button-action.x-button-back::after, .x-toolbar .x-button.x-button-action.x-button-forward::after, .x-button.x-button-action-round, .x-button.x-button-action-round.x-button-back::after, .x-button.x-button-action-round.x-button-forward::after, .x-toolbar .x-button.x-button-action-round, .x-toolbar .x-button.x-button-action-round.x-button-back::after, .x-toolbar .x-button.x-button-action-round.x-button-forward::after, .x-button.x-button-action-small, .x-button.x-button-action-small.x-button-back::after, .x-button.x-button-action-small.x-button-forward::after, .x-toolbar .x-button.x-button-action-small, .x-toolbar .x-button.x-button-action-small.x-button-back::after, .x-toolbar .x-button.x-button-action-small.x-button-forward::after {
+background-color: #333;
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#8D8D8D), color-stop(50%,#5E5E5E), color-stop(51%,#4C4C4C), color-stop(100%,#414141));
+height: 40px;
+padding-bottom: 6px;
+width: 240px;
+font-size: 22px;
 }

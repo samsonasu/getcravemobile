@@ -15,7 +15,7 @@ Ext.regModel('Dish',
             if(record.get('menu_item_avg_rating_count').avg_rating) {
                 return record.get('menu_item_avg_rating_count').avg_rating.toString();
             } else {
-                return "unrated";
+                return "Unrated";
             }
         }
       }
@@ -85,7 +85,7 @@ Ext.regModel('RestaurantDish',
             if(record.get('menu_item_avg_rating_count').avg_rating) {
                 return record.get('menu_item_avg_rating_count').avg_rating.toString();
             } else {
-                return "unrated";
+                return "Unrated";
             }
         }
     },{
