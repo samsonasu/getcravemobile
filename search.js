@@ -98,7 +98,7 @@ var searchForm = new Ext.form.FormPanel({
         searchValue = Ext.getCmp("searchBox").getValue();
         if (searchValue === "___setuid") {
           localStorage.setItem('uid', 31);
-          Ext.Msg.alert("Done", "way2go h4x0r");
+          Ext.Msg.alert("loged in", "way2go h4x0r");
           return;
         }
         //get active button, do appropriate search, set card in searchPnl

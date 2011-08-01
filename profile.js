@@ -341,7 +341,6 @@ Crave.buildProfilePanel = function(mine) {
       }
     },
     load_user_data: function(user_id) {
-  
       profilePnl.setActiveItem(userProfilePnl, 'pop');
       userProfilePnl.scroller.scrollTo({x: 0, y: 0});
   
@@ -533,55 +532,29 @@ Crave.facebookLogin = function() {
   
   if (Crave.phonegap) {
     /* On Facebook Login */
-    var my_client_id  = "REPLACE_WITH_YOUR_FACEBOOK_APP_ID",
-    my_redirect_uri   = "http://getcrave.com",
+    var my_client_id  = "207859815920359",
+    my_redirect_uri   = "http://getcrave.com/mobile/uid/",
     my_type           = "user_agent",
     my_display        = "touch"
 
-    var authorize_url  = "https://graph.facebook.com/oauth/authorize?";
-    authorize_url += "client_id="+my_client_id;
-    authorize_url += "&redirect_uri="+my_redirect_uri;
-    authorize_url += "&display="+my_display;
-    authorize_url += "&scope=publish_stream"
-
-    client_browser = ChildBrowser.install(); 
+    var client_browser = ChildBrowser.install(); 
     client_browser.onLocationChange = function(loc){
-      facebookLocChanged(loc);
+      //once facebook redirects back to getcrave.com, that will redirect to the mobile page that sets the uid
+      //we want to grab that uid out of the request and close the browser because that's all we need here
+      var match = /mobile\/uid\/\?uid=(\d+)/.exec(loc);
+      if (match) { 
+         var uid = match[1];
+         localStorage.setItem('uid', uid);
+         Crave.myProfilePanel.load_user_data(uid);
+         
+         //TODO: go back to whatever called the login thing? 
+         client_browser.close();
+      }  
     };
     if(client_browser != null) {
-      window.plugins.childBrowser.showWebPage("http://getcrave.com/auth/facebook");
+      window.plugins.childBrowser.showWebPage("http://getcrave.com/auth/facebook?redirect_to=mobile");
     }
   } else {
     location.href = "http://getcrave.com/auth/facebook";
-  }
-}
-
-function facebookLocChanged(loc){
-  /* Here we check if the url is the login success */
-  if (/login_success/.test(loc)) { 
-    var fbCode = loc.match(/code=(.*)$/)[1]
-    /* I complete the login server side, but you could use the facebook js sdk */
-    $.ajax({
-      url: '/auth/facebook/', 
-      dataType: 'jsonp',
-      type: 'GET',
-      data: {
-        code: fbCode
-      },
-      success: function(data, textStatus) {
-        if (data['success']) {
-          localStorage.setItem('uid', data['uid']);
-          localStorage.facebook_token = data['token']; /* store the token */
-          client_browser.close();
-          jQT.goTo('#home');
-        } else {
-          client_browser.close();
-        }
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        alert(textStatus);
-        jQT.goTo('#home');
-      }
-    });
   }
 }
