@@ -71,7 +71,7 @@ Crave.buildProfilePanel = function(mine) {
           var rating = parseInt(record.data.menu_item.menu_item_avg_rating_count.avg_rating);
           return Crave.ratingDisplay(rating);
         } catch (ex) {
-          return "unrated"
+          return "Unrated"
         }
       },
       proxy: {
@@ -457,7 +457,7 @@ Crave.buildSavedPanel = function() {
         var rating = parseInt(record.data.menu_item.menu_item_avg_rating_count.avg_rating);
         return Crave.ratingDisplay(rating);
       } catch (ex) {
-        return "unrated"
+        return "Unrated"
       }
     },
     proxy: {

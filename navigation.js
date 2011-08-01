@@ -35,10 +35,10 @@ Crave.ratingDisplay = function(rating) {
   try {
     
     var intRating = parseInt(rating);
-    if (isNaN(intRating)) return "unrated";
+    if (isNaN(intRating)) return "Unrated";
     return "<img class='stars' src='../images/rating-my-" + intRating+ ".png' >"
   } catch(ex) {
-    return "unrated";
+    return "Unrated";
   }
 }
 

@@ -240,7 +240,7 @@ Ext.setup({
               listPnl.setActiveItem(dishList);
             },
             ui:'round',
-            width:'110'
+            width:'100'
           },{
             text:'Places',
             id:'placesButton',
@@ -249,7 +249,7 @@ Ext.setup({
               listPnl.setActiveItem(placesList);
             },
             ui:'round',
-            width:'110'
+            width:'100'
           }]
         },{
           xtype:'button',
