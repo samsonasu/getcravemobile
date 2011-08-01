@@ -284,6 +284,7 @@ Crave.buildDishDisplayPanel = function() {
   
   //receive the image from phonegap, upload it, and associate with the correct menu item
   var uploadHandler = function(imageURI) { //get the photo
+    console.log('got a photo at: ' + imageURI);
     var menu_item_id = Crave.dishDisplayPanel.current_menu_item.id; //get a closure on this for later
     var user_id = Crave.currentUserId(); //this too, in case they log out real quick (unlikely)
     addSheet.hide();
@@ -332,7 +333,8 @@ Crave.buildDishDisplayPanel = function() {
         }, { 
           quality: 50, 
           destinationType: Camera.DestinationType.FILE_URI,
-          sourceType : Camera.PictureSourceType.CAMERA
+          sourceType : Camera.PictureSourceType.CAMERA,
+          correctOrientation: true
         });
       }
     },{
@@ -653,7 +655,7 @@ Crave.uploadPhoto = function(imageURI, callback) {
   //phonegap
   var options = new FileUploadOptions();
   options.fileKey="file";
-  options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+  options.fileName = new Date().getTime() + ".jpg";
   options.mimeType="image/jpg";
   params.key = 'mobile_uploads/user_' + Crave.currentUserId() + '/' + options.fileName;
   options.params = params;
