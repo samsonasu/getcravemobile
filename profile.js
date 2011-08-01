@@ -369,9 +369,9 @@ Crave.buildProfilePanel = function(mine) {
           html = html + '<div class="reviewCount">' + user.user_ratings_count + ' reviews</div>';
           if (!mine && Crave.isLoggedIn()) { //can't follow if not logged in yet
             if (user.followed_by_current_user) {
-              html = html + '<button onclick="Crave.follow_user_toggle(' + user_id + ', this);" class="follow">- Unfollow</button>';
+              html = html + '<button onclick="Crave.follow_user_toggle(' + user_id + ', this);" class="follow">Unfollow</button>';
             } else {
-              html = html + '<button onclick="Crave.follow_user_toggle(' + user_id + ', this);" class="follow">+ Follow</button>';
+              html = html + '<button onclick="Crave.follow_user_toggle(' + user_id + ', this);" class="follow">Follow</button>';
             }
           }
           userInfoPanel.update(html);
