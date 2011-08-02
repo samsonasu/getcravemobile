@@ -288,7 +288,20 @@ Crave.buildDishDisplayPanel = function() {
     var menu_item_id = Crave.dishDisplayPanel.current_menu_item.id; //get a closure on this for later
     var user_id = Crave.currentUserId(); //this too, in case they log out real quick (unlikely)
     addSheet.hide();
-    Ext.Msg.wait("Please wait", "Uploading photo");
+    TouchBS.wait("Uploading photo...");
+    var fail_handler = function() {
+      TouchBS.stop_waiting();
+      Ext.Msg.show({
+        title: "Can't upload",
+        msg: "We're having problems uploading your photo, probably because of network conditions.  Try again?",
+        buttons: Ext.MessageBox.YESNO,
+        fn: function(btn) {
+          if (btn === 'yes') {
+            uploadHandler(imageURI);
+          } 
+        }
+      });
+    }
     Crave.uploadPhoto(imageURI, function(photo_url) { //upload it to s3
       //console.log("posting " + photo_url + "to menu_item_photos.json, mi=" + menu_item_id + " user=" + user_id);
       Ext.Ajax.request({ //post the association to the menu item
@@ -302,22 +315,15 @@ Crave.buildDishDisplayPanel = function() {
           }
         },
         success: function() {
+          TouchBS.stop_waiting();
           Ext.Msg.alert("Thanks for the photo!", "Keep on Cravin'");
-        }, 
-        failure: function() {
-          Ext.Msg.show({
-            title: "Can't upload",
-            msg: "We're having problems uploading your photo, probably because of network conditions.  Try again?",
-            buttons: Ext.MessageBox.YESNO,
-            fn: function(btn) {
-              if (btn === 'yes') {
-                uploadHandler(imageURI);
-              } 
-            }
+          Crave.dishDisplayPanel.load_dish_data(menu_item_id, function() {
+            imageCarousel.setActiveItem(imageCarousel.items.length-1);
           });
-        }
+        }, 
+        failure: fail_handler
       });
-    }); 
+    }, fail_handler); 
   }
   
   
@@ -346,6 +352,7 @@ Crave.buildDishDisplayPanel = function() {
           destinationType: Camera.DestinationType.FILE_URI,
           sourceType: Camera.PictureSourceType.CAMERA,
           correctOrientation: true,
+          saveToPhotoAlbum: true,
           targetWidth: 800,
           targetHeight: 600
         });
@@ -511,20 +518,20 @@ Crave.buildDishDisplayPanel = function() {
     layout: 'card', 
     items: [dishPanel, reviewsPanel],
     activeItem: 0, 
-    load_dish_data: function(dish_id) {
+    load_dish_data: function(dish_id, callback) {
       dishPanel.setLoading('Loading');
       Ext.Ajax.request({
         method: "GET",
         url: '/items/' + dish_id + '.json',
         success: function(response, options) {
           var menu_item = Ext.decode(response.responseText).menu_item;
-          Crave.dishDisplayPanel.load_dish(menu_item);
+          Crave.dishDisplayPanel.load_dish(menu_item, callback);
           //and we're done
           dishPanel.setLoading(false);
         }
       });
     },
-    load_dish: function(menu_item) {
+    load_dish: function(menu_item, callback) {
       Crave.dishDisplayPanel.current_menu_item = menu_item;    
       //Set up the image carousel at the top
       if (menu_item.menu_item_photos) {
@@ -598,6 +605,9 @@ Crave.buildDishDisplayPanel = function() {
       Ext.getCmp('dishAddress').update(menu_item.restaurant);
 
       dishPanel.scroller.scrollTo({x: 0, y: 0});
+      if (callback) {
+        callback(menu_item);
+      }
     },
     setup_back_stack: function(subPanel) {
       Crave.back_stack.push({
@@ -650,7 +660,7 @@ Crave.photo_for = function(obj, placeholder) {
 }
 
 
-Crave.uploadPhoto = function(imageURI, callback) {
+Crave.uploadPhoto = function(imageURI, callback, fail_callback) {
   var form = document.createElement('form');
   form.setAttribute('action', "http://getcrave.s3.amazonaws.com/");
   form.setAttribute('method', 'post');
@@ -699,10 +709,7 @@ Crave.uploadPhoto = function(imageURI, callback) {
     callback("http://getcrave.s3.amazonaws.com/" + params.key);
   }
 
-  var fail = function(error) {
-    alert("An error has occurred while uploading: Code = " + error.code);
-  }
 
   var ft = new FileTransfer();
-  ft.upload(imageURI, "http://getcrave.s3.amazonaws.com", win, fail, options);  
+  ft.upload(imageURI, "http://getcrave.s3.amazonaws.com", win, fail_callback, options);  
 };

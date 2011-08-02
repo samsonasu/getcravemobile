@@ -176,3 +176,18 @@ Ext.override(Ext.plugins.PullRefreshPlugin, {
       }
   }
 });
+
+TouchBS.wait = function(msg) {
+  Ext.getBody().mask(msg, 'x-mask-loading');
+};
+
+TouchBS.stop_waiting = function() {
+  Ext.getBody().unmask();
+}
+
+
+
+
+
+
+
