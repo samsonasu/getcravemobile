@@ -410,8 +410,10 @@ Crave.buildDishDisplayPanel = function() {
       width: '100%',
       id: 'dishDetailHeader',
       height: 100,
-      tpl: '<div class="dishInfo"><b>{name}</b><br/>' +
-           '@ {restaurant.name}<br>' +
+      tpl: '<div class="dishInfo">'+
+           '<div class="savedFlag {[values.saved ? "saved" : "unsaved"]}"></div>' +
+           '<b>{name}</b><br/>' +
+           '@ <a href="#" onclick="Crave.dishDisplayPanel.setup_back_stack(0);Crave.show_restaurant({restaurant.id});">{restaurant.name}</a><br>' +
            '<tpl if="menu_item_avg_rating_count">' +
            '{[Crave.ratingDisplay(values.menu_item_avg_rating_count.avg_rating)]}' +
            '{menu_item_avg_rating_count.count} ratings</div>' + 
@@ -507,7 +509,7 @@ Crave.buildDishDisplayPanel = function() {
         afterrender: function(c){
           c.el.on('click', function(){
             var mi = Crave.dishDisplayPanel.current_menu_item;
-            window.open('http://maps.google.com/maps?ll=' + [mi.restaurant.latitude, mi.restaurant.longitude].join(','))
+            window.open('http://maps.google.com/maps?ll=' + [mi.restaurant.latitude, mi.restaurant.longitude].join(','));
           });
         }
       }
@@ -574,7 +576,10 @@ Crave.buildDishDisplayPanel = function() {
         //var new_height = drp.getEl().down('.review').dom.clientHeight;
         
         drp.onResize();
-        reviewStore.loadData(menu_item.menu_item_ratings);
+        //Sencha sucks and they modify this in place to become an array of records instead of an array of {}s
+        //I hate them
+        var ratingsData = TouchBS.clone(menu_item.menu_item_ratings);
+        reviewStore.loadData(ratingsData);
       } else {
         Ext.getCmp('dishRatingPanel').hide();
       }

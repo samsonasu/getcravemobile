@@ -95,8 +95,9 @@ Crave.back_handler = function() {
       if (backInfo.callback) { backInfo.callback(backInfo);}
     }
   } catch (ex) {
-    if (location.href.indexOf('local') > -1)
+    if (location.href.indexOf('local') > -1) {
       alert('Unhandled back button, please make a note of this and tell Samson.')
+    }
     
     console.log("can't figure out where to go back to!");
     Crave.viewport.setActiveItem(0, 'pop');

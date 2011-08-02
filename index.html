@@ -85,7 +85,7 @@
 <textarea id="restDishTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="adish">
-            <img src="../images/no-image-default.png" class="dishImg" style="height: 60px;">
+            <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 60px;">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">{rating_count}</span>

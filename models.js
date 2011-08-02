@@ -8,7 +8,7 @@
 Ext.regModel('Dish',
 {
     fields: ['name','id','price','description','restaurant_id','restaurant',
-      'distance','menu_item_avg_rating_count','avg_rating', 'menu_item_photos',
+      'distance','menu_item_avg_rating_count','avg_rating', 'count', 'menu_item_photos',
       {
         name: 'rating',
         convert: function(value, record) {
@@ -18,17 +18,25 @@ Ext.regModel('Dish',
                 return "Unrated";
             }
         }
-      }
-    ]
+      },{
+        name: 'rating_count',
+        convert: function(value, record) {
+            if(record.get('menu_item_avg_rating_count').count) {
+                if(record.get('menu_item_avg_rating_count').count.toString()=="1") {
+                    return record.get('menu_item_avg_rating_count').count.toString()+" review";
+                } else {
+                    return record.get('menu_item_avg_rating_count').count.toString()+" reviews";
+                }
+            } else {
+                return "";
+            }
+        }
+    }]
 });
 
 Ext.regModel('savedDish',
 {
-    fields: ['menu_item'],
-    belongsTo: {
-      name: 'menu_item',
-      model: "Dish"
-    }
+    fields: ['menu_item']
 });
 
 Crave.dishTemplateConfig = {
@@ -70,38 +78,6 @@ Ext.regModel('FollowUser', {
 
 Ext.regModel("MenuItemRating", {
   fields: ["user", "rating", "created_at", "updated_at", "review", "id", "user_id", "menu_item_id", 'menu_item']
-});
-
-
-
-
-//used in restaurants.js
-//this should be combined with Dish above
-Ext.regModel('RestaurantDish',
-{
-    fields: ['name','id','price','description','restaurant_id','restaurant','distance','menu_item_avg_rating_count','avg_rating','count',{
-        name: 'rating',
-        convert: function(value, record) {
-            if(record.get('menu_item_avg_rating_count').avg_rating) {
-                return record.get('menu_item_avg_rating_count').avg_rating.toString();
-            } else {
-                return "Unrated";
-            }
-        }
-    },{
-        name: 'rating_count',
-        convert: function(value, record) {
-            if(record.get('menu_item_avg_rating_count').count) {
-                if(record.get('menu_item_avg_rating_count').count.toString()=="1") {
-                    return record.get('menu_item_avg_rating_count').count.toString()+" review";
-                } else {
-                    return record.get('menu_item_avg_rating_count').count.toString()+" reviews";
-                }
-            } else {
-                return "";
-            }
-        }
-    }]
 });
 
 Ext.regModel('DishSearch',

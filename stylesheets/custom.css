@@ -2,8 +2,17 @@ body {
 	background: #f4f4f4;
 }
 .restName {font-weight:bold;}
+
 .restAddress {
-  font-weight:lighter;display:block;
+  font-weight:lighter;
+  display:block;
+  text-decoration: none;
+  color: #333;
+}
+
+.phoneNumberLink {
+  text-decoration: underline;
+  color: #01669a;
 }
 
 .chevrony {
@@ -238,12 +247,28 @@ font-weight: lighter;
     margin:12px auto;
 }
 .dishInfo {background-color: white;}
+.dishInfo A {
+  color: #01669a;
+  text-decoration: none;
+  -webkit-touch-callout: inherit;
+  -webkit-tap-highlight-color: red;
+}
 .dishInfo, #reviewPnl {
 	padding: 12px;
 	font-size: 16px;
 	line-height: 24px;
 	border-bottom: 1px solid #CCC;
 	color:#333333;
+}
+
+.dishInfo .savedFlag {
+  height: 80px;
+  width: 80px;
+  float: right;
+  background: url('../../images/saved-icon-OFF@2x.png');
+}
+.dishInfo .savedFlag.saved {
+   background: url('../../images/saved-icon-ON@2x.png');
 }
 
 .dishCarouselImage IMG {

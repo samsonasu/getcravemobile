@@ -160,8 +160,7 @@ Ext.setup({
     });
 
     var restMapPnl = new Ext.Panel ({
-      items: [
-      {
+      items: [{
         id: 'googleMap',
         xtype: 'map',
         useCurrentLocation: false,
@@ -173,10 +172,17 @@ Ext.setup({
           zoom : 17,
           mapTypeId : google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: true,
-          navigationControl: false
+          navigationControl: false,
+          draggable: false
+        },
+        listeners: {
+        afterrender: function(c){
+          c.el.on('click', function(){
+            window.open('http://maps.google.com/maps?ll=' + [c.map.center.lat(), c.map.center.lng()].join(','));
+          });
         }
       }
-      ],
+      }],
       height:100,
       width:100
     });
