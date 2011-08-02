@@ -288,7 +288,7 @@ Crave.buildDishDisplayPanel = function() {
     var menu_item_id = Crave.dishDisplayPanel.current_menu_item.id; //get a closure on this for later
     var user_id = Crave.currentUserId(); //this too, in case they log out real quick (unlikely)
     addSheet.hide();
-    Ext.Msg.alert("Thanks for the photo!", "Keep on Cravin'");
+    Ext.Msg.wait("Please wait", "Uploading photo");
     Crave.uploadPhoto(imageURI, function(photo_url) { //upload it to s3
       //console.log("posting " + photo_url + "to menu_item_photos.json, mi=" + menu_item_id + " user=" + user_id);
       Ext.Ajax.request({ //post the association to the menu item
@@ -302,9 +302,20 @@ Crave.buildDishDisplayPanel = function() {
           }
         },
         success: function() {
-          console.log('photo successfuly uploaded and associated');
+          Ext.Msg.alert("Thanks for the photo!", "Keep on Cravin'");
         }, 
-        failure: TouchBS.handle_failure
+        failure: function() {
+          Ext.Msg.show({
+            title: "Can't upload",
+            msg: "We're having problems uploading your photo, probably because of network conditions.  Try again?",
+            buttons: Ext.MessageBox.YESNO,
+            fn: function(btn) {
+              if (btn === 'yes') {
+                uploadHandler(imageURI);
+              } 
+            }
+          });
+        }
       });
     }); 
   }
@@ -333,8 +344,10 @@ Crave.buildDishDisplayPanel = function() {
         }, { 
           quality: 50, 
           destinationType: Camera.DestinationType.FILE_URI,
-          sourceType : Camera.PictureSourceType.CAMERA,
-          correctOrientation: true
+          sourceType: Camera.PictureSourceType.CAMERA,
+          correctOrientation: true,
+          targetWidth: 800,
+          targetHeight: 600
         });
       }
     },{
@@ -347,7 +360,10 @@ Crave.buildDishDisplayPanel = function() {
         }, { 
           quality: 50, 
           destinationType: Camera.DestinationType.FILE_URI,
-          sourceType : Camera.PictureSourceType.PHOTOLIBRARY 
+          sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
+          correctOrientation: true,
+          targetWidth: 800,
+          targetHeight: 600
         });
       }
     },{
@@ -605,7 +621,10 @@ Crave.dishImageLoaded = function(img) {
 }
 
 //obj is something with a photo, so far either a menu item or a user
-Crave.photo_url = function(obj) {
+Crave.photo_url = function(obj, placeholder) {
+  if (placeholder === undefined) {
+    placeholder = true;
+  }
   if (obj.menu_item_photos && obj.menu_item_photos.length > 0) {
     var photo_url = obj.menu_item_photos[0].photo;
     return "http://src.sencha.io/" + photo_url;
@@ -614,9 +633,21 @@ Crave.photo_url = function(obj) {
   if (obj.user_profile_pic_url) {
     return "http://src.sencha.io/" + obj.user_profile_pic_url;
   }
-
-  return "../images/no-image-default.png";
+  if (placeholder) {
+    return "../images/no-image-default.png";
+  } else {
+    return null;
+  }
 };
+
+Crave.photo_for = function(obj, placeholder) {
+  var photo_url = Crave.photo_url(obj, placeholder);
+  if (photo_url) {
+    return '<img src='+photo_url+' class="dishImg" style="height: 60px;">';
+  } else {
+    return "";
+  }
+}
 
 
 Crave.uploadPhoto = function(imageURI, callback) {

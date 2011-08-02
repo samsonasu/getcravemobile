@@ -58,7 +58,7 @@
 <textarea id="dishesTemplate" class="x-hidden-display">
     <tpl for=".">
         <div class="adish">
-            <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 60px;">
+            {[Crave.photo_for(values, true)]}
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">@{restaurant.name}</span>
