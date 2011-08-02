@@ -157,3 +157,22 @@ TouchBS.rails_serializer = {
   }
 }
 
+//There is a bug in pullrefresh that sometimes happens if the list is rendered into a hidden panel
+//and loaded while hidden.  It will think its element height is 0 so the pull refresh won't "stick" while
+//reloading.  I added a check for that when the list updates, which happens when it becomes visible
+Ext.override(Ext.plugins.PullRefreshPlugin, {
+    onListUpdate: function() {
+      if (!this.rendered) {
+          this.render();
+      }
+
+      this.list.getTargetEl().insertFirst(this.el);
+      if (this.pullHeight === 0) {
+        this.pullHeight = this.el.getHeight();
+      }
+
+      if (!this.refreshFn) {
+          this.onLoadComplete.call(this);
+      }
+  }
+});

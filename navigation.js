@@ -33,10 +33,9 @@ Crave.new_dish_rating = function(menu_item) {
 
 Crave.ratingDisplay = function(rating) {
   try {
-    
     var intRating = parseInt(rating);
     if (isNaN(intRating)) return "Unrated";
-    return "<img class='stars' src='../images/rating-my-" + intRating+ ".png' >"
+    return "<img class='stars' src='../images/rating-my-" + intRating+ "@2x.png' >"
   } catch(ex) {
     return "Unrated";
   }

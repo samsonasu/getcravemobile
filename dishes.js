@@ -669,13 +669,9 @@ Crave.uploadPhoto = function(imageURI, callback) {
   }
 
   var fail = function(error) {
-      alert("An error has occurred: Code = " + error.code);
+    alert("An error has occurred while uploading: Code = " + error.code);
   }
-
 
   var ft = new FileTransfer();
   ft.upload(imageURI, "http://getcrave.s3.amazonaws.com", win, fail, options);  
-  
-  
-  
 };

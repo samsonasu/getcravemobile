@@ -28,17 +28,18 @@ Ext.setup({
       dishStore.proxy.extraParams = {
         "lat": coords.latitude,
         "long": coords.longitude,
+        distance: "yes",
         limit: 25
       }
       dishStore.load();
-
+      
       places.proxy.extraParams = {
         "lat": coords.latitude,
         "long": coords.longitude,
         limit: 25
       }
-
       places.load();
+
       Crave.activityStore.load();
     });
 
@@ -48,11 +49,22 @@ Ext.setup({
       itemSelector: '.aplace',
       singleSelect: true,
       grouped: false,
-      indexBar: false,
       store: places,
+      scroll: 'vertical',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
-      plugins: [new Ext.plugins.ListPagingPlugin()]
+      plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
+        refreshFn: function(cb, scope) {
+          Crave.updateLocation(function(coords) {
+            places.proxy.extraParams.lat = coords.latitude;
+            places.proxy.extraParams.lon = coords.longitude;
+            places.load({
+              scope: scope,
+              callback: cb
+            });
+          });
+        }
+      })]
     });
     placesList.on('itemtap', function(dataView, index, item, e) {
       var record = dataView.store.data.items[index];
@@ -212,25 +224,24 @@ Ext.setup({
 
     //intentionally not using var to make this global
     listPnl = new Ext.Panel({
-      title:'Nearby',
-      iconCls:'nearBy',
       id: 'listPnl',
       items: [dishList,placesList,searchPnl,newRestaurant],
-      layout: {
-        type: 'card'
-      },
+      layout: 'card',
       width:'100%',
+      activeItem: 0,
       height:'100%',
-      direction:'horizontal',
       dockedItems: [{
         id: 'topPanel',
         xtype: 'toolbar',
         ui:'light',
         dock: 'top',
         layout:{
-          pack:'center'
+          pack:'justify'
         },
         items:[{
+            xtype: 'spacer',
+            width: 25
+          },{
           xtype:'segmentedbutton',
           items:[{
             text:'Food',
@@ -265,8 +276,13 @@ Ext.setup({
             Crave.viewport.setActiveItem(filterListPnl, {type: 'slide', direction: 'up'});
           }
         }]
-      },searchForm
-      ]
+      },
+      searchForm],
+      listeners: {
+        activate: function() {
+          alert('activate');
+        }
+      }
     });
 
     placePnl = new Ext.Panel({
@@ -335,7 +351,7 @@ Ext.setup({
             Crave.back_stack = []; //clear back stack when they explicitly click a tab
             if(tab.text === "Me") {
               Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
-            }
+            } 
           }
         }
       })],

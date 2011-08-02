@@ -824,22 +824,22 @@ IMG.stars {
 }
 
 .ratingOf0 {
-    background:url("../images/rating-my-0.png") no-repeat;
+    background:url("../images/rating-my-0@2x.png") no-repeat;
 }
 .ratingOf1 {
-    background:url("../images/rating-my-1.png") no-repeat;
+    background:url("../images/rating-my-1@2x.png") no-repeat;
 }
 .ratingOf2 {
-    background:url("../images/rating-my-2.png") no-repeat;
+    background:url("../images/rating-my-2@2x.png") no-repeat;
 }
 .ratingOf3 {
-    background:url("../images/rating-my-3.png") no-repeat;
+    background:url("../images/rating-my-3@2x.png") no-repeat;
 }
 .ratingOf4 {
-    background:url("../images/rating-my-4.png") no-repeat;
+    background:url("../images/rating-my-4@2x.png") no-repeat;
 }
 .ratingOf5 {
-    background:url("../images/rating-my-5.png") no-repeat;
+    background:url("../images/rating-my-5@2x.png") no-repeat;
 }
 
 .starcover {

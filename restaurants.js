@@ -1,12 +1,13 @@
-restaurantTemplate = Ext.XTemplate.from('restaurantTemplate',
-    {distDisplay: function(miles) {
-        feet = Math.round(miles * 5280);
-        if(feet<1000) {
-            return feet+" feet";
-        } else {
-            return parseFloat(miles).toFixed(1)+' miles';
-        }
-    }});
+restaurantTemplate = Ext.XTemplate.from('restaurantTemplate', {
+  distDisplay: function(miles) {
+    var feet = Math.round(miles * 5280);
+    if(feet<1000) {
+      return feet+" feet";
+    } else {
+      return parseFloat(miles).toFixed(1)+' miles';
+    }
+  }
+});
 
 restaurantDishTemplate = Ext.XTemplate.from('restDishTemplate');
 
@@ -28,24 +29,7 @@ var singleRestaurantStore = new Ext.data.Store({
     model: 'RestaurantDish',
     sorters: [{property: 'arating', direction: 'ASC'}],
     getGroupString : function(record) {
-        rating = parseInt(record.get('rating'));
-        if(rating==5) {
-            return "<img src='../images/rating-stars/rating-dish-5.png'>";
-        }
-        if(rating==4) {
-            return "<img src='../images/rating-stars/rating-dish-4.png'>";
-        }
-        if(rating==3) {
-            return "<img src='../images/rating-stars/rating-dish-3.png'>";
-        }
-        if(rating==2) {
-            return "<img src='../images/rating-stars/rating-dish-2.png'>";
-        }
-        if(rating==1) {
-            return "<img src='../images/rating-stars/rating-dish-1.png'>";
-        } else {
-            return "Unrated";
-        }
+       return Crave.ratingDisplay(record.get('rating'));
     },
     proxy: {
       type:'ajax',
