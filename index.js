@@ -24,25 +24,31 @@ Ext.setup({
       }
     }, this);
     
-    Crave.updateLocation(function(coords) {
-      dishStore.proxy.extraParams = {
-        "lat": coords.latitude,
-        "long": coords.longitude,
-        distance: "yes",
-        limit: 25
-      }
-      dishStore.load();
-      
-      places.proxy.extraParams = {
-        "lat": coords.latitude,
-        "long": coords.longitude,
-        limit: 25
-      }
-      places.load();
+    
+    updateNearby = function() {
+      Crave.updateLocation(function(coords) {
+        dishStore.proxy.extraParams = {
+          "lat": coords.latitude,
+          "long": coords.longitude,
+          distance: "yes",
+          limit: 25
+        }
+        dishStore.load();
+        
+        places.proxy.extraParams = {
+          "lat": coords.latitude,
+          "long": coords.longitude,
+          limit: 25
+        }
+        places.load();
 
-      Crave.activityStore.load();
-    });
-
+      });
+    }
+    updateNearby();
+    Crave.activityStore.load();
+    if (Crave.phonegap) {
+      document.addEventListener('resume', updateNearby, false);
+    }
 
     var placesList = new Ext.List({
       itemTpl: restaurantTemplate,
@@ -277,12 +283,7 @@ Ext.setup({
           }
         }]
       },
-      searchForm],
-      listeners: {
-        activate: function() {
-          alert('activate');
-        }
-      }
+      searchForm]
     });
 
     placePnl = new Ext.Panel({
@@ -359,10 +360,11 @@ Ext.setup({
         afterlayout: function(viewport) {
           var tb = Ext.getCmp('mainTabbar');
           tb.cardLayout = viewport.layout;
+          $(".startuppic").remove();
         }
       }
     });
-    $(".startuppic").remove();
+    
   }
 });
 
