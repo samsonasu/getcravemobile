@@ -233,6 +233,7 @@ Crave.buildDishDisplayPanel = function() {
   var imageCarousel = new Ext.Carousel({
     height: 100,
     width: '100%',
+    hidden: true,
     items: [{
         xtype: 'panel',
         html: '<p>No Image Available</p>'
