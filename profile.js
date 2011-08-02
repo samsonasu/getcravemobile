@@ -404,8 +404,7 @@ Crave.buildProfilePanel = function(mine) {
 
 
 Crave.follow_user_toggle = function(user_id, button) {
-  //TODO: actually follow somebody
-  var following = (button.innerHTML[0] === '-');
+  var following = (button.innerHTML[0] === 'U'); //ghetto
   
   if (following) {
     Ext.Ajax.request({

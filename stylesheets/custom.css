@@ -263,12 +263,17 @@ font-weight: lighter;
 
 .dishInfo .savedFlag {
   height: 80px;
-  width: 80px;
+  width: 50px;
   float: right;
-  background: url('../../images/saved-icon-OFF@2x.png');
+  background: url('../../images/saved-icon-OFF@2x.png') no-repeat;
+  -webkit-background-size: 40px 60px;
+  padding-top: 56px;
+  color: #555;
 }
 .dishInfo .savedFlag.saved {
-   background: url('../../images/saved-icon-ON@2x.png');
+   background: url('../../images/saved-icon-ON@2x.png') no-repeat;
+   -webkit-background-size: 40px 60px;
+   color: #70b9b6;
 }
 
 .dishCarouselImage IMG {

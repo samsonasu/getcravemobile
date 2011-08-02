@@ -411,7 +411,7 @@ Crave.buildDishDisplayPanel = function() {
       id: 'dishDetailHeader',
       height: 100,
       tpl: '<div class="dishInfo">'+
-           '<div class="savedFlag {[values.saved ? "saved" : "unsaved"]}"></div>' +
+           '<div onclick="Crave.dishDisplayPanel.toggle_saved();" class="savedFlag {[values.saved ? "saved" : ""]}">Save</div>' +
            '<b>{name}</b><br/>' +
            '@ <a href="#" onclick="Crave.dishDisplayPanel.setup_back_stack(0);Crave.show_restaurant({restaurant.id});">{restaurant.name}</a><br>' +
            '<tpl if="menu_item_avg_rating_count">' +
@@ -626,6 +626,45 @@ Crave.buildDishDisplayPanel = function() {
           Crave.dishDisplayPanel.setActiveItem(subPanel, {type: 'slide', direction: 'right'});
         }
       });
+    },
+    toggle_saved: function() {
+      var savedFlag = this.el.down(".savedFlag");
+      var saved = this.current_menu_item.saved_by_current_user;
+      if (saved) {
+        Ext.Ajax.request({
+          method: "DELETE",
+          url: '/user_saved_menu_item.json',
+          jsonData:{
+            user_following: {
+              user_id: Crave.currentUserId(),
+              menu_item_id: this.current_menu_item.id
+            }
+          },
+          failure: Crave.handle_failure,
+          success: function(response, options) {
+            savedFlag.dom.innerHTML = "Save";
+            savedFlag.removeCls('saved');
+            this.current_menu_item.saved_by_current_user = false;
+          }
+        });
+      } else {
+        Ext.Ajax.request({
+          method: "POST",
+          url: '/user_saved_menu_items.json',
+          jsonData:{
+            user_saved_menu_item: {
+              user_id: Crave.currentUserId(),
+              menu_item_id: this.current_menu_item.id
+            }
+          },
+          failure: Crave.handle_failure,
+          success: function(response, options) {
+            savedFlag.dom.innerHTML = "Remove";
+            savedFlag.addCls('saved');
+            this.current_menu_item.saved_by_current_user = true;
+          }
+        });
+      }
     }
   })
   return Crave.dishDisplayPanel; 
@@ -634,7 +673,7 @@ Crave.buildDishDisplayPanel = function() {
 Crave.dishImageLoaded = function(img) {
   var y = img.height / 2;
   img.style["-webkit-transform"] = "translate(0, -" + y + "px)";
-}
+};
 
 //obj is something with a photo, so far either a menu item or a user
 Crave.photo_url = function(obj, placeholder) {
