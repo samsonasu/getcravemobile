@@ -132,7 +132,6 @@ Crave.show_image = function(image_url, anim) {
     var width, height, style;
     if (image.width > image.height) {
       style = "width: 100%";
-      width = "90%";
     } else {
       style = "height: 100%",
       height = "90%";
@@ -141,14 +140,11 @@ Crave.show_image = function(image_url, anim) {
       centered: true,
       modal: true,
       height: height,
-      width: width,
-      html: "<img src='" + image_url + "' style='" + style + "'>",
+      width: "90%",
+      html: "<img src='" + image_url + "' style='margin: 0 auto; display:block; " + style + "'>",
       bodyStyle: 'padding: 0 0 12px 0; border-radius: 0;',
       hideOnMaskTap: true
     });
     sheet.show(anim);
-  }
-
-
-  
+  }  
 };
