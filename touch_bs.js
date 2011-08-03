@@ -240,4 +240,4 @@ TouchBS.init_viewport = function(cb, scope) {
   } else {
     Ext.Viewport.init(cb, scope);
   }
-}
+};
