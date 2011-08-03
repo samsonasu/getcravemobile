@@ -11,7 +11,7 @@ body {
 }
 
 .phoneNumberLink {
-  text-decoration: underline;
+  text-decoration: none;
   color: #01669a;
 }
 
@@ -1052,6 +1052,6 @@ background-color: #333;
 background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#8D8D8D), color-stop(50%,#5E5E5E), color-stop(51%,#4C4C4C), color-stop(100%,#414141));
 height: 40px;
 padding-bottom: 6px;
-width: 240px;
 font-size: 22px;
 }
+

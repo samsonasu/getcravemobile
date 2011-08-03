@@ -77,9 +77,9 @@ function placeDisplay(restaurant_id) {
       restaurant.name+'</span><a target="_blank" href="' +
       'http://maps.google.com/maps?ll=' + [restaurant.latitude, restaurant.longitude].join(',') +
       '" class="restAddress">'+
-      restaurant.street_address+', '+
+      restaurant.street_address+' <br>'+
       restaurant.city +
-      '<br><span id="restaurantTotalRatings"></span> ratings</span>';
+      '<br>';
 
       if (restaurant.telephone) {
         htmlString = htmlString +'<a href="tel:' + restaurant.telephone + '" class="phoneNumberLink">' + TouchBS.formatted_phone_number(restaurant.telephone) + '</a>';
