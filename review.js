@@ -1,12 +1,12 @@
 
 Crave.buildRateDishPanel = function() {
   var reviewText = new Ext.form.TextArea({
-    xtype: 'textareafield',
     name: 'menu_item_rating[review]',
     anchor: '100%',
     height: 400,
     placeHolder: 'Write a review',
-    cls:'reviewField'
+    cls:'reviewField',
+    autoCapitalize: true
   });
   var ratingField = new Ext.form.Hidden({
     xtype: 'hiddenfield',
@@ -14,6 +14,7 @@ Crave.buildRateDishPanel = function() {
     id:'menuRating'
   });
   var reviewForm = new Ext.form.FormPanel({
+    url: '/ratings.json',
     width: '100%',
     items: [ratingField,reviewText]
   });
@@ -29,6 +30,7 @@ Crave.buildRateDishPanel = function() {
         text:'Submit',
         ui:'normal', 
         handler:function() {
+          reviewText.blur();
           var rating = {
             menu_item_id: Crave.rateDishPanel.current_menu_item.id,
             user_id: Crave.currentUserId(),

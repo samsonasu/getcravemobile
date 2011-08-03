@@ -41,6 +41,20 @@ Crave.ratingDisplay = function(rating) {
   }
 }
 
+Crave.magic_scroll_handler = function(comp,target,options) {
+  var t = Ext.get(target);
+  if (t.hasCls('x-button') || t.hasCls('x-button-label')) {
+    return;
+  }
+  var magic_scrollers = this.ownerCt.el.query('.magic-scroll');
+  Ext.each(magic_scrollers, function(magic) {
+    if (magic) {
+      var panel = Ext.getCmp(magic.getAttribute('id'));
+      panel.scroller.scrollTo({x: 0, y:0}, true);
+    }
+  });
+}
+
 //call this and then put it in dockedItems[]
 //config.items is any buttons you want (back button, etc)
 Crave.create_titlebar = function(config) {
@@ -53,7 +67,12 @@ Crave.create_titlebar = function(config) {
       type: 'hbox',
       pack:'justify'
     },
-    items: config.items
+    items: config.items,
+    listeners: {
+      render: function(c) {
+        c.el.on('click', Crave.magic_scroll_handler, c);
+      }
+    }
   }
 };
 

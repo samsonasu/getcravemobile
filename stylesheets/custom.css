@@ -780,11 +780,10 @@ IMG.stars {
 }
 
 .arating {
-	padding: 0 10px 0 0;
+	padding: 0;
 }
 .arating .ratingListItem {
   padding-left: 68px;
-  
 }
 
 .arating .ratingListItem .chevrony {
@@ -808,17 +807,21 @@ IMG.stars {
 }
 
 .arating .ratingDescription A:hover {
-  text-decoration: underlione;
+  text-decoration: underline;
 }
+
 
 /*fix for flickering slide animations */
-.x-tabpanel > .x-panel-body .x-panel {
-    -webkit-backface-visibility: hidden;
+.x-panel {
+  -webkit-backface-visibility: hidden;
 }
 
-.reviewField {border:none;}
-.newReviewContainer {v
-  background:#222222;
+.x-tabpanel > .x-panel-body .x-panel {
+  -webkit-backface-visibility: hidden;
+}
+
+.newReviewContainer {
+  background: #222222;
   background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #282523), color-stop(1, #404143) );
   height: 48px;
   padding: 4px;
@@ -839,6 +842,7 @@ IMG.stars {
     margin-top: 2px;
     float: left;
     height: 40px;
+    -webkit-background-size: 200px 35px;
 }
 
 .rateDishPanel .x-panel, 
@@ -846,11 +850,12 @@ IMG.stars {
 .rateDishPanel .x-panel-body {
   padding: 0;
   margin: 0;
+  background: white;
 }
-.rateDishPanel TEXTAREA {
+.rateDishPanel .reviewField {
   width: 100%;
   border-radius: 0px;
-  height: 340px;
+  height: 100px;
 }
 
 .ratingOf0 {
@@ -886,6 +891,35 @@ IMG.stars {
 background-color: #CCC;
 background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
 background-image: linear-gradient(#EFEFEF,#D9D9D9 50%,#CCC 51%,#DDD);
+}
+
+/* line 186, ../themes/stylesheets/sencha-touch/default/widgets/_buttons.scss */
+.x-button-forward:before, .x-button-forward:after, .x-button-back:before, .x-button-back:after {
+  content: "";
+  position: absolute;
+  /*width: 0.773em;*/
+  width: 1em;
+  height: 1.8em;
+  top: -0.1em;
+  left: auto;
+  z-index: 2;
+  -webkit-mask: 0.145em 0 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABGCAYAAADb7SQ4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAiNJREFUeNrEWb9LQlEUvj5BcHoQvMnVKXD1D3CLwqBJbHJsazQaWoSCxgbHJiMIAiNok6AhCDdXVycnJ8EQOgeOYaG+d39998KH+HyP753zzjnfd325xfdSgVeV8B6BScuEV0IRSbxHeCMk/AVFXCA8ScQKSXxPqK0fQBBfE5r/D+Y8VzUT9jb94DPimqRYIYkrhGcpKhhxIqTxrpNcExdlQJTTTnRJnCc8ykhUSOIOoZ71ZFfEZ4S2zgUu+rguxZRHEnPbfKRVsOtUl0RtYpOLTYljIS2Z3nVk2DY9SbNCEt8RDm0rUpe4La1jvXSqmtum72raZI24KuNQIYl/nSGSOJb0Jq61M0pxhjwK9304hUjHGSKILzc5Q5drUzttdYY+I97pDH1FzG0zNFUb04gTG4kzJS5kdYauiZtZnaFr4ooKsCIVaDHxKAQxt1NBnGIVHfGCcEQYh3jGU8KBfMKLiyM+lgzAq/qT0ArVTg+Ei1B9fEPoovV4fcfQd2HedScX39GprwGTNjJn0maTELN6IuSzECLB6T5x2eM66jQgnIeSxa60GnS3uL56tr7b1Ai0JPVwYi6yho2U2lgfKym19VxjMRHzEGbvS9K+RBPzetGVUpf29lZHSl2/DMnLvwh1ZMQrKW3Ic4fvJOZS6ZMQW5hpmpT63DvtlFLfm7bBNruM2C2yXb7y3U6ZpRS5P/4jpUjihRTbCJ3q1eL3GMMfAQYAJmB6SBO619IAAAAASUVORK5CYII=') no-repeat;
+  -webkit-mask-size: 0.773em 1.8em;
+  overflow: hidden;
+}
+
+/* line 195, ../themes/stylesheets/sencha-touch/default/widgets/_buttons.scss */
+.x-button-back, .x-toolbar .x-button-back {
+  margin-left: 0.8em;
+  padding-left: .4em;
+}
+/* line 198, ../themes/stylesheets/sencha-touch/default/widgets/_buttons.scss */
+.x-button-back:before, .x-toolbar .x-button-back:before {
+  left: -0.6em;
+}
+/* line 201, ../themes/stylesheets/sencha-touch/default/widgets/_buttons.scss */
+.x-button-back:after, .x-toolbar .x-button-back:after {
+  left: -0.628em;
 }
 
 .x-toolbar.x-docked-bottom {

@@ -256,7 +256,14 @@ Crave.buildDishDisplayPanel = function() {
   });
   
   var marker = null;
-  
+  var addButtonHandler = function() {
+    if (Crave.isLoggedIn()) {
+      addSheet.show();
+    } else {
+      Crave.viewport.setActiveItem(Crave.myProfilePanel);
+    }
+  };
+
   var reviewsPanel = new Ext.Panel({
     layout: 'fit',
     dockedItems: Crave.create_titlebar({
@@ -264,6 +271,9 @@ Crave.buildDishDisplayPanel = function() {
         text: 'Back',
         ui: 'back',
         handler: Crave.back_handler
+      },{
+        text: "Add",
+        handler: addButtonHandler
       }]
     }),
     items: new Ext.List({
@@ -383,7 +393,6 @@ Crave.buildDishDisplayPanel = function() {
     }]
   });
 
-  
   var dishPanel = new Ext.Panel({
     layout: 'vbox',
     width: '100%',
@@ -395,14 +404,7 @@ Crave.buildDishDisplayPanel = function() {
         handler: Crave.back_handler
       }, {
         text: "Add", 
-        handler: function() {
-          if (Crave.isLoggedIn()) {
-            addSheet.show();
-          } else {
-            Crave.viewport.setActiveItem(Crave.myProfilePanel);
-          }
-          
-        }
+        handler: addButtonHandler
       }]
     }),
     items: [imageCarousel,{

@@ -57,6 +57,7 @@ Ext.setup({
       grouped: false,
       store: places,
       scroll: 'vertical',
+      cls: 'magic-scroll',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
       plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
@@ -88,6 +89,7 @@ Ext.setup({
       indexBar: false,
       store: dishStore,
       id:'dishesNearbyList',
+      cls: 'magic-scroll',
       scroll:'vertical',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
@@ -250,6 +252,11 @@ Ext.setup({
         layout:{
           pack:'justify'
         },
+        listeners: {
+          render: function(c) {
+            c.el.on('click', Crave.magic_scroll_handler, c);
+          }
+        },
         items:[{
             xtype: 'spacer',
             width: 25
@@ -321,8 +328,8 @@ Ext.setup({
     Crave.viewport = new Ext.Panel({
       fullscreen: true,
       layout: 'card',
-      activeItem: 0,
-      items: [listPnl, Crave.buildSavedPanel(), Crave.activityPanel, Crave.myProfilePanel, detailPnl, filterListPnl,  
+      activeItem: listPnl,
+      items: [Crave.activityPanel, listPnl, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, filterListPnl,
         placePnl, newDishForm, Crave.buildRateDishPanel(),
         Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  Crave.otherProfilePanel],
       cardSwitchAnimation: 'slide',
@@ -337,6 +344,10 @@ Ext.setup({
           pack: 'center'
         }, 
         items: [{
+          text: "Activity",
+          iconCls: 'activity',
+          card: Crave.activityPanel
+        },{
           text: 'Nearby', 
           iconCls: 'nearBy',
           card: listPnl
@@ -344,10 +355,6 @@ Ext.setup({
           text: "Saved",
           iconCls: 'saved',
           card: Crave.savedPanel
-        },{
-          text: "Activity",
-          iconCls: 'activity', 
-          card: Crave.activityPanel
         },{
           text: "Me",
           iconCls: 'me',

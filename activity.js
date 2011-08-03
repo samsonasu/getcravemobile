@@ -28,6 +28,11 @@ Crave.activityPanel = new Ext.Panel({
     layout:{
       pack:'center'
     },
+    listeners: {
+      render: function(c) {
+        c.el.on('click', Crave.magic_scroll_handler, c);
+      }
+    },
     items:[{
       xtype:'segmentedbutton',
       id: 'whoseActivityButton',
@@ -71,6 +76,7 @@ Crave.activityPanel = new Ext.Panel({
     }),
     itemSelector: '.arating',
     scroll:'vertical',
+    cls: 'magic-scroll',
     loadingText: 'Loading',
     singleSelect: true,
     grouped: true,
