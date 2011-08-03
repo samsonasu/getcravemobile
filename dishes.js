@@ -1,16 +1,22 @@
-Ext.regModel('Filters', {
-    fields: ['label']
+Ext.regModel('MenuLabel', {
+    fields: ['menu_label', 'created_at', 'id']
 });
-var filterStore = new Ext.data.JsonStore({
-    model  : 'Filters',
-    sorters: 'label',
 
-    getGroupString : function(record) {
-        return record.get('label')[0];
+Crave.buildLabelListPanel = function(title) {
+  if (!title) {title = "Dietary Preference";}
+  var filterStore = new Ext.data.Store({
+    model  : 'MenuLabel',
+    sorters: 'menu_label',
+    proxy: {
+      type: 'ajax',
+      url: '/menu_labels.json',
+      reader: {
+        type: 'json',
+        record: 'menu_label'
+      }
     },
-
-    data: [
-        {label: 'Gluten Free'},
+    autoLoad: true,
+    old: [{label: 'Gluten Free'},
         {label: 'Vegetarian'},
         {label: 'Vegan'},
         {label: 'High Protein'},
@@ -28,40 +34,58 @@ var filterStore = new Ext.data.JsonStore({
         {label: 'Atkins Friendly'},
         {label: 'Four Hour Body (4HB)'}
     ]
-});
-var filterList = new Ext.List({
-    width:'100%',
-    height:'100%',
-    scroll: false,
-    title: "Dietary Preference",
-    itemTpl : '<span class="labelname">{label}</span>',
-    grouped : false,
-    multiSelect: true,
-    simpleSelect:true,
-    indexBar: false,
-    store: filterStore
-});
-labelString = "";
-filterList.on('itemtap', function(dataView, index, item, e) {
-    thisLabel = $(".labelname", item).text();
-    labelString += " "+thisLabel;
-    //alert(labelString);
-});
-//when youpress search, make json call to search results, repopulate listPnl store
-//add distance control button
-//add listener to button, add distance parameter to search string
+  });
+  var list = new Ext.List({
+      scroll: false,
+      loadingText: "Loading",
+      itemTpl : '<span class="labelname">{menu_label}</span>',
+      grouped : false,
+      multiSelect: true,
+      simpleSelect:true,
+      indexBar: false,
+      store: filterStore
+  });
+  return new Ext.Panel({
+    xtype: 'panel',
+    cls: 'framePanel',
+    height: 710,
+    dockedItems: [{
+      dock : 'top',
+      xtype: 'toolbar',
+      cls: 'title',
+      title: title
+    }],
+    items: list,
+    getSelectedRecords: function() {
+      return list.getSelectedRecords();
+    },
+    get_filters: function() {
+      var filters = list.getSelectedRecords();
+      var filter_names = [];
+      Ext.each(filters, function(f) {
+        filter_names.push(f.data.menu_label);
+      })
+      return filter_names;
+    }
+  });
+};
 
-var searchHandler = function(b,e) {
-    dishSearchStore.proxy.extraParams.q = labelString;
-    var dfb = Ext.getCmp('distanceFilterButton').getPressed();
-    dishSearchStore.proxy.extraParams.within = dfb.filter_value;
-    dishSearchStore.load();
-    console.log(dishSearchStore.proxy.url);
-    Ext.getCmp('listPnl').setActiveItem(searchPnl);
-    Ext.getCmp('searchPnl').setActiveItem(dishSearchList);
-}
+Crave.buildFilterPanel = function() {
 
-var distancePnl = function() {
+  //when youpress search, make json call to search results, repopulate listPnl store
+  //add distance control button
+  //add listener to button, add distance parameter to search string
+
+  var searchHandler = function(b,e) {
+      dishSearchStore.proxy.extraParams.q = labelList.get_filters().join(' ');
+      var dfb = Ext.getCmp('distanceFilterButton').getPressed();
+      dishSearchStore.proxy.extraParams.within = dfb.filter_value;
+      dishSearchStore.load();
+      console.log(dishSearchStore.proxy.url);
+      Ext.getCmp('listPnl').setActiveItem(searchPnl);
+      Ext.getCmp('searchPnl').setActiveItem(dishSearchList);
+  }
+
   var items = [];
   Ext.each([".5", "2", "5", "10"], function(d) {
     items.push({
@@ -77,7 +101,7 @@ var distancePnl = function() {
     width: 35,
     ui: 'round'
   });
-  return new Ext.Panel({
+  var distancePanel = new Ext.Panel({
     cls: 'framePanel',
     dockedItems: [{
       dock : 'top',
@@ -103,53 +127,47 @@ var distancePnl = function() {
     }
   });
 
-}();
-
-var filterListPnl = new Ext.Panel({
-  items: [distancePnl, {
-    xtype: 'panel',
-    cls: 'framePanel',
-    layout: 'fit',
-    height: 880,
-    dockedItems: [{
-      dock : 'top',
-      xtype: 'toolbar',
-      cls: 'title',
-      title: 'Dietary Preference'
-    }],
-    items: filterList
-  }],
-  id: 'filterListPnl',
-  //layout: 'vbox',
-  width:'100%',
-  height:'100%',
-  scroll:'vertical',
-  dockedItems:[{
-    dock:'top',
-    xtype:'toolbar',
-    ui:'light',
-    title:'Filters',
-    layout: {
-      type: 'hbox',
-      pack:'justify'
-    },
-    items:[{
-      text:'Cancel',
-      ui:'normal',
-      handler: Crave.back_handler
-    },{
-      text:'Search',
-      ui:'normal',
-      handler:searchHandler
+  var labelList = Crave.buildLabelListPanel();
+  Crave.filterPanel = new Ext.Panel({
+    items: [distancePanel, labelList],
+    id: 'filterListPnl',
+    //layout: 'vbox',
+    width:'100%',
+    height:'100%',
+    scroll:'vertical',
+    dockedItems:[{
+      dock:'top',
+      xtype:'toolbar',
+      ui:'light',
+      title:'Filters',
+      layout: {
+        type: 'hbox',
+        pack:'justify'
+      },
+      items:[{
+        text:'Cancel',
+        ui:'normal',
+        handler: Crave.back_handler
+      },{
+        text:'Search',
+        ui:'normal',
+        handler:searchHandler
+      }]
     }]
-  }]
-});
+  });
+
+  return Crave.filterPanel;
+}
+
 
 
 var dishStore = new Ext.data.Store({
     model: 'Dish',
     clearOnPageLoad: false,
-    sorters: [{property: 'arating', direction: 'ASC'}],
+    sorters: [
+      {property: 'arating', direction: 'DESC'},
+      {property: 'distance', direction: 'ASC'}
+    ],
     getGroupString : function(record) {
         return Crave.ratingDisplay(record.get('rating'));
     },
@@ -349,7 +367,10 @@ Crave.buildDishDisplayPanel = function() {
     },{
       text: 'Add a Label',
       handler: function() {
-        
+        Crave.dishDisplayPanel.setup_back_stack(dishPanel);
+        labelsPanel.set_menu_item(Crave.dishDisplayPanel.current_menu_item);
+        Crave.dishDisplayPanel.setActiveItem(labelsPanel, {type: 'slide', direction: 'left'});
+        addSheet.hide();
       }
     },{
       text: "Take a Photo", 
@@ -393,6 +414,47 @@ Crave.buildDishDisplayPanel = function() {
     }]
   });
 
+  var labelList = Crave.buildLabelListPanel("Add Labels");
+
+  var labelsPanel = new Ext.Panel({
+    width: '100%',
+    scroll: 'vertical',
+    dockedItems: Crave.create_titlebar({
+      items: [{
+        text: 'Back',
+        ui: 'back',
+        handler: Crave.back_handler
+      }, {
+        text: "Submit",
+        handler: function() {
+          TouchBS.wait("Please wait");
+          Ext.each(labelList.getSelectedRecords(), function(label) {
+            Ext.Ajax.request({
+              method: 'POST',
+              url: '/menu_label_associations.json',
+              jsonData: {
+                menu_label_association: {
+                  menu_item_id: labelsPanel.current_menu_item_id,
+                  user_id: Crave.currentUserId(),
+                  menu_label_id: label.data.id
+                }
+              },
+              success: function() {
+
+              },
+              failure: TouchBS.handle_failure
+            });
+          });
+          TouchBS.stop_waiting();
+        }
+      }]
+    }),
+    items: labelList,
+    set_menu_item: function (menu_item) {
+      labelsPanel.current_menu_item_id = menu_item.id;
+    }
+  });
+
   var dishPanel = new Ext.Panel({
     layout: 'vbox',
     width: '100%',
@@ -428,11 +490,24 @@ Crave.buildDishDisplayPanel = function() {
       dockedItems: [{
         dock : 'top',
         xtype: 'toolbar',
-        cls: 'title',
+        cls: 'title clickable',
         title: 'Dish Labels'
       }],
       tpl: '<div class="dishLabels">{[values.labels.join(",")]}</div>',
-      data: {labels: ["test", "label", "somelabel"]}
+      data: {labels: []},
+      listeners: {
+        afterrender: function(c){
+          c.el.on('click', function(){
+            if (!Crave.isLoggedIn()) {
+              Crave.viewport.setActiveItem(Crave.myProfilePanel);
+              return;
+            }
+            Crave.dishDisplayPanel.setup_back_stack(dishPanel);
+            labelsPanel.set_menu_item(Crave.dishDisplayPanel.current_menu_item);
+            Crave.dishDisplayPanel.setActiveItem(labelsPanel, {type: 'slide', direction: 'left'});
+          });
+        }
+      }
     },{
       xtype: 'panel',
       cls: 'framePanel',
@@ -520,7 +595,7 @@ Crave.buildDishDisplayPanel = function() {
   
   Crave.dishDisplayPanel = new Ext.Panel({
     layout: 'card', 
-    items: [dishPanel, reviewsPanel],
+    items: [dishPanel, reviewsPanel, labelsPanel],
     activeItem: 0, 
     load_dish_data: function(dish_id, callback) {
       dishPanel.setLoading('Loading');
@@ -615,6 +690,10 @@ Crave.buildDishDisplayPanel = function() {
       var labels = [];
       for (var l in label_map) {
         labels.push(l + " (" + label_map[l] + ")");
+      }
+
+      if (labels.length === 0) {
+        labels.push("Add a Label");
       }
 
       Ext.getCmp('dishLabelsPanel').update({labels: labels});

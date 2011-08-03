@@ -212,7 +212,7 @@ Ext.setup({
                 direction: 'down'
               }
             });
-            Crave.viewport.setActiveItem(filterListPnl, {type: 'slide', direction: 'up'});
+            Crave.viewport.setActiveItem(Crave.filterPanel, {type: 'slide', direction: 'up'});
           }
         }]
       },
@@ -227,7 +227,7 @@ Ext.setup({
         layout: 'card',
         fullscreen: true,
         activeItem: listPnl,
-        items: [Crave.activityPanel, listPnl, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, filterListPnl,
+        items: [Crave.activityPanel, listPnl, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, Crave.buildFilterPanel(),
           placePnl, newDishForm, Crave.buildRateDishPanel(),
           Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  Crave.otherProfilePanel],
         cardSwitchAnimation: 'slide',
