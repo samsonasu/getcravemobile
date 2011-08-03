@@ -18,7 +18,8 @@ body {
 .chevrony {
   display:block;
   float:right;
-  background: url('../../images/arrow-gray.png') no-repeat;
+  background: url('../../images/arrow-gray@2x.png') no-repeat;
+  -webkit-background-size: .6em 1em;
   width: 8px;
   height: 13px;
   margin: 28px 3px 0 0;
@@ -32,11 +33,9 @@ body {
 .cravelogo {margin: 10px 0 0 0;}
 
 .startuppic {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  bottom: 0;
-  right: 0;
 }
 
 .x-button img {

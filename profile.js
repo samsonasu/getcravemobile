@@ -12,6 +12,7 @@ Crave.buildProfilePanel = function(mine) {
       panel: profilePnl,
       user_id: profilePnl.displayed_user_id,
       callback: function(backInfo) {
+        debugger;
         if (!mine) {
           //they just returned to the "other" profile panel via the back button, which means they were on someone else's profile
           profilePnl.load_user_data(backInfo.user_id);
@@ -113,9 +114,6 @@ Crave.buildProfilePanel = function(mine) {
       plugins: [new Ext.plugins.ListPagingPlugin()]
     });
   }
-    
-
-  
 
   var followerStore = new Ext.data.Store({
     model: "FollowUser",
@@ -200,7 +198,7 @@ Crave.buildProfilePanel = function(mine) {
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
   });
-  
+  var profilePnl = null;
   var userInfoPanel = new Ext.Panel({
     xtype: 'panel',
     html: '<div class="userTopPnl"></div>',
@@ -318,7 +316,7 @@ Crave.buildProfilePanel = function(mine) {
     }
   });
 
-  var profilePnl = new Ext.Panel({
+  profilePnl = new Ext.Panel({
     title:'Me',
     iconCls:'me',
     layout: 'card',
@@ -342,7 +340,9 @@ Crave.buildProfilePanel = function(mine) {
             p.load_user_data(Crave.currentUserId());
           }
         }
-        userDishList.refresh();  //herp derp 
+        if (p.getActiveItem() === userProfilePnl) {
+          userDishList.refresh();  //herp derp
+        }
       }
     },
     load_user_data: function(user_id) {

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0;">
     <title>crave</title>
     <link rel="stylesheet" href="stylesheets/apple.css" type="text/css" />
     <link rel="stylesheet" href="stylesheets/custom.css" type="text/css" />
@@ -9,7 +10,7 @@
     <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-72.png" sizes="72x72"/>
     <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114.png" sizes="114x114"/>
 
-    <meta name="viewport" content="width = device-width">
+    
     <link rel="Fav Icon" href="../favicon.ico" type="image/vnd.microsoft.icon">
 
     <script type="text/javascript">
@@ -51,11 +52,10 @@
         <!-- End Phone Gap -->
 </head>
 
- <body style='margin: 0; padding: 0; height: 100%;'>
-
+<body style='margin: 0; padding: 0; height: 100%;'>
 <img src="../images/loading-screen-linen.png" border="0" class="startuppic" >
 
-<textarea id="dishesTemplate" class="x-hidden-display">
+<textarea id="dishesTemplate" style="display:none" >
     <tpl for=".">
         <div class="adish">
             {[Crave.photo_for(values, true)]}
@@ -69,7 +69,7 @@
         </div>
     </tpl>
 </textarea>
-<textarea id="restaurantTemplate" class="x-hidden-display">
+<textarea id="restaurantTemplate" style="display:none">
   <tpl for=".">
     <div class="aplace">
       <img src="../images/places-pin.png" class="dishImg" style="height: 60px;">
@@ -82,7 +82,7 @@
 </tpl>
 </textarea>
 
-<textarea id="restDishTemplate" class="x-hidden-display">
+<textarea id="restDishTemplate" style="display:none">
     <tpl for=".">
         <div class="adish">
             <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 60px;">
@@ -95,7 +95,7 @@
     </tpl>
 </textarea>
 
-<textarea id="reviewDishTemplate" class="x-hidden-display">
+<textarea id="reviewDishTemplate" style="display:none">
     <tpl for=".">
         <div class="adish">
             <img src="../images/no-image-default.png" class="dishImg" style="height: 60px;">
@@ -109,13 +109,13 @@
     </tpl>
 </textarea>
 
-<textarea id="savedDishTemplate" class="x-hidden-display">
+<textarea id="savedDishTemplate" style="display:none">
     <tpl for="menu_item">
       {[this.render_dish(values)]}
     </tpl>
 </textarea>
 
-<textarea id="ratingTemplate" class="x-hidden-display">
+<textarea id="ratingTemplate" style="display:none">
     <tpl for=".">
         <div class="arating">
             <img src="{[Crave.photo_url(values.user)]}" class="dishImg" style="height: 60px;">
@@ -131,7 +131,7 @@
     </tpl>
 </textarea>
 
-<textarea id="profileRatingTemplate" class="x-hidden-display">
+<textarea id="profileRatingTemplate" style="display:none">
     <tpl for=".">
         <div class="arating">
             <img src="{[Crave.photo_url(values.menu_item)]}" class="dishImg" style="height: 60px;">
@@ -149,7 +149,7 @@
 </textarea>
 
 <!-- For the list of ratings on the dish detail page -->
-<textarea id="dishRatingTemplate" class="x-hidden-display">
+<textarea id="dishRatingTemplate" style="display:none">
     <tpl for=".">
         <div class="arating">
             <img src="{[Crave.photo_url(values.user)]}" class="dishImg" style="height: 60px;">
@@ -164,7 +164,7 @@
     </tpl>
 </textarea>
 
-<textarea id="followUserTemplate" class="x-hidden-display">
+<textarea id="followUserTemplate" style="display:none">
   <tpl for=".">
     <div class='followUser'>
       <img src='{[this.get_user(values).user_profile_pic_url]}'>
@@ -195,9 +195,6 @@
 <script type="text/javascript" src="profile.js"></script>
 <script type="text/javascript" src="activity.js"></script>
 <script type="text/javascript" src="review.js"></script>
-
-
-
 
 <script type="text/javascript" src="index.js"></script>
    

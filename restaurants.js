@@ -25,6 +25,8 @@ var places = new Ext.data.Store({
    }
 });
 
+
+
 var singleRestaurantStore = new Ext.data.Store({
     model: 'Dish',
     sorters: [{property: 'arating', direction: 'ASC'}],
@@ -222,4 +224,109 @@ aRestaurantList.on('itemtap', function(dataView, index, item, e) {
     panel: placePnl
   });
   Crave.show_menu_item(record.data.id);
+});
+
+var infoPnl = new Ext.Panel({
+  html: '',
+  id: 'infoPnl',
+  width:'100%'
+});
+
+var restMapPnl = new Ext.Panel ({
+  items: [{
+    id: 'googleMap',
+    xtype: 'map',
+    useCurrentLocation: false,
+    height:100,
+    width:100,
+    mapOptions : {
+      center : new google.maps.LatLng(37.774518,-122.420101),  //SF
+      //not really centering here, just putting it in top right corner
+      zoom : 17,
+      mapTypeId : google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      navigationControl: false,
+      draggable: false
+    },
+    listeners: {
+      afterrender: function(c){
+        c.el.on('click', function(){
+          window.open('http://maps.google.com/maps?ll=' + [c.map.center.lat(), c.map.center.lng()].join(','));
+        });
+      }
+    }
+  }],
+  height:100,
+  width:100
+});
+var restInfoPnl = new Ext.Panel({
+  html: '',
+  id: 'restInfoPnl',
+  flex: 1
+});
+var restPnl = new Ext.Panel({
+  id: 'restPnl',
+  layout: 'hbox',
+  items:[restMapPnl,restInfoPnl],
+  width:'100%',
+  height:100
+});
+
+var reviewPnl = new Ext.Panel({
+  html: '',
+  scroll: 'vertical',
+  id: 'reviewPnl'
+});
+
+detailPnl = new Ext.Panel({
+  items: [infoPnl,reviewPnl],
+  id: 'detailPnl',
+  layout: {
+    type: 'vbox',
+    align: 'start',
+    direction: 'normal'
+  },
+  scroll:'vertical',
+  width:'100%',
+  height:'100%',
+  dockedItems: Crave.create_titlebar({
+    items:[{
+      text:'Back',
+      ui:'back',
+      handler: Crave.back_handler
+    },{
+      text:'Rate',
+      ui:'normal',
+      handler: function() {
+        Crave.back_stack.push({
+          panel: detailPnl
+        });
+        Crave.viewport.setActiveItem(Crave.rateDishPanel);
+      }
+    }]
+  })
+});
+
+
+placePnl = new Ext.Panel({
+  id: 'placePnl',
+  scroll: 'vertical',
+  items: [restPnl, aRestaurantList],
+  layout: {
+    type: 'vbox',
+    align: 'start',
+    direction: 'normal'
+  },
+  dockedItems:[
+  {
+    dock:'top',
+    xtype:'toolbar',
+    ui:'light',
+    title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
+    items:[{
+      text:'Back',
+      ui:'back',
+      handler: Crave.back_handler
+    }]
+  }]
 });

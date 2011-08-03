@@ -228,4 +228,16 @@ TouchBS.formatted_phone_number = function(phone) {
   }
 };
 
-
+//I use these 2 lines instead of Ext.Viewport.init beacuse on iphone it is all wigged out
+//because it's trying to do a bunch of crazy stuff to fix blackberry and galaxy tab
+//PS sencha touch is garbage
+TouchBS.init_viewport = function() {
+  if (Ext.is.iOS) {
+      if (Ext.is.Phone) {
+        Ext.Viewport.updateOrientation();
+        Ext.Viewport.scrollToTop();
+      }
+  } else {
+    Ext.Viewport.init();
+  }
+}
