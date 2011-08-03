@@ -810,15 +810,16 @@ IMG.stars {
 }
 
 
-/*fix for flickering slide animations */
+/*fix for flickering slide animations  on iphone */
 .x-panel {
   -webkit-backface-visibility: hidden;
 }
 
+/* the above breaks android but this works 
 .x-tabpanel > .x-panel-body .x-panel {
   -webkit-backface-visibility: hidden;
 }
-
+*/
 .newReviewContainer {
   background: #222222;
   background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #282523), color-stop(1, #404143) );

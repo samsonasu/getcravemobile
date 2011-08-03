@@ -222,59 +222,59 @@ Ext.setup({
     Crave.myProfilePanel = Crave.buildProfilePanel(true);
     Crave.otherProfilePanel = Crave.buildProfilePanel(false);
 
-    TouchBS.init_viewport();
-
-    Crave.viewport = new Ext.Panel({
-      layout: 'card',
-      fullscreen: true,
-      activeItem: listPnl,
-      items: [Crave.activityPanel, listPnl, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, filterListPnl,
-        placePnl, newDishForm, Crave.buildRateDishPanel(),
-        Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  Crave.otherProfilePanel],
-      cardSwitchAnimation: 'slide',
-      direction:'horizontal',
-      dockedItems: [new Ext.TabBar({
-        dock: 'bottom',
-        //xtype: 'toolbar',
+    TouchBS.init_viewport(function() {
+      Crave.viewport = new Ext.Panel({
+        layout: 'card',
+        fullscreen: true,
+        activeItem: listPnl,
+        items: [Crave.activityPanel, listPnl, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, filterListPnl,
+          placePnl, newDishForm, Crave.buildRateDishPanel(),
+          Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  Crave.otherProfilePanel],
         cardSwitchAnimation: 'slide',
-        id: 'mainTabbar',
-        ui: 'dark',
-        layout: {
-          pack: 'center'
-        },
-        items: [{
-          text: "Activity",
-          iconCls: 'activity',
-          card: Crave.activityPanel
-        },{
-          text: 'Nearby',
-          iconCls: 'nearBy',
-          card: listPnl
-        },{
-          text: "Saved",
-          iconCls: 'saved',
-          card: Crave.savedPanel
-        },{
-          text: "Me",
-          iconCls: 'me',
-          card: Crave.myProfilePanel
-        }],
-        listeners: {
-          change: function(tabbar, tab, card) {
-            Crave.back_stack = []; //clear back stack when they explicitly click a tab
-            if(tab.text === "Me") {
-              Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
+        direction:'horizontal',
+        dockedItems: [new Ext.TabBar({
+          dock: 'bottom',
+          //xtype: 'toolbar',
+          cardSwitchAnimation: 'slide',
+          id: 'mainTabbar',
+          ui: 'dark',
+          layout: {
+            pack: 'center'
+          },
+          items: [{
+            text: "Activity",
+            iconCls: 'activity',
+            card: Crave.activityPanel
+          },{
+            text: 'Nearby',
+            iconCls: 'nearBy',
+            card: listPnl
+          },{
+            text: "Saved",
+            iconCls: 'saved',
+            card: Crave.savedPanel
+          },{
+            text: "Me",
+            iconCls: 'me',
+            card: Crave.myProfilePanel
+          }],
+          listeners: {
+            change: function(tabbar, tab, card) {
+              Crave.back_stack = []; //clear back stack when they explicitly click a tab
+              if(tab.text === "Me") {
+                Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
+              }
             }
           }
+        })],
+        listeners: {
+          afterlayout: function(viewport) {
+            var tb = Ext.getCmp('mainTabbar');
+            tb.cardLayout = viewport.layout;
+            $(".startuppic").remove();
+          }
         }
-      })],
-      listeners: {
-        afterlayout: function(viewport) {
-          var tb = Ext.getCmp('mainTabbar');
-          tb.cardLayout = viewport.layout;
-          $(".startuppic").remove();
-        }
-      }
+      });
     });
   }
 });
