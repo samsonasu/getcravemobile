@@ -446,6 +446,10 @@ Crave.buildDishDisplayPanel = function() {
             });
           });
           TouchBS.stop_waiting();
+          Ext.Msg.alert("Thanks for the Label!", "Keep on Cravin'.");
+          Crave.back_handler();
+          debugger;
+          Crave.dishDisplayPanel.load_dish_data(labelsPanel.current_menu_item_id);
         }
       }]
     }),
@@ -493,7 +497,7 @@ Crave.buildDishDisplayPanel = function() {
         cls: 'title clickable',
         title: 'Dish Labels'
       }],
-      tpl: '<div class="dishLabels">{[values.labels.join(",")]}</div>',
+      tpl: '<div class="dishLabels">{[values.labels.join(", ")]}</div>',
       data: {labels: []},
       listeners: {
         afterrender: function(c){
