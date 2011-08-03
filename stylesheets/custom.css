@@ -262,15 +262,16 @@ font-weight: lighter;
 
 .dishInfo .savedFlag {
   height: 80px;
-  width: 50px;
+  width: 65px;
   float: right;
-  background: url('../../images/saved-icon-OFF@2x.png') no-repeat;
+  background: url('../../images/saved-icon-OFF@2x.png') no-repeat 12px 0;
   -webkit-background-size: 40px 60px;
   padding-top: 56px;
   color: #555;
+  text-align: center;
 }
 .dishInfo .savedFlag.saved {
-   background: url('../../images/saved-icon-ON@2x.png') no-repeat;
+   background: url('../../images/saved-icon-ON@2x.png') no-repeat 12px 0;
    -webkit-background-size: 40px 60px;
    color: #70b9b6;
 }

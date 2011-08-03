@@ -411,7 +411,6 @@ Crave.buildDishDisplayPanel = function() {
       xtype: 'panel',
       width: '100%',
       id: 'dishDetailHeader',
-      height: 100,
       tpl: '<div class="dishInfo">'+
            '<div onclick="Crave.dishDisplayPanel.toggle_saved();" class="savedFlag {[values.saved ? "saved" : ""]}">Save</div>' +
            '<b>{name}</b><br/>' +
@@ -537,7 +536,28 @@ Crave.buildDishDisplayPanel = function() {
       });
     },
     load_dish: function(menu_item, callback) {
-      Crave.dishDisplayPanel.current_menu_item = menu_item;    
+      Crave.dishDisplayPanel.current_menu_item = menu_item;
+      //check to see if this is saved
+      if (Crave.isLoggedIn()) {
+        Ext.Ajax.request({
+          method: 'GET',
+          url: "/saved/is_saved.json",
+          scope: this,
+          params: {
+            user_id: Crave.currentUserId(),
+            menu_item_id: menu_item.id
+          },
+          success: function(response, options) {
+            if (response.responseText !== "" && response.responseText !== "null") {
+              var saved_menu_item = Ext.decode(response.responseText).user_saved_menu_item;
+              var savedFlag = dishPanel.el.down(".savedFlag");
+              savedFlag.addCls('saved');
+              savedFlag.dom.innerHTML = "Remove";
+              Crave.dishDisplayPanel.current_menu_item.user_saved_menu_item_id = saved_menu_item.id;
+            }
+          }
+        });
+      }
       //Set up the image carousel at the top
       if (menu_item.menu_item_photos) {
         //imageCarousel.removeAll();
@@ -559,6 +579,7 @@ Crave.buildDishDisplayPanel = function() {
       }
       //Dish header is easy, so is description
       Ext.getCmp('dishDetailHeader').update(menu_item);
+      Ext.getCmp('dishDetailHeader').onResize();
       if (menu_item.description == null || menu_item.description === "") {
         Ext.getCmp('dishDescriptionPanel').hide();
       } else {
@@ -566,8 +587,6 @@ Crave.buildDishDisplayPanel = function() {
         Ext.getCmp('dishDescriptionPanel').show();
         Ext.getCmp('dishDescriptionPanel').onResize();
       }
-        
-      
 
       //Update ratings or hide if there aren't any
       if (menu_item.menu_item_ratings.length > 0) {
@@ -599,6 +618,7 @@ Crave.buildDishDisplayPanel = function() {
       }
 
       Ext.getCmp('dishLabelsPanel').update({labels: labels});
+      Ext.getCmp('dishLabelsPanel').onResize();
 
       //update the map
       Ext.getCmp('dishMap').update(menu_item.restaurant);
@@ -613,6 +633,7 @@ Crave.buildDishDisplayPanel = function() {
       Ext.getCmp('dishAddress').update(menu_item.restaurant);
 
       dishPanel.scroller.scrollTo({x: 0, y: 0});
+      dishPanel.doLayout();
       if (callback) {
         callback(menu_item);
       }
@@ -631,18 +652,12 @@ Crave.buildDishDisplayPanel = function() {
     },
     toggle_saved: function() {
       var savedFlag = this.el.down(".savedFlag");
-      var saved = this.current_menu_item.saved_by_current_user;
-      if (saved) {
+      if (this.current_menu_item.user_saved_menu_item_id) {
         Ext.Ajax.request({
           method: "DELETE",
-          url: '/user_saved_menu_item.json',
-          jsonData:{
-            user_following: {
-              user_id: Crave.currentUserId(),
-              menu_item_id: this.current_menu_item.id
-            }
-          },
+          url: '/saved/' + this.current_menu_item.user_saved_menu_item_id + '.json',
           failure: Crave.handle_failure,
+          scope: this,
           success: function(response, options) {
             savedFlag.dom.innerHTML = "Save";
             savedFlag.removeCls('saved');
@@ -652,18 +667,20 @@ Crave.buildDishDisplayPanel = function() {
       } else {
         Ext.Ajax.request({
           method: "POST",
-          url: '/user_saved_menu_items.json',
+          url: '/saved.json',
           jsonData:{
             user_saved_menu_item: {
               user_id: Crave.currentUserId(),
               menu_item_id: this.current_menu_item.id
             }
           },
+          scope: this,
           failure: Crave.handle_failure,
           success: function(response, options) {
+            var saved_menu_item = Ext.decode(response.responseText).user_saved_menu_item;
             savedFlag.dom.innerHTML = "Remove";
             savedFlag.addCls('saved');
-            this.current_menu_item.saved_by_current_user = true;
+            this.current_menu_item.user_saved_menu_item_id = saved_menu_item.id;
           }
         });
       }
