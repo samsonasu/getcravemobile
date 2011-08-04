@@ -601,7 +601,7 @@ Crave.photo_url = function(obj, placeholder) {
     return "http://src.sencha.io/" + obj.user_profile_pic_url;
   }
   if (placeholder) {
-    return "../images/no-image-default.png";
+    return "../images/no-image-default.jpg";
   } else {
     return null;
   }

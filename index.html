@@ -72,7 +72,7 @@
 <textarea id="restaurantTemplate" style="display:none">
   <tpl for=".">
     <div class="aplace">
-      <img src="../images/places-pin.png" class="dishImg" style="height: 60px;">
+      <img src="../images/no-image-place.png" class="dishImg" style="height: 60px;">
       <div class="dishListinfo">
         <span class="dishname">{name}</span>
         <span class="distanceFigure">{[this.distDisplay(values.distance)]}</span>
@@ -98,7 +98,7 @@
 <textarea id="reviewDishTemplate" style="display:none">
     <tpl for=".">
         <div class="adish">
-            <img src="../images/no-image-default.png" class="dishImg" style="height: 60px;">
+            <img src="../images/no-image-default.jpg" class="dishImg" style="height: 60px;">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">@{restaurant.name}</span>
@@ -186,7 +186,7 @@
       <span class="chevrony"></span>
     </tpl>
     <tpl for="restaurant">
-      <img src="../images/places-pin.png" class="dishImg" style="height: 60px;">
+      <img src="../images/no-image-place.png" class="dishImg" style="height: 60px;">
       <div class="dishListinfo">
         <span class="dishname">{name}</span>
         <span class="distanceFigure">{[Crave.distDisplay(values.distance)]}</span>
