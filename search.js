@@ -29,7 +29,7 @@ Crave.buildSearchResultsPanel = function() {
       activate: function(p) {
         dishSearchStore.load();
         dishSearchList.refresh();
-        segButton.setPressed(1);
+        segButton.setPressed(1, true);
       }
     },
     plugins: [new Ext.plugins.ListPagingPlugin({}), new Ext.plugins.PullRefreshPlugin({})]
@@ -71,7 +71,7 @@ Crave.buildSearchResultsPanel = function() {
       activate: function(p) {
         restaurantSearchStore.load();
         restaurantSearchList.refresh();
-        segButton.setPressed(2);
+        segButton.setPressed(2, true);
       }
     },
     plugins: [new Ext.plugins.ListPagingPlugin({}), new Ext.plugins.PullRefreshPlugin({})]
@@ -130,7 +130,7 @@ Crave.buildSearchResultsPanel = function() {
       },
       activate: function(p) {
         bothStore.load();
-        segButton.setPressed(0);
+        segButton.setPressed(0, true);
       }
     }
   });
@@ -157,6 +157,9 @@ Crave.buildSearchResultsPanel = function() {
   });
 
   var segButton = new Ext.SegmentedButton({
+    cls: 'filterButtons',
+    allowDepress: true,
+    
     items:[{
       text:'All',
       pressed:true,

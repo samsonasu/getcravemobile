@@ -354,19 +354,32 @@ font-weight: lighter;
     );
 }
 
-#dishesButton.x-button span {
-	background: url('../../images/dish-icon-OFF.png') no-repeat;
+.x-segmentedbutton .x-button:not(:first-child) {
+border-left: 0;
+/*border-top-left-radius: 0.4em;
+border-bottom-left-radius: 0.4em;*/
+}
+
+.x-segmentedbutton.filterButtons DIV.x-button span{
 	font-size: 12px;
 	font-weight: bold;
 	color: #F39A8A;
 	text-shadow: 0px -1px #933223;
+}
+.x-segmentedbutton.filterButtons .x-button.x-button-pressed span {
+  color:#ffffff;
+  text-shadow: 0px -1px #571e15;
+}
+
+#dishesButton.x-button span {
+	background: url('../../images/dish-icon-OFF.png') no-repeat;
+
 	margin: 0px 13px;
 	padding: 0px 0px 0px 25px;
 }
 #dishesButton.x-button-pressed span {
     background: url('../../images/dish-icon-ON.png') no-repeat;
-    color:#ffffff;
-    text-shadow: 0px -1px #571e15;
+    
 }
 #placesButton span {
     text-align: left;
@@ -375,17 +388,11 @@ font-weight: lighter;
 
 #placesButton.x-button span {
     background: url('../../images/restaurant-icon-OFF.png') no-repeat;
-	font-size: 12px;
-	font-weight: bold;
-	color: #F39A8A;
-	text-shadow: 0px -1px #933223;
 	margin: 0px 10px;
 	padding: 0px 0px 0px 0px;
 }
 #placesButton.x-button-pressed span {
     background: url('../../images/restaurant-icon-ON.png') no-repeat;
-    color:#ffffff;
-    text-shadow: 0px -1px #571e15;
 }
 
 
@@ -974,12 +981,6 @@ text-shadow: 0px 1px #ffffff;
 height: 50px;
 background: #F1F1F1;
 border-top: 1px solid #CCC;
-}
-
-.x-segmentedbutton .x-button:not(:first-child) {
-border-left: 0;
-/*border-top-left-radius: 0.4em;
-border-bottom-left-radius: 0.4em;*/
 }
 
 .x-toolbar-light .x-button, .x-toolbar-light .x-button.x-button-back::after, .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar .x-toolbar-light .x-button, .x-toolbar .x-toolbar-light .x-button.x-button-back::after, .x-toolbar .x-toolbar-light .x-button.x-button-forward::after, .x-toolbar-light .x-field-select .x-input-text, .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward::after, .x-toolbar-light .x-field-select::before, .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar-light .x-field-select::before.x-button-forward::after, .x-toolbar .x-toolbar-light .x-field-select::before, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-back::after, .x-toolbar .x-toolbar-light .x-field-select::before.x-button-forward::after {

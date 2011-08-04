@@ -180,6 +180,7 @@ Ext.setup({
             width: 25
           },{
           xtype:'segmentedbutton',
+          cls: 'filterButtons',
           items:[{
             text:'Food',
             id:'dishesButton',
