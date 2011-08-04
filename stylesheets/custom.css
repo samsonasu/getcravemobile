@@ -61,7 +61,8 @@ padding: .3em .3em;
   float: right;
   width: 16px;
   height: 16px;
-  background: url('../images/icons/tick.png') 0 0 no-repeat;
+  background: url('../images/icons/check@2x.png') 0 0 no-repeat;
+  -webkit-background-size: 16px 16px;
 }
 
 .x-list .x-list-item {
@@ -192,6 +193,25 @@ padding: .3em .3em;
 
 .framePanel .settingItem .version {
   float: right;
+}
+
+.framePanel .x-list .x-list-item:first-child,
+.framePanel .x-list .x-list-item:first-child .x-list-item-body {
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+}
+.framePanel .x-list .x-list-item:last-child,
+.framePanel .x-list .x-list-item:last-child .x-list-item-body {
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border-bottom: none;
+}
+.framePanel .x-list {
+  background: transparent;
+}
+
+.framePanel .x-list-item, .framePanel .x-list-item.x-item-selected {
+  background: white;
 }
 
 .dishListinfo {
@@ -858,6 +878,11 @@ IMG.stars {
   border-radius: 0px;
   height: 100px;
 }
+
+#dishDisplayRating SPAN.review {
+  padding-bottom: 12px;
+}
+
 
 .ratingOf0 {
     background:url("../images/rating-my-0@2x.png") no-repeat;

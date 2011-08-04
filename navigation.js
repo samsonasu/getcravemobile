@@ -56,13 +56,15 @@ Crave.magic_scroll_handler = function(comp,target,options) {
 }
 
 //call this and then put it in dockedItems[]
+//config.title is the title, or it will be the logo
 //config.items is any buttons you want (back button, etc)
 Crave.create_titlebar = function(config) {
+  var title = config.title || '<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">';
   return {
     dock:'top',
     xtype:'toolbar',
     ui:'light',
-    title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
+    title: title,
     layout: {
       type: 'hbox',
       pack:'justify'

@@ -19,16 +19,16 @@ Crave.buildRateDishPanel = function() {
     items: [ratingField,reviewText]
   });
 
-  Crave.rateDishPanel = new Ext.Panel({
+  var reviewPanel = new Ext.Panel({
     cls: "rateDishPanel",
     dockedItems:[Crave.create_titlebar({
       items:[{
         text:'Back',
-        ui:'back', 
+        ui:'back',
         handler:Crave.back_handler
       },{
         text:'Submit',
-        ui:'normal', 
+        ui:'normal',
         handler:function() {
           reviewText.blur();
           var rating = {
@@ -38,15 +38,14 @@ Crave.buildRateDishPanel = function() {
             review: reviewText.getValue()
           };
           Ext.Ajax.request({
-            url: '/ratings.json', 
-            method: "POST", 
+            url: '/ratings.json',
+            method: "POST",
             jsonData: {
               menu_item_rating: rating
             },
-            failure: TouchBS.handle_failure, 
+            failure: TouchBS.handle_failure,
             success: function(response, options) {
-              Ext.Msg.alert("It's Been Craved!", 'Thanks for your review');
-              Crave.back_handler();
+              Crave.rateDishPanel.setActiveItem(labelsPanel);
             }
           });
         }
@@ -55,10 +54,31 @@ Crave.buildRateDishPanel = function() {
     items: [{
       html: '<div class="newReviewContainer"><div class="starLabel">Have you tried this?</div><div class="starRating ratingOf0"><button class="starcover" id="id-star1"></button><button class="starcover" id="id-star2"></button><button class="starcover" id="id-star3"></button><button class="starcover" id="id-star4"></button><button class="starcover" id="id-star5"></button></div></div>',
       width:'100%'
-    }, reviewForm 
-    ],
+    }, reviewForm
+    ]
+  });
+
+  var labelsPanel = Crave.buildAddLabelPanel({
+    cancel_label: "Skip",
+    success_callback: function() {
+      Ext.Msg.alert("It's Been Craved!", 'Thanks for your review');
+      Crave.back_handler();
+    },
+    cancel_callback: function() {
+      Ext.Msg.alert("It's Been Craved!", 'Thanks for your review');
+      Crave.back_handler();
+    }
+  });
+
+  Crave.rateDishPanel = new Ext.Panel({
+    layout: 'card',
+    activeItem: 0,
+    items: [reviewPanel, labelsPanel],
     set_menu_item: function(menu_item) {
       Crave.rateDishPanel.current_menu_item = menu_item;
+      labelsPanel.set_menu_item(menu_item);
+      reviewText.setValue("");
+      Crave.rateDishPanel.setActiveItem(reviewPanel);
     },
     listeners: {
       activate: function() {

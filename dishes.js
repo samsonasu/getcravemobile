@@ -2,74 +2,6 @@ Ext.regModel('MenuLabel', {
     fields: ['menu_label', 'created_at', 'id']
 });
 
-Crave.buildLabelListPanel = function(title) {
-  if (!title) {title = "Dietary Preference";}
-  var filterStore = new Ext.data.Store({
-    model  : 'MenuLabel',
-    sorters: 'menu_label',
-    proxy: {
-      type: 'ajax',
-      url: '/menu_labels.json',
-      reader: {
-        type: 'json',
-        record: 'menu_label'
-      }
-    },
-    autoLoad: true,
-    old: [{label: 'Gluten Free'},
-        {label: 'Vegetarian'},
-        {label: 'Vegan'},
-        {label: 'High Protein'},
-        {label: 'Paleo friendly'},
-        {label: 'Sugar Free'},
-        {label: 'Low Fat'},
-        {label: 'Low Carb'},
-        {label: 'Organic'},
-        {label: 'Meat Lovers'},
-        {label: 'Bang for your Buck'},
-        {label: 'Spicy'},
-        {label: 'Pescatarian Friendly'},
-        {label: 'Late Night Eats'},
-        {label: 'Dairy Free'},
-        {label: 'Atkins Friendly'},
-        {label: 'Four Hour Body (4HB)'}
-    ]
-  });
-  var list = new Ext.List({
-      scroll: false,
-      loadingText: "Loading",
-      itemTpl : '<span class="labelname">{menu_label}</span>',
-      grouped : false,
-      multiSelect: true,
-      simpleSelect:true,
-      indexBar: false,
-      store: filterStore
-  });
-  return new Ext.Panel({
-    xtype: 'panel',
-    cls: 'framePanel',
-    height: 710,
-    dockedItems: [{
-      dock : 'top',
-      xtype: 'toolbar',
-      cls: 'title',
-      title: title
-    }],
-    items: list,
-    getSelectedRecords: function() {
-      return list.getSelectedRecords();
-    },
-    get_filters: function() {
-      var filters = list.getSelectedRecords();
-      var filter_names = [];
-      Ext.each(filters, function(f) {
-        filter_names.push(f.data.menu_label);
-      })
-      return filter_names;
-    }
-  });
-};
-
 Crave.buildFilterPanel = function() {
 
   //when youpress search, make json call to search results, repopulate listPnl store
@@ -127,7 +59,7 @@ Crave.buildFilterPanel = function() {
     }
   });
 
-  var labelList = Crave.buildLabelListPanel();
+  var labelList = Crave.buildLabelListPanel("Dietary Preference");
   Crave.filterPanel = new Ext.Panel({
     items: [distancePanel, labelList],
     id: 'filterListPnl',
@@ -414,48 +346,11 @@ Crave.buildDishDisplayPanel = function() {
     }]
   });
 
-  var labelList = Crave.buildLabelListPanel("Add Labels");
-
-  var labelsPanel = new Ext.Panel({
-    width: '100%',
-    scroll: 'vertical',
-    dockedItems: Crave.create_titlebar({
-      items: [{
-        text: 'Back',
-        ui: 'back',
-        handler: Crave.back_handler
-      }, {
-        text: "Submit",
-        handler: function() {
-          TouchBS.wait("Please wait");
-          Ext.each(labelList.getSelectedRecords(), function(label) {
-            Ext.Ajax.request({
-              method: 'POST',
-              url: '/menu_label_associations.json',
-              jsonData: {
-                menu_label_association: {
-                  menu_item_id: labelsPanel.current_menu_item_id,
-                  user_id: Crave.currentUserId(),
-                  menu_label_id: label.data.id
-                }
-              },
-              success: function() {
-
-              },
-              failure: TouchBS.handle_failure
-            });
-          });
-          TouchBS.stop_waiting();
-          Ext.Msg.alert("Thanks for the Label!", "Keep on Cravin'.");
-          Crave.back_handler();
-          debugger;
-          Crave.dishDisplayPanel.load_dish_data(labelsPanel.current_menu_item_id);
-        }
-      }]
-    }),
-    items: labelList,
-    set_menu_item: function (menu_item) {
-      labelsPanel.current_menu_item_id = menu_item.id;
+  var labelsPanel = Crave.buildAddLabelPanel({
+    success_callback: function() {
+      Ext.Msg.alert("Thanks for the Label!", "Keep on Cravin'.");
+      Crave.back_handler();
+      Crave.dishDisplayPanel.load_dish_data(labelsPanel.current_menu_item_id);
     }
   });
 
@@ -528,7 +423,7 @@ Crave.buildDishDisplayPanel = function() {
     },{
       xtype: 'panel',
       cls: 'framePanel',
-      width: '100%',
+      anchor: '100%',
       id: 'dishRatingPanel',
       dockedItems: [{
         dock : 'top',
@@ -677,12 +572,11 @@ Crave.buildDishDisplayPanel = function() {
       //Update ratings or hide if there aren't any
       if (menu_item.menu_item_ratings.length > 0) {
         Ext.getCmp('dishDisplayRating').update(menu_item.menu_item_ratings[0]);
+        
         var drp = Ext.getCmp('dishRatingPanel');
         drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
         drp.show();
-        //var new_height = drp.getEl().down('.review').dom.clientHeight;
         
-        drp.onResize();
         //Sencha sucks and they modify this in place to become an array of records instead of an array of {}s
         //I hate them
         var ratingsData = TouchBS.clone(menu_item.menu_item_ratings);
