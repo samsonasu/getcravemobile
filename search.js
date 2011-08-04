@@ -320,7 +320,10 @@ Crave.buildFilterPanel = function() {
       items:[{
         text:'Cancel',
         ui:'normal',
-        handler: Crave.back_handler
+        handler: function() {
+          labelList.clear_filters();
+          Crave.back_handler();
+        }
       },{
         text:'Search',
         ui:'normal',

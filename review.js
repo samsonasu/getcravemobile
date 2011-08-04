@@ -25,7 +25,11 @@ Crave.buildRateDishPanel = function() {
       items:[{
         text:'Back',
         ui:'back',
-        handler:Crave.back_handler
+        handler: function() {
+          reviewText.setValue("");
+          Crave.rateDishPanel.clear_stars();
+          Crave.back_handler();
+        }
       },{
         text:'Submit',
         ui:'normal',
@@ -80,6 +84,13 @@ Crave.buildRateDishPanel = function() {
       reviewText.setValue("");
       Crave.rateDishPanel.setActiveItem(reviewPanel);
     },
+    clear_stars: function() {
+      var ratingClasses = new Array("ratingOf0","ratingOf1", "ratingOf2","ratingOf3","ratingOf4","ratingOf5");
+      for(var i=0;i<ratingClasses.length;i++) {
+        $(".starRating").removeClass(ratingClasses[i].toString());
+      }
+      $(".starRating").addClass('ratingOf0');
+    },
     listeners: {
       activate: function() {
         if (!Crave.isLoggedIn()) {
@@ -94,10 +105,7 @@ Crave.buildRateDishPanel = function() {
 
 $(".starcover").live("click",function(event) {
   var rating = event.currentTarget.id.toString().replace("id-star","");
-  var ratingClasses = new Array("ratingOf0","ratingOf1", "ratingOf2","ratingOf3","ratingOf4","ratingOf5");
-  for(var i=0;i<ratingClasses.length;i++) {
-    $(".starRating").removeClass(ratingClasses[i].toString());
-  }
+  Crave.rateDishPanel.clear_stars();
   if(rating==1) {
     $(".starRating").addClass("ratingOf1");
   }

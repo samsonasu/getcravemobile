@@ -66,6 +66,9 @@ Crave.buildLabelListPanel = function(title) {
         filter_names.push(f.data.menu_label);
       })
       return filter_names;
+    },
+    clear_filters: function() {
+       list.getSelectionModel().deselectAll();
     }
   });
 };
@@ -85,7 +88,10 @@ Crave.buildAddLabelPanel = function(config) {
       title: "Add a Label",
       items: [{
         text: cancel_label,
-        handler: cancel_callback
+        handler: function() {
+          labelList.clear_filters();
+          cancel_callback();
+        }
       }, {
         text: "Submit",
         handler: function() {
@@ -107,6 +113,7 @@ Crave.buildAddLabelPanel = function(config) {
               failure: TouchBS.handle_failure
             });
           });
+          labelList.clear_filters();
           TouchBS.stop_waiting();
           config.success_callback();
         }

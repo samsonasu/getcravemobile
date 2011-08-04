@@ -14,7 +14,7 @@ Crave.checkSupportedCity = function(coords, callback) {
           if (city_component) {
             city = city_component.long_name;
           }
-          if (city === 'San Fransisco') {
+          if (city === 'San Francisco') {
             supported = true;
             break;
           } 
@@ -43,7 +43,11 @@ Crave.buildCityVotePanel = function() {
       xtype: 'panel', 
       cls: 'label',
       html: "I want Crave in: "
-    },city_field,email_field],
+    },city_field,email_field,{
+      xtype: 'panel',
+      cls: 'label',
+      html: "Give us your e-mail address, and we'll let you know when Crave is ready in your home town.<br/><br/>For now, we'll show you results from downtown San Francisco"
+    }],
     listeners: {
       beforesubmit: function() {
         if (!email_field.getValue()) {
@@ -58,9 +62,8 @@ Crave.buildCityVotePanel = function() {
   Crave.cityVotePanel = new Ext.Panel({
     //layout: 'fit',
     dockedItems: Crave.create_titlebar({
-      title: "Vote for your city",
       items: [{
-        text: "Nevermind", 
+        text: "Cancel",
         handler: function() {
           Crave.viewport.setActiveItem(Crave.nearbyPanel);
         }
