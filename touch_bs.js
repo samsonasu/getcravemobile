@@ -176,3 +176,15 @@ Ext.override(Ext.plugins.PullRefreshPlugin, {
       }
   }
 });
+
+TouchBS.get_address_component_type = function(address_components, type) {
+  for (var j=0; j < address_components.length; j++) {
+    var address_component = address_components[j];
+    if (address_component.types[0] === type) {
+      //bingo
+      return address_component;
+    }
+  }
+  
+  return null;
+}

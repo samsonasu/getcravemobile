@@ -76,12 +76,47 @@ padding: .3em .3em;
 
 /** frame panel thing used on the filters screen and probably elsewhere **/
 .framePanel {
-	margin: .5em .5em .4em .5em;
-	border-radius: 1em;
-	background: white;
-	padding-bottom: .75em;
-	font-size: 14px;
-	border: 1px solid #B2B2B2;
+  margin: .5em .5em .4em .5em;
+  border-radius: 1em;
+  background: white;
+  padding-bottom: .75em;
+  font-size: 14px;
+  border: 1px solid #B2B2B2;
+}
+
+FORM.framePanel {
+  padding: 0;
+  background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F8F7F5), color-stop(1, #ECEBE7) )
+}
+
+FORM.framePanel DIV.x-panel-body {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  border: none;
+}
+
+FORM.framePanel .label {
+  background: transparent;
+}
+
+FORM.framePanel .x-field {
+  border: none;
+  margin-bottom: 8px;
+  width: 95%;
+}
+
+FORM.framePanel .x-form-field-container {
+  margin: 0;
+  padding: 0;
+}
+
+FORM.framePanel INPUT {
+  padding-left: 1em;
+}
+
+.requiredField INPUT {
+  border: 2px dotted red !important;
 }
 
 .framePanel .x-toolbar.title {
@@ -991,3 +1026,4 @@ padding-bottom: 6px;
 width: 240px;
 font-size: 22px;
 }
+
