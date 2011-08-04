@@ -1,6 +1,6 @@
 Ext.setup({
   glossOnIcon: false,
-  fullscreen: false,
+  fullscreen: true,
   onReady: function(){
     Crave.app_version = "1.0";
     
@@ -222,7 +222,7 @@ Ext.setup({
     Crave.otherProfilePanel = Crave.buildProfilePanel(false);
     Crave.buildSavedPanel();
 
-    TouchBS.init_viewport(function() {
+    
       Crave.viewport = new Ext.Panel({
         layout: 'card',
         fullscreen: true,
@@ -278,7 +278,6 @@ Ext.setup({
           }
         }
       });
-    });
   }
 });
 
