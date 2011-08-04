@@ -188,3 +188,69 @@ TouchBS.get_address_component_type = function(address_components, type) {
   
   return null;
 }
+
+TouchBS.wait = function(msg) {
+  Ext.getBody().mask(msg, 'x-mask-loading');
+};
+
+TouchBS.stop_waiting = function() {
+  Ext.getBody().unmask();
+};
+
+
+/**
+ * Clone Function
+ * @param {Object/Array} o Object or array to clone
+ * @return {Object/Array} Deep clone of an object or an array
+ * @author Ing. Jozef Sakalos
+ *
+ * from: http://www.yui-ext.com/forum/showthread.php?p=238787
+ */
+TouchBS.clone = function(o) {
+    if(!o || 'object' !== typeof o) {
+        return o;
+    }
+    if('function' === typeof o.clone) {
+        return o.clone();
+    }
+    var c = '[object Array]' === Object.prototype.toString.call(o) ? [] : {};
+    var p, v;
+    for(p in o) {
+        if(o.hasOwnProperty(p)) {
+            v = o[p];
+            if(v && 'object' === typeof v) {
+                c[p] = TouchBS.clone(v);
+            }
+            else {
+                c[p] = v;
+            }
+        }
+    }
+    return c;
+}; // eo function clone
+
+TouchBS.formatted_phone_number = function(phone) {
+  phone = String(phone);
+  if (phone.length === 10) {
+    return "(" + phone.substring(0,3) + ") " + phone.substring(3,6) + "-" + phone.substring(6,10);
+  } else if (phone.length === 7) {
+    return phone.substring(0,3) + "-" + phone.substring(3,7);
+  } else {
+    return phone;
+  }
+};
+
+//I use these 2 lines instead of Ext.Viewport.init beacuse on iphone it is all wigged out
+//because it's trying to do a bunch of crazy stuff to fix blackberry and galaxy tab
+//PS sencha touch is garbage
+TouchBS.init_viewport = function(cb, scope) {
+  if (Ext.is.iOS && Ext.is.Phone) {
+    Ext.Viewport.updateOrientation();
+    Ext.Viewport.scrollToTop();
+    if (cb)
+      cb.apply(scope || window);
+  } else {
+    Ext.Viewport.init(cb, scope);
+  }
+};
+

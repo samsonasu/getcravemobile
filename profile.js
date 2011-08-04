@@ -1,6 +1,11 @@
+Crave.buildLoginPanel = function() {
+  return new Ext.Panel({
+    html:'<div class="loginPanel"><img src="../images/profile-cold-food.png"><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="#" onclick="Crave.facebookLogin();" class="loginButton"></a></div>',
+    height: '100%'
+  });
+}
 //mine is true for the "my profile" panel and false for the other people's one.
 Crave.buildProfilePanel = function(mine) {
-  
   var setupBackStack = function(subPanel) {
     Crave.back_stack.push({
       panel: profilePnl,
@@ -18,6 +23,7 @@ Crave.buildProfilePanel = function(mine) {
   var userDishStore = new Ext.data.Store({
       model: 'MenuItemRating',
       clearOnPageLoad: false,
+      sorters: [{property: 'created_at', direction: 'desc'}],
       proxy: {
         type:'ajax',
         extraParams: {},
@@ -106,9 +112,6 @@ Crave.buildProfilePanel = function(mine) {
       plugins: [new Ext.plugins.ListPagingPlugin()]
     });
   }
-    
-
-  
 
   var followerStore = new Ext.data.Store({
     model: "FollowUser",
@@ -152,6 +155,7 @@ Crave.buildProfilePanel = function(mine) {
     itemSelector: '.followUser',
     singleSelect: true,
     grouped: true,
+    profile_panel_title: "Followers",
     cls: 'followList',
     data: {user: {}},
     cardSwitchAnimation: 'pop',
@@ -173,6 +177,7 @@ Crave.buildProfilePanel = function(mine) {
   //people i'm following
   var followingList = new Ext.List({
     itemTpl: followTemplate,
+    profile_panel_title: "Following",
     cls: 'followList',
     itemSelector: '.followUser',
     singleSelect: true,
@@ -193,7 +198,7 @@ Crave.buildProfilePanel = function(mine) {
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
   });
-  
+  var profilePnl = null;
   var userInfoPanel = new Ext.Panel({
     xtype: 'panel',
     html: '<div class="userTopPnl"></div>',
@@ -275,6 +280,7 @@ Crave.buildProfilePanel = function(mine) {
     layout: {
       type: 'vbox'
     },
+    cls: 'magic-scroll',
     scroll: 'vertical',
     height:'100%',
     width:'100%',
@@ -285,10 +291,7 @@ Crave.buildProfilePanel = function(mine) {
     }
   });
 
-  var profileLoginPnl = new Ext.Panel({
-    html:'<div class="loginPanel"><img src="../images/profile-cold-food.png"><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="#" onclick="Crave.facebookLogin();" class="loginButton"></a></div>',
-    height: '100%'
-  });
+  var profileLoginPnl = Crave.buildLoginPanel();
 
   var backButton = new Ext.Button({
     text: "Back",
@@ -313,7 +316,7 @@ Crave.buildProfilePanel = function(mine) {
     }
   });
 
-  var profilePnl = new Ext.Panel({
+  profilePnl = new Ext.Panel({
     title:'Me',
     iconCls:'me',
     layout: 'card',
@@ -327,18 +330,28 @@ Crave.buildProfilePanel = function(mine) {
       },settingsButton]
     }),
     listeners: {
+      cardswitch: function(p, newCard, oldCard) {
+        p.set_title(newCard.profile_panel_title);
+      },
       activate: function(p) {
         if (mine) {
           if (!Crave.isLoggedIn()){
             p.setActiveItem(profileLoginPnl);
+            settingsButton.hide();
           } else { 
             //make sure the user data is loaded
             //this will do nothign on subsequest calls
             p.load_user_data(Crave.currentUserId());
+            settingsButton.show();
           }
         }
-        userDishList.refresh();  //herp derp 
+        if (p.getActiveItem() === userProfilePnl) {
+          userDishList.refresh();  //herp derp
+        }
       }
+    },
+    set_title: function(title) {
+      profilePnl.dockedItems.get(0).set_title(title);
     },
     load_user_data: function(user_id) {
       profilePnl.setActiveItem(userProfilePnl, 'pop');
@@ -404,8 +417,7 @@ Crave.buildProfilePanel = function(mine) {
 
 
 Crave.follow_user_toggle = function(user_id, button) {
-  //TODO: actually follow somebody
-  var following = (button.innerHTML[0] === '-');
+  var following = (button.innerHTML[0] === 'U'); //ghetto
   
   if (following) {
     Ext.Ajax.request({
@@ -494,15 +506,22 @@ Crave.buildSavedPanel = function() {
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
   });
+
+  var savedLoginPanel = Crave.buildLoginPanel();
   
   Crave.savedPanel = new Ext.Panel({
-    dockedItems: Crave.create_titlebar({
-    }),
-    items: savedList,
+    layout: 'card',
+    width: '100%',
+    height: '100%',
+    activeItem: Crave.isLoggedIn() ? 0 : 1,
+    dockedItems: Crave.create_titlebar({}),
+    items: [savedList, savedLoginPanel],
     listeners: {
-      activate: function() {
+      activate: function(p) {
         if (!Crave.isLoggedIn()) {
-          Crave.viewport.setActiveItem(Crave.myProfilePanel);
+          Crave.savedPanel.setActiveItem(savedLoginPanel);
+        } else {
+          Crave.savedPanel.setActiveItem(savedList);
         }
       }
     },
@@ -511,7 +530,6 @@ Crave.buildSavedPanel = function() {
       savedDishStore.load();
     }
   });
-  
   
   return Crave.savedPanel;
 };
@@ -529,7 +547,6 @@ Crave.squareFitImage = function(img) {
 
 
 Crave.facebookLogin = function() { 
-  
   if (Crave.phonegap) {
     /* On Facebook Login */
     var my_client_id  = "207859815920359",
@@ -547,7 +564,7 @@ Crave.facebookLogin = function() {
          localStorage.setItem('uid', uid);
          Crave.myProfilePanel.load_user_data(uid);
          
-         //TODO: go back to whatever called the login thing? 
+         //TODO: go back to whatever called the login thing?
          client_browser.close();
       }  
     };

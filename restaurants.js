@@ -1,12 +1,5 @@
 restaurantTemplate = Ext.XTemplate.from('restaurantTemplate', {
-  distDisplay: function(miles) {
-    var feet = Math.round(miles * 5280);
-    if(feet<1000) {
-      return feet+" feet";
-    } else {
-      return parseFloat(miles).toFixed(1)+' miles';
-    }
-  }
+  distDisplay: Crave.distDisplay
 });
 
 restaurantDishTemplate = Ext.XTemplate.from('restDishTemplate');
@@ -25,8 +18,10 @@ var places = new Ext.data.Store({
    }
 });
 
+
+
 var singleRestaurantStore = new Ext.data.Store({
-    model: 'RestaurantDish',
+    model: 'Dish',
     sorters: [{property: 'arating', direction: 'ASC'}],
     getGroupString : function(record) {
        return Crave.ratingDisplay(record.get('rating'));
@@ -40,64 +35,66 @@ var singleRestaurantStore = new Ext.data.Store({
       }
     }
 });
+var restaurantMarker = null;
 
 function placeDisplay(restaurant_id) {
-    singleRestaurantStore.proxy.url = ('/places/'+restaurant_id+'/items.json');
+  singleRestaurantStore.proxy.url = ('/places/'+restaurant_id+'/items.json');
 
-    Crave.viewport.setActiveItem(placePnl);
-    singleRestaurantStore.load(function(){
-        console.log('store loaded');
-        totalRatings = 0;
-        singleRestaurantStore.each(function() {
-           console.log(this.data.rating_count);
-           ratings = this.data.rating_count;
-           if(ratings!="") {
-               additionValue = parseInt(this.data.rating_count.toString().replace(" reviews",""));
-               console.log(additionValue);
-               totalRatings = totalRatings + additionValue;
-           }
-        });
-        $("#restaurantTotalRatings").html(totalRatings);
+  Crave.viewport.setActiveItem(placePnl);
+  singleRestaurantStore.load(function(){
+    var totalRatings = 0;
+    singleRestaurantStore.each(function() {
+      var ratings = this.data.rating_count;
+      if(ratings!="") {
+        var additionValue = parseInt(this.data.rating_count.toString().replace(" reviews",""));
+        console.log(additionValue);
+        totalRatings = totalRatings + additionValue;
+      }
     });
+    $("#restaurantTotalRatings").html(totalRatings);
+  });
 
-    Ext.Ajax.request({
-        method: 'GET',
-        url: ('/places/'+restaurant_id+'/details.json'),
-        reader: {
-             type: 'json'
-        },
-        success: function(response) {
-             //try looping through single restaurant store here
-             //populate top panel with restaurant data, map
-             var responseObject = Ext.decode(response.responseText);
-            //set restaurant data locally now
-             localStorage.setItem('editRestaurantId',responseObject.restaurant.id);
-             htmlString = '<div class="restaurantInfo"><span class="restName">'+responseObject.restaurant.name+'</span><span class="restAddress">'+responseObject.restaurant.street_address+', '+responseObject.restaurant.city+'<br><span id="restaurantTotalRatings"></span> ratings</span><!--<a class="newDish">add dish</a>--></div>';
-             Ext.getCmp('restInfoPnl').update(htmlString);
+  Ext.Ajax.request({
+    method: 'GET',
+    url: ('/places/'+restaurant_id+'/details.json'),
+    reader: {
+      type: 'json'
+    },
+    success: function(response) {
+      //try looping through single restaurant store here
+      //populate top panel with restaurant data, map
+      var restaurant = Ext.decode(response.responseText).restaurant;
+      //set restaurant data locally now
+      localStorage.setItem('editRestaurantId',restaurant.id);
+      var htmlString = '<div class="restaurantInfo"><span class="restName">'+
+      restaurant.name+'</span><a target="_blank" href="' +
+      'http://maps.google.com/maps?ll=' + [restaurant.latitude, restaurant.longitude].join(',') +
+      '" class="restAddress">'+
+      restaurant.street_address+' <br>'+
+      restaurant.city +
+      '<br>';
 
-            var placeholder = new google.maps.Marker(
-                {
-                    position: new google.maps.LatLng(responseObject.restaurant.latitude,responseObject.restaurant.longitude),
-                    map: Ext.getCmp('googleMap').map,
-                    title: 'restaurant'
-                }
-            );
-            // woah baby, this is a nasty hack but the map refuses to behave unless you trigger resize after a delay AFTER the initial ajax returns
-            Ext.Ajax.request({
-                method: 'GET',
-                url: '/places/'+restaurant_id + '/items.json',
-                reader: {
-                   type: 'json'
-                },
-                success: function(response) {
-                    google.maps.event.trigger(Ext.getCmp('googleMap').map, 'resize');
-                    var initialLocation = new google.maps.LatLng(responseObject.restaurant.latitude,responseObject.restaurant.longitude);
-                    Ext.getCmp('googleMap').update(initialLocation);
-                    //needs work becoming resuable, maybe have to destroy this on unload
-                }
-            });
-        }
-    });
+      if (restaurant.telephone) {
+        htmlString = htmlString +'<a href="tel:' + restaurant.telephone + '" class="phoneNumberLink">' + TouchBS.formatted_phone_number(restaurant.telephone) + '</a>';
+      }
+
+      htmlString = htmlString + '</div>';
+      Ext.getCmp('restInfoPnl').update(htmlString);
+
+      var map = Ext.getCmp('googleMap');
+      map.restaurant_latitude = restaurant.latitude;
+      map.restaurant_longitude = restaurant.longitude;
+      map.update(restaurant);
+      if (restaurantMarker) {
+        restaurantMarker.setMap(null);
+      }
+      restaurantMarker = new google.maps.Marker({
+        position: new google.maps.LatLng(restaurant.latitude,restaurant.longitude),
+        map: Ext.getCmp('googleMap').map,
+        title: 'restaurant'
+      });
+    }
+  });
 }
 var newRestaurant = new Ext.form.FormPanel({
     scroll: 'vertical',
@@ -220,4 +217,109 @@ aRestaurantList.on('itemtap', function(dataView, index, item, e) {
     panel: placePnl
   });
   Crave.show_menu_item(record.data.id);
+});
+
+var infoPnl = new Ext.Panel({
+  html: '',
+  id: 'infoPnl',
+  width:'100%'
+});
+
+var restMapPnl = new Ext.Panel ({
+  items: [{
+    id: 'googleMap',
+    xtype: 'map',
+    useCurrentLocation: false,
+    height:100,
+    width:100,
+    mapOptions : {
+      center : new google.maps.LatLng(37.774518,-122.420101),  //SF
+      //not really centering here, just putting it in top right corner
+      zoom : 17,
+      mapTypeId : google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      navigationControl: false,
+      draggable: false
+    },
+    listeners: {
+      afterrender: function(c){
+        c.el.on('click', function(){
+          window.open('http://maps.google.com/maps?ll=' + [c.map.center.lat(), c.map.center.lng()].join(','));
+        });
+      }
+    }
+  }],
+  height:100,
+  width:100
+});
+var restInfoPnl = new Ext.Panel({
+  html: '',
+  id: 'restInfoPnl',
+  flex: 1
+});
+var restPnl = new Ext.Panel({
+  id: 'restPnl',
+  layout: 'hbox',
+  items:[restMapPnl,restInfoPnl],
+  width:'100%',
+  height:100
+});
+
+var reviewPnl = new Ext.Panel({
+  html: '',
+  scroll: 'vertical',
+  id: 'reviewPnl'
+});
+
+detailPnl = new Ext.Panel({
+  items: [infoPnl,reviewPnl],
+  id: 'detailPnl',
+  layout: {
+    type: 'vbox',
+    align: 'start',
+    direction: 'normal'
+  },
+  scroll:'vertical',
+  width:'100%',
+  height:'100%',
+  dockedItems: Crave.create_titlebar({
+    items:[{
+      text:'Back',
+      ui:'back',
+      handler: Crave.back_handler
+    },{
+      text:'Rate',
+      ui:'normal',
+      handler: function() {
+        Crave.back_stack.push({
+          panel: detailPnl
+        });
+        Crave.viewport.setActiveItem(Crave.rateDishPanel);
+      }
+    }]
+  })
+});
+
+
+placePnl = new Ext.Panel({
+  id: 'placePnl',
+  scroll: 'vertical',
+  items: [restPnl, aRestaurantList],
+  layout: {
+    type: 'vbox',
+    align: 'start',
+    direction: 'normal'
+  },
+  dockedItems:[
+  {
+    dock:'top',
+    xtype:'toolbar',
+    ui:'light',
+    title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
+    items:[{
+      text:'Back',
+      ui:'back',
+      handler: Crave.back_handler
+    }]
+  }]
 });

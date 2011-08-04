@@ -39,21 +39,56 @@ Crave.ratingDisplay = function(rating) {
   } catch(ex) {
     return "Unrated";
   }
+};
+
+Crave.distDisplay = function(miles) {
+  var feet = Math.round(miles * 5280);
+  if(feet<1000) {
+    return feet+" feet";
+  } else {
+    return parseFloat(miles).toFixed(1)+' miles';
+  }
+}
+
+Crave.magic_scroll_handler = function(comp,target,options) {
+  var t = Ext.get(target);
+  if (t.hasCls('x-button') || t.hasCls('x-button-label')) {
+    return;
+  }
+  var magic_scrollers = this.ownerCt.el.query('.magic-scroll');
+  Ext.each(magic_scrollers, function(magic) {
+    if (magic) {
+      var panel = Ext.getCmp(magic.getAttribute('id'));
+      panel.scroller.scrollTo({x: 0, y:0}, true);
+    }
+  });
 }
 
 //call this and then put it in dockedItems[]
+//config.title is the title, or it will be the logo
 //config.items is any buttons you want (back button, etc)
 Crave.create_titlebar = function(config) {
+  var title = config.title || '<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">';
   return {
     dock:'top',
     xtype:'toolbar',
+    cls: 'craveTitlebar',
     ui:'light',
-    title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
+    title: title,
     layout: {
       type: 'hbox',
       pack:'justify'
     },
-    items: config.items
+    items: config.items,
+    listeners: {
+      render: function(c) {
+        c.el.on('click', Crave.magic_scroll_handler, c);
+      }
+    },
+    set_title: function(title) {
+       var theTitle = title || '<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">';
+       this.setTitle(theTitle);
+    }
   }
 };
 
@@ -95,11 +130,37 @@ Crave.back_handler = function() {
       if (backInfo.callback) { backInfo.callback(backInfo);}
     }
   } catch (ex) {
-    if (location.href.indexOf('local') > -1)
+    if (location.href.indexOf('local') > -1) {
       alert('Unhandled back button, please make a note of this and tell Samson.')
+    }
     
     console.log("can't figure out where to go back to!");
     Crave.viewport.setActiveItem(0, 'pop');
   }
   
-}
+};
+
+Crave.show_image = function(image_url, anim) {
+  var image = new Image();
+  image.src = image_url;
+  image.setAttribute('class', 'lightbox');
+  image.onload = function() {
+    var width, height, style;
+    if (image.width > image.height) {
+      style = "width: 100%";
+    } else {
+      style = "height: 100%",
+      height = "90%";
+    }
+    var sheet = new Ext.Sheet({
+      centered: true,
+      modal: true,
+      height: height,
+      width: "90%",
+      html: "<img src='" + image_url + "' style='margin: 0 auto; display:block; " + style + "'>",
+      bodyStyle: 'padding: 0 0 12px 0; border-radius: 0;',
+      hideOnMaskTap: true
+    });
+    sheet.show(anim);
+  }  
+};
