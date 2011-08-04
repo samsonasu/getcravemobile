@@ -72,6 +72,7 @@ Crave.create_titlebar = function(config) {
   return {
     dock:'top',
     xtype:'toolbar',
+    cls: 'craveTitlebar',
     ui:'light',
     title: title,
     layout: {
@@ -83,6 +84,10 @@ Crave.create_titlebar = function(config) {
       render: function(c) {
         c.el.on('click', Crave.magic_scroll_handler, c);
       }
+    },
+    set_title: function(title) {
+       var theTitle = title || '<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">';
+       this.setTitle(theTitle);
     }
   }
 };

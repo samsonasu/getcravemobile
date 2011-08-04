@@ -332,7 +332,7 @@ Crave.buildDishDisplayPanel = function() {
     },{
       xtype: 'panel',
       cls: 'framePanel',
-      anchor: '100%',
+      width: '100%',
       id: 'dishRatingPanel',
       dockedItems: [{
         dock : 'top',
@@ -340,15 +340,12 @@ Crave.buildDishDisplayPanel = function() {
         cls: 'title clickable',
         title: 'Reviews'
       }],
-      items: {
-        id: 'dishDisplayRating',
-        tpl: new Ext.XTemplate.from('dishRatingTemplate', {
-          getBackPanelIndex: function() {
-            return Crave.dishDisplayPanel.items.indexOf(dishPanel);
-          }
-        }),
-        data: {user: {}}
-      },
+      tpl: new Ext.XTemplate.from('dishRatingTemplate', {
+        getBackPanelIndex: function() {
+          return Crave.dishDisplayPanel.items.indexOf(dishPanel);
+        }
+      }),
+      data: {user: {}},
       listeners: {  
         afterrender: function(c){
           c.el.on('click', function(){
@@ -398,7 +395,6 @@ Crave.buildDishDisplayPanel = function() {
         }
       }
     }]
-    
   });
   
   Crave.dishDisplayPanel = new Ext.Panel({
@@ -479,11 +475,10 @@ Crave.buildDishDisplayPanel = function() {
       }
 
       //Update ratings or hide if there aren't any
+      var drp = Ext.getCmp('dishRatingPanel');
       if (menu_item.menu_item_ratings.length > 0) {
-        Ext.getCmp('dishDisplayRating').update(menu_item.menu_item_ratings[0]);
-        
-        var drp = Ext.getCmp('dishRatingPanel');
         drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
+        drp.update(menu_item.menu_item_ratings[0]);
         drp.show();
         
         //Sencha sucks and they modify this in place to become an array of records instead of an array of {}s
@@ -491,7 +486,7 @@ Crave.buildDishDisplayPanel = function() {
         var ratingsData = TouchBS.clone(menu_item.menu_item_ratings);
         reviewStore.loadData(ratingsData);
       } else {
-        Ext.getCmp('dishRatingPanel').hide();
+        drp.hide();
       }
 
       // Update labels

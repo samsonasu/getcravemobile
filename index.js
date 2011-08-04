@@ -220,13 +220,14 @@ Ext.setup({
 
     Crave.myProfilePanel = Crave.buildProfilePanel(true);
     Crave.otherProfilePanel = Crave.buildProfilePanel(false);
+    Crave.buildSavedPanel();
 
     TouchBS.init_viewport(function() {
       Crave.viewport = new Ext.Panel({
         layout: 'card',
         fullscreen: true,
         activeItem: Crave.nearbyPanel,
-        items: [Crave.activityPanel, Crave.nearbyPanel, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, Crave.buildFilterPanel(),
+        items: [Crave.activityPanel, Crave.nearbyPanel, Crave.savedPanel,  Crave.myProfilePanel, detailPnl, Crave.buildFilterPanel(),
           placePnl, newDishForm, Crave.buildRateDishPanel(),
           Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  
           Crave.otherProfilePanel, Crave.buildSearchResultsPanel()],
@@ -297,7 +298,7 @@ Crave.updateLocation = function(callback) {
   }, function() {
     //failure handler
     console.log("no location available: using sanfran");
-    alert("We couldn't find your location so we're showing results near San Fransisco.")
+    Ext.Msg.alert("No Location", "We couldn't find your location so we're showing results near San Fransisco.")
     Crave.latest_position = {
       latitude: 37.77494,
       longitude: -122.41958

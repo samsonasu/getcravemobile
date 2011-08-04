@@ -67,6 +67,7 @@ Crave.buildSearchResultsPanel = function() {
     indexBar: false,
     clearSectionOnDeactivate:true,
     store: restaurantSearchStore,
+    loadingText: "Loading...",
     listeners: {
       activate: function(p) {
         restaurantSearchStore.load();
@@ -114,6 +115,7 @@ Crave.buildSearchResultsPanel = function() {
     store: bothStore,
     scroll:'vertical',
     hideOnMaskTap: false,
+    loadingText: "Loading...",
     clearSectionOnDeactivate:true,
     plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({})],
     listeners: {
@@ -149,8 +151,13 @@ Crave.buildSearchResultsPanel = function() {
           Crave.searchResultsPanel.set_search_params({
             q: searchValue
           });
-          
-          Crave.searchResultsPanel.getActiveItem().getStore().load();
+          var item = Crave.searchResultsPanel.getActiveItem();
+          item.setLoading(true);
+          item.getStore().load({
+            callback: function(){
+              item.setLoading(false);
+            }
+          });
         }
       }
     }]
