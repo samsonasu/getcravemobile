@@ -6,13 +6,11 @@ Crave.buildLoginPanel = function() {
 }
 //mine is true for the "my profile" panel and false for the other people's one.
 Crave.buildProfilePanel = function(mine) {
-  
   var setupBackStack = function(subPanel) {
     Crave.back_stack.push({
       panel: profilePnl,
       user_id: profilePnl.displayed_user_id,
       callback: function(backInfo) {
-        debugger;
         if (!mine) {
           //they just returned to the "other" profile panel via the back button, which means they were on someone else's profile
           profilePnl.load_user_data(backInfo.user_id);
@@ -509,13 +507,16 @@ Crave.buildSavedPanel = function() {
     listeners: {
       activate: function() {
         if (!Crave.isLoggedIn()) {
-          Crave.savedPanel.setActiveItem(savedLoginPanel);
+          Crave.savedPanel.setActiveItem(savedLoginPanel, false);
+        } else {
+          Crave.savedPanel.setActiveItem(savedList, false);
         }
       }
     },
     set_user: function(user) {
       savedDishStore.proxy.url = "/users/" + user.id + "/saved.json";
       savedDishStore.load();
+      Crave.savedPanel.setActiveItem(savedList, false);
     }
   });
   
@@ -552,7 +553,7 @@ Crave.facebookLogin = function() {
          localStorage.setItem('uid', uid);
          Crave.myProfilePanel.load_user_data(uid);
          
-         //TODO: go back to whatever called the login thing? 
+         //TODO: go back to whatever called the login thing?
          client_browser.close();
       }  
     };
