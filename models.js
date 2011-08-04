@@ -85,3 +85,6 @@ Ext.regModel('DishSearch',
   fields: ['name','id','price','description','restaurant_id']
 });
 
+Ext.regModel('Both', {
+  fields: ['menu_item', 'restaurant']
+});

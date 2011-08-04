@@ -1,12 +1,5 @@
 restaurantTemplate = Ext.XTemplate.from('restaurantTemplate', {
-  distDisplay: function(miles) {
-    var feet = Math.round(miles * 5280);
-    if(feet<1000) {
-      return feet+" feet";
-    } else {
-      return parseFloat(miles).toFixed(1)+' miles';
-    }
-  }
+  distDisplay: Crave.distDisplay
 });
 
 restaurantDishTemplate = Ext.XTemplate.from('restDishTemplate');

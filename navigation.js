@@ -39,6 +39,15 @@ Crave.ratingDisplay = function(rating) {
   } catch(ex) {
     return "Unrated";
   }
+};
+
+Crave.distDisplay = function(miles) {
+  var feet = Math.round(miles * 5280);
+  if(feet<1000) {
+    return feet+" feet";
+  } else {
+    return parseFloat(miles).toFixed(1)+' miles';
+  }
 }
 
 Crave.magic_scroll_handler = function(comp,target,options) {

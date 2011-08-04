@@ -119,4 +119,4 @@ Crave.buildAddLabelPanel = function(config) {
   });
 
   return labelsPanel;
-}
+};

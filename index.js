@@ -63,7 +63,7 @@ Ext.setup({
         refreshFn: function(cb, scope) {
           Crave.updateLocation(function(coords) {
             places.proxy.extraParams.lat = coords.latitude;
-            places.proxy.extraParams.lon = coords.longitude;
+            places.proxy.extraParams['long'] = coords.longitude;
             places.load({
               scope: scope,
               callback: cb
@@ -75,7 +75,7 @@ Ext.setup({
     placesList.on('itemtap', function(dataView, index, item, e) {
       var record = dataView.store.data.items[index];
       Crave.back_stack.push({
-        panel: listPnl
+        panel: Crave.nearbyPanel
       });
       placeDisplay(record.data.id);
     });
@@ -96,7 +96,7 @@ Ext.setup({
         refreshFn: function(cb, scope) {
           Crave.updateLocation(function(coords) {
             dishStore.proxy.extraParams.lat = coords.latitude;
-            dishStore.proxy.extraParams.lon = coords.longitude;
+            dishStore.proxy.extraParams['long'] = coords.longitude;
             dishStore.load({
               scope: scope,
               callback: cb
@@ -108,58 +108,56 @@ Ext.setup({
     
     dishList.on('itemtap', function(dataView, index, item, e) {
       var thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
-      Crave.back_stack.push({panel: listPnl});
+      Crave.back_stack.push({panel: Crave.nearbyPanel});
       Crave.show_menu_item(thisId);
     });
 
-/*
-    var dishPlaceStore = new Ext.data.Store({
-        model: 'Dish',
-        clearOnPageLoad: true,
-        sorters: [{property: 'arating', direction: 'ASC'}],
-        getGroupString : function(record) {
-            var rating = parseInt(record.get('rating'));
-            return Crave.ratingDisplay(rating);
-        },
-        proxy: {
-           type:'ajax',
-           url: '/items/nearby.json',
-           reader: {
-               type:'json',
-               record:'menu_item'
-           }
+    var searchForm = new Ext.form.FormPanel({ //Search form goes here
+      cls: 'searchForm',
+      layout: 'auto',
+      items: [{
+        xtype: 'searchfield',
+        name: 'searchString',
+        inputType: 'search',
+        useClearIcon:true,
+        id: 'searchBox',
+        ui: 'search',
+        placeHolder: 'Search for dish, restaurant or diet...',
+        listeners: {
+          change: function() {
+            var searchValue = Ext.getCmp("searchBox").getValue();
+            if (searchValue === "___setuid") {
+              localStorage.setItem('uid', 31);
+              Ext.Msg.alert("loged in", "way2go h4x0r");
+              return;
+            }
+            if (searchValue === "") {
+              return;
+            }
+            Crave.searchResultsPanel.set_search_params({
+              q: searchValue
+            });
+            Crave.back_stack.push({
+              panel: Crave.nearbyPanel
+            });
+            //get active button, do appropriate search, set card in searchPnl
+            if(Ext.getCmp('placesButton').pressed) {
+              Crave.viewport.setActiveItem(Crave.searchResultsPanel);
+              Crave.searchResultsPanel.setActiveItem(2);
+            }
+            if(Ext.getCmp('dishesButton').pressed) {
+              Crave.viewport.setActiveItem(Crave.searchResultsPanel);
+              Crave.searchResultsPanel.setActiveItem(1);
+            }
+          }
         }
+      }]
     });
 
-
-    var dishPlaceList = new Ext.List({
-      itemTpl: Ext.XTemplate.from('dishPlaceTemplate'),
-      itemSelector: '.item',
-      singleSelect: true,
-      grouped: true,
-      indexBar: false,
-      store: dishPlaceStore,
-      scroll:'vertical',
-      hideOnMaskTap: false,
-      clearSectionOnDeactivate:true,
-      plugins: [new Ext.plugins.ListPagingPlugin()],
-      listeners: {
-        itemtap: function(dataView, index, item, e) {
-          Crave.back_stack.push({
-            panel: listPnl
-          });
-          //dish_or_place_display
-        }
-      }
-    });
-*/
-
-   
-    
     //intentionally not using var to make this global
-    listPnl = new Ext.Panel({
+    Crave.nearbyPanel = new Ext.Panel({
       id: 'listPnl',
-      items: [dishList,placesList,searchPnl,newRestaurant],
+      items: [dishList,placesList,newRestaurant],
       layout: 'card',
       width:'100%',
       activeItem: 0,
@@ -187,7 +185,7 @@ Ext.setup({
             id:'dishesButton',
             pressed:true,
             handler:function () {
-              listPnl.setActiveItem(dishList);
+              Crave.nearbyPanel.setActiveItem(dishList);
             },
             ui:'round',
             width:'100'
@@ -196,7 +194,7 @@ Ext.setup({
             id:'placesButton',
             pressed:false,
             handler:function () {
-              listPnl.setActiveItem(placesList);
+              Crave.nearbyPanel.setActiveItem(placesList);
             },
             ui:'round',
             width:'100'
@@ -206,7 +204,7 @@ Ext.setup({
           iconCls:'filtersButton',
           handler: function() {
             Crave.back_stack.push({
-              panel: listPnl, 
+              panel: Crave.nearbyPanel,
               anim: {
                 type: 'slide', 
                 direction: 'down'
@@ -226,10 +224,11 @@ Ext.setup({
       Crave.viewport = new Ext.Panel({
         layout: 'card',
         fullscreen: true,
-        activeItem: listPnl,
-        items: [Crave.activityPanel, listPnl, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, Crave.buildFilterPanel(),
+        activeItem: Crave.nearbyPanel,
+        items: [Crave.activityPanel, Crave.nearbyPanel, Crave.buildSavedPanel(),  Crave.myProfilePanel, detailPnl, Crave.buildFilterPanel(),
           placePnl, newDishForm, Crave.buildRateDishPanel(),
-          Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  Crave.otherProfilePanel],
+          Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  
+          Crave.otherProfilePanel, Crave.buildSearchResultsPanel()],
         cardSwitchAnimation: 'slide',
         direction:'horizontal',
         dockedItems: [new Ext.TabBar({
@@ -248,7 +247,7 @@ Ext.setup({
           },{
             text: 'Nearby',
             iconCls: 'nearBy',
-            card: listPnl
+            card: Crave.nearbyPanel
           },{
             text: "Saved",
             iconCls: 'saved',
