@@ -124,7 +124,7 @@ FORM.framePanel .x-form-field-container {
 
 FORM.framePanel INPUT {
   padding-left: 1em;
-}
+}f
 
 .requiredField INPUT {
   border: 2px dotted red !important;
@@ -544,12 +544,11 @@ input[type="search"]::-webkit-search-cancel-button {
   background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #F8F7F5), color-stop(1, #ECEBE7) );
   border-top: 1px solid white;
   height: 45px;
-
 }
 
 .x-field input, .x-field textarea, .x-field select, .x-field .x-field-slider {
 -webkit-border-radius: 0;
-border-radius: 20px;
+border-radius: 16px;
 padding: .4em;
 border: 0;
 word-wrap:break-word;
