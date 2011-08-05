@@ -1,6 +1,12 @@
 //Brian Samson Sencha Touch utility functions
 var TouchBS = {};
 
+TouchBS.handle_failure = function() {
+  //TODO add error messages and such
+  TouchBS.stop_waiting();
+  Ext.Msg.alert("Opps", "Sorry, something went wrong.");
+}
+
 Date.patterns = {
   ShortSlashes: "Y/m/d",
   ISO8601Long:"Y-m-d H:i:s",

@@ -113,8 +113,31 @@ FORM.framePanel .label {
 
 FORM.framePanel .x-field {
   border: none;
-  margin-bottom: 8px;
+  margin-bottom: 0px;
   width: 95%;
+}
+
+
+FORM.framePanel .x-field INPUT, FORM.framePanel .x-field TEXTAREA {
+  padding-left: 1em;
+  border-radius: 0;
+  border: 1px solid #ccc;
+}
+
+FORM.framePanel .x-field:first-child INPUT,
+FORM.framePanel .x-field:first-child TEXTAREA,
+FORM.framePanel .x-field.first INPUT,
+FORM.framePanel .x-field.first TEXTAREA {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+FORM.framePanel .x-field:last-child INPUT,
+FORM.framePanel .x-field:last-child TEXTAREA,
+FORM.framePanel .x-field.last INPUT,
+FORM.framePanel .x-field.last TEXTAREA {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
 }
 
 FORM.framePanel .x-form-field-container {
@@ -122,11 +145,8 @@ FORM.framePanel .x-form-field-container {
   padding: 0;
 }
 
-FORM.framePanel INPUT {
-  padding-left: 1em;
-}f
 
-.requiredField INPUT {
+.requiredField INPUT, .requiredField TEXTAREA {
   border: 2px dotted red !important;
 }
 
@@ -279,6 +299,17 @@ font-weight: lighter;
 display: block;
 text-shadow: 1px 1px white;
 line-height: 21px;
+}
+
+DIV.x-button.addMenuItemButton {
+  text-align: center !important;
+  color: #069;
+  border: 1px solid #B2B2B2;
+  background: #EEE;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
+  font-family: helvetica neue,helvetica,sans-serif;
+  height: 30px;
+  padding-top: 3px;
 }
 
 .distanceFigure {

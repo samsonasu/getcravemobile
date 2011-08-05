@@ -28,10 +28,12 @@ Crave.checkSupportedCity = function(coords, callback) {
 
 Crave.buildCityVotePanel = function() {
   var city_field = new Ext.form.Text({
-    name: 'city'
+    name: 'city',
+    cls: 'first'
   });
   var email_field = new Ext.form.Text({
-    xtype: 'textfield', 
+    xtype: 'textfield',
+    cls: 'last',
     name: 'email', 
     inputType: 'email', 
     placeHolder: "My E-mail Address"

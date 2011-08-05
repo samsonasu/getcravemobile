@@ -21,70 +21,71 @@ var dishStore = new Ext.data.Store({
        }
     }
 });
+Crave.buildNewDishPanel = function() {
+  var submitForm = function() {
+    var menu_item = form.getValues();
+    menu_item.restaurant_id = localStorage.getItem('editRestaurantId');
+    menu_item.user_id = localStorage.getItem('uid');
+    TouchBS.wait("Adding Dish");
+    Ext.Ajax.request({
+       url: '/items.json',
+       method: 'POST',
+       jsonData: {
+          menu_item: menu_item
+       },
+       success: function (objForm, httpRequest) {
+         TouchBS.stop_waiting();
+         Ext.Msg.alert("Thanks!", "Keep on Cravin'");
+         Crave.back_handler();
+       },
+       failure: TouchBS.handle_failure
+    });
+  };
+  var name_field = new Ext.form.Text({
+     xtype: 'textfield',
+     placeHolder:'Name',
+     name: 'menu_item[name]',
+     id: 'menuItemName'
+  });
 
-var newDishForm = new Ext.form.FormPanel({
-    scroll: 'vertical',
-    dockedItems:[
-       {
-           dock:'top',
-           xtype:'toolbar',
-           ui:'light',
-           title:'Crave',
-           items:[{text:'Back',ui:'back', handler:Crave.back_handler}]
-       }
-    ],
-    items: [
-       {xtype: 'fieldset', title: 'New Restaurant', items: [
-            {
-                xtype: 'textfield',
-                hidden:true,
-                name: 'menu_item[restaurant_id]',
-                id: 'restaurantId'
-		    },
-           {
-               xtype: 'textfield',
-               label:'Name',
-               name: 'menu_item[name]',
-               id: 'menuItemName'
-           },
-           {
-               xtype: 'textfield',
-               label:'Description',
-               name: 'menu_item[description]',
-               id: 'menuItemDescription'
-           },
-           {
-               xtype: 'textfield',
-               hidden:true,
-               name: 'menu_item[user_id]',
-               id: 'userId'
-           },
+  var description_field = new Ext.form.TextArea({
+    xtype: 'textareafield',
+    placeHolder: 'Description',
+    name: 'menu_item[description]',
+    id: 'menuItemDescription'
+  });
 
-           {
-               xtype:'button',
-               text: 'Submit',
-               handler: function() {
-                   Ext.getCmp('restaurantId').setValue(localStorage.getItem('editRestaurantId'));
-                   Ext.getCmp('userId').setValue(localStorage.getItem("uid"));
-                   newDishForm.submit({
-                       url: '/menu_items',
-                       method: 'post',
-                       submitDisabled: true,
-                       waitMsg: 'Saving Data...Please wait.',
-                       success: function (objForm,httpRequest) {
-                           var mbox = new Ext.MessageBox({});
-                           mbox.alert("Record Saved");
-                           //redirect back to restaurant list?
-                       },
-                       failure: function() {
-                           console.log('submissionFailed');
-                       }
-                   })
-               }
-           }
-        ]}
-    ]
-});
+  var form = new Ext.form.FormPanel({
+    cls: 'framePanel',
+    items: [name_field,description_field],
+    listeners: {
+      beforesubmit: function() {
+        submitForm();
+        return false;
+      }
+    }
+  });
+
+  Crave.newDishPanel = new Ext.Panel({
+    height: '100%',
+    layout: 'fit',
+    dockedItems:Crave.create_titlebar({
+      title: "Add a Menu Item",
+      items: [{
+        text: 'back',
+        ui: 'back',
+        handler: Crave.back_handler
+      },{
+        text: 'Submit',
+        handler: submitForm
+      }]
+    }),
+    items: form
+  });
+
+  return Crave.newDishPanel;
+};
+
 
 //this is the new dish display, and it's not done yet so don't use it.
 Crave.buildDishDisplayPanel = function() {
@@ -402,14 +403,14 @@ Crave.buildDishDisplayPanel = function() {
     items: [dishPanel, reviewsPanel, labelsPanel],
     activeItem: 0, 
     load_dish_data: function(dish_id, callback) {
-      dishPanel.setLoading('Loading');
+      dishPanel.setLoading('Loading...');
+      Crave.dishDisplayPanel.setActiveItem(dishPanel, false);
       Ext.Ajax.request({
         method: "GET",
         url: '/items/' + dish_id + '.json',
         success: function(response, options) {
           var menu_item = Ext.decode(response.responseText).menu_item;
           Crave.dishDisplayPanel.load_dish(menu_item, callback);
-          //and we're done
           dishPanel.setLoading(false);
         }
       });

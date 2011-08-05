@@ -230,7 +230,7 @@ Ext.setup({
         items: [Crave.activityPanel, Crave.nearbyPanel, 
           Crave.savedPanel,  Crave.myProfilePanel, 
           detailPnl, Crave.buildFilterPanel(),
-          placePnl, newDishForm, Crave.buildRateDishPanel(),
+          placePnl, Crave.buildNewDishPanel(), Crave.buildRateDishPanel(),
           Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  
           Crave.otherProfilePanel, Crave.buildSearchResultsPanel(), Crave.buildCityVotePanel()],
         cardSwitchAnimation: 'slide',
@@ -320,8 +320,8 @@ Crave.updateLocation = function(callback) {
     var coords = position.coords;
 //    if(window.location.toString().indexOf("local")>-1) {
 //      coords = {
-//        latitude: 37.77867,
-//        longitude: -122.39127
+//        latitude: 37.77494,
+//        longitude: -122.41958
 //      };
 //    }
     position_callback(coords);
