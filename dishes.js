@@ -74,8 +74,7 @@ Crave.buildNewDishPanel = function() {
     dockedItems:Crave.create_titlebar({
       title: "Add a Menu Item",
       items: [{
-        text: 'back',
-        ui: 'back',
+        ui: 'iback',
         handler: Crave.back_handler
       },{
         text: 'Submit',
@@ -131,7 +130,7 @@ Crave.buildDishDisplayPanel = function() {
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
-        ui: 'back',
+        ui: 'iback',
         handler: Crave.back_handler
       },{
         text: "Add",
@@ -273,7 +272,7 @@ Crave.buildDishDisplayPanel = function() {
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
-        ui: 'back',
+        ui: 'iback',
         handler: Crave.back_handler
       }, {
         text: "Add", 

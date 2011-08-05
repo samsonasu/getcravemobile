@@ -476,6 +476,27 @@ border-bottom-left-radius: 0.4em;*/
 	border-bottom:1px solid #b1311a;
 	-webkit-box-shadow: inset 0px 1px 2px 0px #5F271D;
 }
+/* new back button */
+
+.x-toolbar .x-button.x-button-iback {
+  width: 3.1em;
+  background: url(../../images/back@2x.png) 0 0 no-repeat;
+  -webkit-background-size: 3em 1.75em;
+  border: none;
+  -webkit-box-shadow: none;
+}
+
+.x-toolbar .x-button.x-button-iback.x-button-pressed,
+.x-toolbar .x-button.x-button-iback.x-button-active {
+   background: url(../../images/back-pressed@2x.png) 0 0 no-repeat;
+}
+
+.x-toolbar .x-button.x-button-iback SPAN.x-button-label {
+  display: none;
+}
+
+
+/* old back button */
 
 .x-toolbar-light .x-button.x-button-back.x-button-pressed,
 .x-toolbar-light .x-button.x-button-back.x-button-pressed::after,

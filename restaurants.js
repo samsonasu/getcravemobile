@@ -136,7 +136,7 @@ var newRestaurant = new Ext.form.FormPanel({
     dockedItems:[Crave.create_titlebar({
       items: [{
         text:'Back',
-        ui:'back', 
+        ui:'iback',
         handler: Crave.back_handler
       }]
     })],
@@ -321,7 +321,7 @@ detailPnl = new Ext.Panel({
   dockedItems: Crave.create_titlebar({
     items:[{
       text:'Back',
-      ui:'back',
+      ui:'iback',
       handler: Crave.back_handler
     },{
       text:'Rate',
@@ -354,7 +354,7 @@ placePnl = new Ext.Panel({
     title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
     items:[{
       text:'Back',
-      ui:'back',
+      ui:'iback',
       handler: Crave.back_handler
     }]
   }]
