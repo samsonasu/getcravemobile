@@ -136,31 +136,38 @@ Crave.buildSearchResultsPanel = function() {
       }
     }
   });
+
+  var doTextSearch = function() {
+    Crave.searchResultsPanel.set_search_params({
+      q: search_field.getValue()
+    });
+    var item = Crave.searchResultsPanel.getActiveItem();
+    item.setLoading(true);
+    item.getStore().load({
+      callback: function(){
+        item.setLoading(false);
+      }
+    });
+    return false;
+  }
+  
+  var search_field = new Ext.form.Text({
+    xtype: 'searchfield',
+    name: 'searchString',
+    inputType: 'search',
+    useClearIcon:true,
+    ui: 'search',
+    placeHolder: 'Search for dish, restaurant or diet...',
+    listeners: {
+      change: doTextSearch,
+      beforesubmit: doTextSearch
+    }
+  });
+ 
   var searchForm = new Ext.form.FormPanel({
     cls: 'searchForm',
     layout: 'auto',
-    items: [{
-      xtype: 'searchfield',
-      name: 'searchString',
-      inputType: 'search',
-      useClearIcon:true,
-      ui: 'search',
-      placeHolder: 'Search for dish, restaurant or diet...',
-      listeners: {
-        change: function(t, searchValue, oldValue) {
-          Crave.searchResultsPanel.set_search_params({
-            q: searchValue
-          });
-          var item = Crave.searchResultsPanel.getActiveItem();
-          item.setLoading(true);
-          item.getStore().load({
-            callback: function(){
-              item.setLoading(false);
-            }
-          });
-        }
-      }
-    }]
+    items: [search_field]
   });
 
   var segButton = new Ext.SegmentedButton({
@@ -223,35 +230,43 @@ Crave.buildSearchResultsPanel = function() {
     }),searchForm],
     activeItem: 0,
     items: [bothList, dishSearchList,restaurantSearchList],
+    active_filters: [],
+    search_radius: "",
+    search_query: "",
     set_search_params: function(search) {
-      dishSearchStore.proxy.extraParams = Ext.apply({
-        lat: Crave.latest_position.latitude,
-        "long": Crave.latest_position.longitude,
-        distance: true
-      }, search);
+      if (search.filters) {
+        Crave.searchResultsPanel.active_filters = search.filters;
+      }
 
-      restaurantSearchStore.proxy.extraParams = Ext.apply({
-        lat: Crave.latest_position.latitude,
-        "long": Crave.latest_position.longitude,
-        distance: true
-      }, search);
+      if (search.d) {
+        Crave.searchResultsPanel.search_radius = search.d;
+      }
 
-      bothStore.proxy.extraParams = Ext.apply({
-        lat: Crave.latest_position.latitude,
+      if (search.q) {
+        Crave.searchResultsPanel.search_query = search.q;
+      }
+
+      var params = {
+         lat: Crave.latest_position.latitude,
         "long": Crave.latest_position.longitude,
-        distance: true
-      }, search);
+        q: Crave.searchResultsPanel.search_query + " " + Crave.searchResultsPanel.active_filters.join(' '),
+        d: Crave.searchResultsPanel.search_radius
+      }
+      dishSearchStore.proxy.extraParams = Ext.apply({}, params);
+      restaurantSearchStore.proxy.extraParams = Ext.apply({}, params);
+      bothStore.proxy.extraParams = Ext.apply({}, params);
       
       var activePanel = Crave.searchResultsPanel.getActiveItem();
       if (activePanel) {
-        activePanel.getStore().load();
+        //console.log('activePanel found, loading');
+        //activePanel.getStore().load();
       }
 
-      searchForm.items.get(0).setValue(search.q);
+      searchForm.items.get(0).setValue(Crave.searchResultsPanel.search_query);
     },
     listeners: {
-      activate: function(p) {
-       
+      activate: function() {
+        Crave.searchResultsPanel.getActiveItem().fireEvent('activate');
       }
     }
   });
@@ -330,7 +345,7 @@ Crave.buildFilterPanel = function() {
         handler:function(b,e) {
           var dfb = Ext.getCmp('distanceFilterButton').getPressed();
           Crave.searchResultsPanel.set_search_params({
-            q: labelList.get_filters().join(' '),
+            filters: labelList.get_filters(),
             d: dfb.filter_value
           });
           Crave.viewport.setActiveItem(Crave.searchResultsPanel);
