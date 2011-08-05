@@ -57,26 +57,35 @@ function placeDisplay(restaurant_id) {
     });
     $("#restaurantTotalRatings").html(totalRatings);
 
-    var addButton = Ext.DomHelper.append(aRestaurantList.getTargetEl(), {
-      tag: 'div',
-      cls: 'x-list-item',
-      children: [{
-          tag: 'div',
-          cls: 'x-list-item-body',
-          children: [{
-            tag: 'div',
-            cls: "addMenuItemButton x-button",
-            html: '+ Add a Menu Item'
-          }]
-      }]
+//    var addButton = Ext.DomHelper.append(aRestaurantList.getTargetEl(), {
+//      tag: 'div',
+//      cls: 'x-list-item',
+//      children: [{
+//          tag: 'div',
+//          cls: 'x-list-item-body',
+//          children: [{
+//            tag: 'div',
+//            cls: "addMenuItemButton x-button",
+//            children: [{
+//              tag: 'span',
+//              cls: 'x-button-label',
+//              html: '+ Add a Menu Item'
+//            }]
+//          }]
+//      }]
+//    });
+
+    var b = new Ext.Button({
+      cls: 'listButton',
+      renderTo: aRestaurantList.getTargetEl(),
+      text: "+ Add a Menu Item",
+      handler:  function() {
+        Crave.back_stack.push({
+          panel: placePnl
+        });
+        Crave.viewport.setActiveItem(Crave.newDishPanel);
+      }
     });
-    
-    Ext.get(addButton).on('click', function() {
-      Crave.back_stack.push({
-        panel: placePnl
-      });
-      Crave.viewport.setActiveItem(Crave.newDishPanel);
-    })
 
   });
 
