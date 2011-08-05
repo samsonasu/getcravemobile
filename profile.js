@@ -198,6 +198,7 @@ Crave.buildProfilePanel = function(mine) {
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
   });
+
   var profilePnl = null;
   var userInfoPanel = new Ext.Panel({
     xtype: 'panel',
@@ -345,6 +346,7 @@ Crave.buildProfilePanel = function(mine) {
             settingsButton.show();
           }
         }
+        
         if (p.getActiveItem() === userProfilePnl) {
           userDishList.refresh();  //herp derp
         }
@@ -354,12 +356,12 @@ Crave.buildProfilePanel = function(mine) {
       profilePnl.dockedItems.get(0).set_title(title);
     },
     load_user_data: function(user_id) {
-      profilePnl.setActiveItem(userProfilePnl, 'pop');
-      userProfilePnl.scroller.scrollTo({x: 0, y: 0});
-  
       if (profilePnl.displayed_user_id === user_id) {
         return;
       }
+      profilePnl.setActiveItem(userProfilePnl, 'pop');
+      userProfilePnl.scroller.scrollTo({x: 0, y: 0});
+  
 
       profilePnl.setLoading(true);
       //load basic info
