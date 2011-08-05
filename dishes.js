@@ -390,7 +390,7 @@ Crave.buildDishDisplayPanel = function() {
         afterrender: function(c){
           c.el.on('click', function(){
             var mi = Crave.dishDisplayPanel.current_menu_item;
-            window.open('http://maps.google.com/maps?ll=' + [mi.restaurant.latitude, mi.restaurant.longitude].join(','));
+            window.open(Crave.restaurant_map_url(mi.restaurant));
           });
         }
       }

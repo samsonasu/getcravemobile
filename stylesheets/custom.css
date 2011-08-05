@@ -182,11 +182,16 @@ FORM.framePanel INPUT {
   border-radius: 1em;
 }
 
+.framePanel .x-toolbar.x-toolbar-fancy .x-button {
+  border-right: 1px solid #414141;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#8D8D8D), color-stop(50%,#5E5E5E), color-stop(51%,#4C4C4C), color-stop(100%,#414141));
+  color: #ccc;
+}
 .framePanel .x-toolbar.x-toolbar-fancy .x-button.x-button-pressed{
   background-color: #E8553A;
   /*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
-  -moz-box-shadow: inset 0px 0px 3px 3px #333333;
+
   border-top: 1px solid #B13320;
 }
 

@@ -1,3 +1,8 @@
+Crave.restaurant_map_url = function(restaurant) {
+  var addr = encodeURI([restaurant.street_address, restaurant.city, restaurant.state, restaurant.zip].join(' '));
+  return 'http://maps.google.com/maps?q=' + addr;
+};
+
 restaurantTemplate = Ext.XTemplate.from('restaurantTemplate', {
   distDisplay: Crave.distDisplay
 });
@@ -67,8 +72,7 @@ function placeDisplay(restaurant_id) {
       //set restaurant data locally now
       localStorage.setItem('editRestaurantId',restaurant.id);
       var htmlString = '<div class="restaurantInfo"><span class="restName">'+
-      restaurant.name+'</span><a target="_blank" href="' +
-      'http://maps.google.com/maps?ll=' + [restaurant.latitude, restaurant.longitude].join(',') +
+      restaurant.name+'</span><a target="_blank" href="' + Crave.restaurant_map_url(restaurant) +
       '" class="restAddress">'+
       restaurant.street_address+' <br>'+
       restaurant.city +
@@ -85,6 +89,7 @@ function placeDisplay(restaurant_id) {
       map.restaurant_latitude = restaurant.latitude;
       map.restaurant_longitude = restaurant.longitude;
       map.update(restaurant);
+      map.last_restaurant = restaurant;
       if (restaurantMarker) {
         restaurantMarker.setMap(null);
       }
@@ -244,7 +249,8 @@ var restMapPnl = new Ext.Panel ({
     listeners: {
       afterrender: function(c){
         c.el.on('click', function(){
-          window.open('http://maps.google.com/maps?ll=' + [c.map.center.lat(), c.map.center.lng()].join(','));
+
+          window.open(Crave.restaurant_map_url(c.last_restaurant));
         });
       }
     }
