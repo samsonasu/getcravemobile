@@ -332,7 +332,10 @@ font-weight: lighter;
     padding:5px;
     margin:12px auto;
 }
-.dishInfo {background-color: white;}
+.dishInfo {
+  background-color: white;
+  min-height: 100px;
+}
 .dishInfo A {
   color: #01669a;
   text-decoration: none;

@@ -33,10 +33,11 @@ Crave.buildNewDishPanel = function() {
        jsonData: {
           menu_item: menu_item
        },
-       success: function (objForm, httpRequest) {
+       success: function (response, options) {
          TouchBS.stop_waiting();
          Ext.Msg.alert("Thanks!", "Keep on Cravin'");
-         Crave.back_handler();
+         var menu_item = Ext.decode(response.responseText).menu_item
+         Crave.show_menu_item(menu_item.id);
        },
        failure: TouchBS.handle_failure
     });
@@ -44,14 +45,14 @@ Crave.buildNewDishPanel = function() {
   var name_field = new Ext.form.Text({
      xtype: 'textfield',
      placeHolder:'Name',
-     name: 'menu_item[name]',
+     name: 'name',
      id: 'menuItemName'
   });
 
   var description_field = new Ext.form.TextArea({
     xtype: 'textareafield',
     placeHolder: 'Description',
-    name: 'menu_item[description]',
+    name: 'description',
     id: 'menuItemDescription'
   });
 
