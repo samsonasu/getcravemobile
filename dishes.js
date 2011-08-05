@@ -57,6 +57,7 @@ Crave.buildNewDishPanel = function() {
 
   var form = new Ext.form.FormPanel({
     cls: 'framePanel',
+    height: "100%",
     items: [name_field,description_field],
     listeners: {
       beforesubmit: function() {
@@ -68,7 +69,7 @@ Crave.buildNewDishPanel = function() {
 
   Crave.newDishPanel = new Ext.Panel({
     height: '100%',
-    layout: 'fit',
+    //layout: 'fit',
     dockedItems:Crave.create_titlebar({
       title: "Add a Menu Item",
       items: [{

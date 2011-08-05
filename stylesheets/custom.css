@@ -114,9 +114,7 @@ FORM.framePanel .label {
 FORM.framePanel .x-field {
   border: none;
   margin-bottom: 0px;
-  width: 95%;
 }
-
 
 FORM.framePanel .x-field INPUT, FORM.framePanel .x-field TEXTAREA {
   padding-left: 1em;
