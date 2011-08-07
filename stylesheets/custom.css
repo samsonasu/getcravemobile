@@ -351,18 +351,18 @@ font-weight: lighter;
 }
 
 .dishInfo .savedFlag {
-  height: 80px;
-  width: 65px;
-  float: right;
-  background: url('../../images/saved-icon-OFF@2x.png') no-repeat 12px 0;
-  -webkit-background-size: 40px 60px;
-  padding-top: 56px;
-  color: #555;
-  text-align: center;
+	height: 65px;
+	width: 55px;
+	float: right;
+	background: url('../../images/saved-icon-OFF@2x.png') no-repeat 12px 0;
+	-webkit-background-size: 30px 40px;
+	padding-top: 39px;
+	color: #B7B7B7;
+	text-align: center;
 }
 .dishInfo .savedFlag.saved {
    background: url('../../images/saved-icon-ON@2x.png') no-repeat 12px 0;
-   -webkit-background-size: 40px 60px;
+	-webkit-background-size: 30px 40px;
    color: #70b9b6;
 }
 
@@ -458,7 +458,7 @@ border-bottom-left-radius: 0.4em;*/
 
 #placesButton.x-button span {
     background: url('../../images/restaurant-icon-OFF.png') no-repeat;
-	margin: 0px 10px;
+	margin: 0px 8px;
 	padding: 0px 0px 0px 0px;
 }
 #placesButton.x-button-pressed span {
@@ -1081,7 +1081,7 @@ background-image: linear-gradient(#EFEFEF,#D9D9D9 50%,#CCC 51%,#DDD);
 	border:none;
 	border-bottom:1px solid #b1311a;
 	-webkit-box-shadow: inset 0px 1px 2px 0px #5f271d;
-	padding: 0 8px;
+	padding: 0 10px;
 }
 
 .x-button-cancel {
