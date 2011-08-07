@@ -81,21 +81,7 @@ Crave.buildCityVotePanel = function() {
     }
   });
   Crave.cityVotePanel = new Ext.Panel({
-    //layout: 'fit',
     bodyCls: 'cityVoteBody',
-//    dockedItems: Crave.create_titlebar({
-//      items: [{
-//        text: "Cancel",
-//        handler: function() {
-//          Crave.viewport.setActiveItem(Crave.nearbyPanel);
-//        }
-//      },{
-//        text: "Vote",
-//        handler: function() {
-//          form.submit();
-//        }
-//      }]
-//    }),
     items: form,
     set_city: function(city) {
       city_field.setValue(city);

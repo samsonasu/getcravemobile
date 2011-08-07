@@ -896,7 +896,7 @@ IMG.stars {
 }
 
 .arating {
-	padding: 0;
+  padding: 0;
 }
 .arating .ratingListItem {
   padding-left: 68px;
@@ -975,8 +975,8 @@ IMG.stars {
   height: 100px;
 }
 
-#dishRatingPanel SPAN.review {
-  padding-bottom: 12px;
+#dishRatingPanel .arating {
+  padding: .5em;
 }
 
 
@@ -1180,7 +1180,7 @@ font-size: 22px;
 }
 
 FORM.cityVoteForm {
-  padding-top: 180px;
+  padding-top: 200px;
   background: transparent;
   border: none;
   margin: 0;

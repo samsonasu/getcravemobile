@@ -222,62 +222,68 @@ Ext.setup({
     Crave.otherProfilePanel = Crave.buildProfilePanel(false);
     Crave.buildSavedPanel();
 
-    
-      Crave.viewport = new Ext.Panel({
-        layout: 'card',
-        fullscreen: true,
-        activeItem: Crave.nearbyPanel,
-        items: [Crave.activityPanel, Crave.nearbyPanel, 
-          Crave.savedPanel,  Crave.myProfilePanel, 
-          detailPnl, Crave.buildFilterPanel(),
-          placePnl, Crave.buildNewDishPanel(), Crave.buildRateDishPanel(),
-          Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),  
-          Crave.otherProfilePanel, Crave.buildSearchResultsPanel(), Crave.buildCityVotePanel()],
+
+    Crave.viewport = new Ext.Panel({
+      layout: 'card',
+      activeItem: Crave.nearbyPanel,
+      items: [Crave.activityPanel, Crave.nearbyPanel,
+        Crave.savedPanel,  Crave.myProfilePanel,
+        detailPnl, Crave.buildFilterPanel(),
+        placePnl, Crave.buildNewDishPanel(), Crave.buildRateDishPanel(),
+        Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),
+        Crave.otherProfilePanel, Crave.buildSearchResultsPanel()],
+      cardSwitchAnimation: 'slide',
+      direction:'horizontal',
+      dockedItems: [new Ext.TabBar({
+        dock: 'bottom',
+        //xtype: 'toolbar',
         cardSwitchAnimation: 'slide',
-        direction:'horizontal',
-        dockedItems: [new Ext.TabBar({
-          dock: 'bottom',
-          //xtype: 'toolbar',
-          cardSwitchAnimation: 'slide',
-          id: 'mainTabbar',
-          ui: 'dark',
-          layout: {
-            pack: 'center'
-          },
-          items: [{
-            text: "Activity",
-            iconCls: 'activity',
-            card: Crave.activityPanel
-          },{
-            text: 'Nearby',
-            iconCls: 'nearBy',
-            card: Crave.nearbyPanel
-          },{
-            text: "Saved",
-            iconCls: 'saved',
-            card: Crave.savedPanel
-          },{
-            text: "Me",
-            iconCls: 'me',
-            card: Crave.myProfilePanel
-          }],
-          listeners: {
-            change: function(tabbar, tab, card) {
-              Crave.back_stack = []; //clear back stack when they explicitly click a tab
-              if(tab.text === "Me") {
-                Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
-              }
+        id: 'mainTabbar',
+        ui: 'dark',
+        layout: {
+          pack: 'center'
+        },
+        items: [{
+          text: "Activity",
+          iconCls: 'activity',
+          card: Crave.activityPanel
+        },{
+          text: 'Nearby',
+          iconCls: 'nearBy',
+          card: Crave.nearbyPanel
+        },{
+          text: "Saved",
+          iconCls: 'saved',
+          card: Crave.savedPanel
+        },{
+          text: "Me",
+          iconCls: 'me',
+          card: Crave.myProfilePanel
+        }],
+        listeners: {
+          change: function(tabbar, tab, card) {
+            Crave.back_stack = []; //clear back stack when they explicitly click a tab
+            if(tab.text === "Me") {
+              Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
             }
           }
-        })],
-        listeners: {
-          afterlayout: function(viewport) {
-            var tb = Ext.getCmp('mainTabbar');
-            tb.cardLayout = viewport.layout;
-            $(".startuppic").remove();
-          }
         }
-      });
+      })],
+      listeners: {
+        afterlayout: function(viewport) {
+          var tb = Ext.getCmp('mainTabbar');
+          tb.cardLayout = viewport.layout;
+          $(".startuppic").remove();
+        }
+      }
+    });
+
+    Crave.real_viewport = new Ext.Panel({
+      fullscreen: true,
+      layout: 'card',
+      activeItem: Crave.viewport,
+      items: [Crave.viewport, Crave.buildCityVotePanel()]
+    });
   }
 });
 
@@ -287,25 +293,28 @@ Crave.updateLocation = function(callback) {
   var position_callback = function(coords) {
     Crave.checkSupportedCity(coords, function(supported, city) {
       if (!supported) {
-        coords = { //force sanfran
-          latitude: 37.77494,
-          longitude: -122.41958
-        }
-          
-        if (!Crave.alreadyCheckedCity) { //don't badger the nice people
-          Crave.alreadyCheckedCity = true; 
-          Ext.Msg.show({
-            title: "Not Here yet.", 
-            msg: "Sorry, we're not available in " + city + " yet.  Do you want to vote for Crave to come to " + city + "?",
-            buttons: Ext.MessageBox.YESNO,
-            fn: function(btn) {
-              if (btn === 'yes') {
-                Crave.cityVotePanel.set_city(city);
-                Crave.viewport.setActiveItem(Crave.cityVotePanel);
-              }
-            }
-          });
-        }
+        Crave.cityVotePanel.set_city(city);
+        Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
+        return;
+//        coords = { //force sanfran
+//          latitude: 37.77494,
+//          longitude: -122.41958
+//        }
+//
+//        if (!Crave.alreadyCheckedCity) { //don't badger the nice people
+//          Crave.alreadyCheckedCity = true;
+//          Ext.Msg.show({
+//            title: "Not Here yet.",
+//            msg: "Sorry, we're not available in " + city + " yet.  Do you want to vote for Crave to come to " + city + "?",
+//            buttons: Ext.MessageBox.YESNO,
+//            fn: function(btn) {
+//              if (btn === 'yes') {
+//                Crave.cityVotePanel.set_city(city);
+//                Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
+//              }
+//            }
+//          });
+//        }
       }
 
       //either way, set the coords and callback whoever wanted updateLocation
@@ -318,12 +327,13 @@ Crave.updateLocation = function(callback) {
   
   navigator.geolocation.getCurrentPosition(function(position) {
     var coords = position.coords;
-//    if(window.location.toString().indexOf("local")>-1) {
-//      coords = {
-//        latitude: 37.77494,
-//        longitude: -122.41958
-//      };
-//    }
+    //spoof san fran for testing
+    if(window.location.toString().indexOf("local")>-1) {
+      coords = {
+        latitude: 37.77494,
+        longitude: -122.41958
+      };
+    }
     position_callback(coords);
     
   }, function() {
@@ -331,7 +341,7 @@ Crave.updateLocation = function(callback) {
     console.log("no location available: using sanfran");
     Ext.Msg.alert("No Location", "We couldn't find your location so we're showing results near San Fransisco.")
     position_callback({
-      latitude: 47.77494,
+      latitude: 37.77494,
       longitude: -122.41958
     });
   });
