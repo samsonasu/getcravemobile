@@ -266,7 +266,6 @@ Crave.buildDishDisplayPanel = function() {
   });
 
   var dishPanel = new Ext.Panel({
-    layout: 'vbox',
     width: '100%',
     scroll: 'vertical',
     dockedItems: Crave.create_titlebar({
@@ -467,21 +466,22 @@ Crave.buildDishDisplayPanel = function() {
       }
       //Dish header is easy, so is description
       Ext.getCmp('dishDetailHeader').update(menu_item);
-      Ext.getCmp('dishDetailHeader').onResize();
+      //Ext.getCmp('dishDetailHeader').doComponentLayout();
       if (menu_item.description == null || menu_item.description === "") {
         Ext.getCmp('dishDescriptionPanel').hide();
       } else {
-        Ext.getCmp('dishDescriptionPanel').update(menu_item);
         Ext.getCmp('dishDescriptionPanel').show();
+        Ext.getCmp('dishDescriptionPanel').update(menu_item);
         Ext.getCmp('dishDescriptionPanel').onResize();
       }
 
       //Update ratings or hide if there aren't any
       var drp = Ext.getCmp('dishRatingPanel');
       if (menu_item.menu_item_ratings.length > 0) {
-        drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
-        drp.update(menu_item.menu_item_ratings[0]);
         drp.show();
+        drp.update(menu_item.menu_item_ratings[0]);
+        drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
+        drp.doComponentLayout();
         
         //Sencha sucks and they modify this in place to become an array of records instead of an array of {}s
         //I hate them
@@ -508,7 +508,6 @@ Crave.buildDishDisplayPanel = function() {
       }
 
       Ext.getCmp('dishLabelsPanel').update({labels: labels});
-      Ext.getCmp('dishLabelsPanel').onResize();
 
       //update the map
       Ext.getCmp('dishMap').update(menu_item.restaurant);
@@ -523,7 +522,6 @@ Crave.buildDishDisplayPanel = function() {
       Ext.getCmp('dishAddress').update(menu_item.restaurant);
 
       dishPanel.scroller.scrollTo({x: 0, y: 0});
-      dishPanel.doLayout();
       if (callback) {
         callback(menu_item);
       }

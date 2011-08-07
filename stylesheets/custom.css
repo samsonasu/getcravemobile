@@ -377,8 +377,7 @@ font-weight: lighter;
 }
 
 .dishDescription {
-  padding-left: 1em;
-  padding-right: 1em;
+  padding: .25em 1em .25em 1em;
 }
 
 .dishAddress {
