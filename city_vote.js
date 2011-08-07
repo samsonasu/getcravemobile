@@ -29,53 +29,73 @@ Crave.checkSupportedCity = function(coords, callback) {
 Crave.buildCityVotePanel = function() {
   var city_field = new Ext.form.Text({
     name: 'city',
-    cls: 'first'
+    cls: 'last',
+    placeholder: "My City"
   });
   var email_field = new Ext.form.Text({
     xtype: 'textfield',
-    cls: 'last',
+    cls: 'first',
     name: 'email', 
     inputType: 'email', 
-    placeHolder: "My E-mail Address"
+    placeHolder: "E-mail Address"
   });
   var form = new Ext.form.FormPanel({
     url: '/',
-    cls: 'framePanel voteForm',
+    cls: 'framePanel cityVoteForm',
     items:  [{
-      xtype: 'panel', 
-      cls: 'label',
-      html: "I want Crave in: "
-    },city_field,email_field,{
       xtype: 'panel',
       cls: 'label',
-      html: "Give us your e-mail address, and we'll let you know when Crave is ready in your home town.<br/><br/>For now, we'll show you results from downtown San Francisco"
+      style: 'text-align: center;',
+      html: "Let us know your city and email, and we'll let you know when we launch there."
+    },email_field,city_field, {
+      xtype: 'button',
+      text: "Vote for your city",
+      handler: function() {
+        form.submit();
+      }
     }],
     listeners: {
       beforesubmit: function() {
         if (!email_field.getValue()) {
           email_field.el.addCls('requiredField');
         } else {
-          alert('submit!');
+          Ext.Ajax.request({
+            method: "POST",
+            url: '/user_vote_city.json',
+            jsonData: {
+              "user_vote_city":{
+                "email":email_field.getValue(),
+                "latitude":Crave.latest_position.latitude,
+                "longitude":Crave.latest_position.longitude,
+                "city": city_field.getValue()
+                }
+            },
+            success: function() {
+              Crave.viewport.setActiveItem(Crave.nearbyPanel);
+            },
+            failure: TouchBS.handle_failure
+          });
+          return false;
         }
-        return false;
       }
     }
   });
   Crave.cityVotePanel = new Ext.Panel({
     //layout: 'fit',
-    dockedItems: Crave.create_titlebar({
-      items: [{
-        text: "Cancel",
-        handler: function() {
-          Crave.viewport.setActiveItem(Crave.nearbyPanel);
-        }
-      },{
-        text: "Vote",
-        handler: function() {
-          form.submit();
-        }
-      }]
-    }),
+    bodyCls: 'cityVoteBody',
+//    dockedItems: Crave.create_titlebar({
+//      items: [{
+//        text: "Cancel",
+//        handler: function() {
+//          Crave.viewport.setActiveItem(Crave.nearbyPanel);
+//        }
+//      },{
+//        text: "Vote",
+//        handler: function() {
+//          form.submit();
+//        }
+//      }]
+//    }),
     items: form,
     set_city: function(city) {
       city_field.setValue(city);

@@ -331,7 +331,7 @@ Crave.updateLocation = function(callback) {
     console.log("no location available: using sanfran");
     Ext.Msg.alert("No Location", "We couldn't find your location so we're showing results near San Fransisco.")
     position_callback({
-      latitude: 37.77494,
+      latitude: 47.77494,
       longitude: -122.41958
     });
   });

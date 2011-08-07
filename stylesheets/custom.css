@@ -1172,3 +1172,23 @@ padding-bottom: 6px;
 font-size: 22px;
 }
 
+
+
+.cityVoteBody {
+  background: url(../../images/vote-page@2x.png) 0 -16px no-repeat;
+  -webkit-background-size: 320px 480px;
+  height: 100%;
+}
+
+FORM.cityVoteForm {
+  padding-top: 180px;
+  background: transparent;
+  border: none;
+  margin: 0;
+}
+
+FORM.cityVoteForm .x-button {
+  margin-top: 8px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#6ccbbf), color-stop(50%,#5ebbb0), color-stop(51%,#54b3a8), color-stop(100%,#5cbaae));
+  color: white;
+}
