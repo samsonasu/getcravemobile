@@ -433,7 +433,7 @@ Crave.buildDishDisplayPanel = function() {
               var saved_menu_item = Ext.decode(response.responseText).user_saved_menu_item;
               var savedFlag = dishPanel.el.down(".savedFlag");
               savedFlag.addCls('saved');
-              savedFlag.dom.innerHTML = "Remove";
+              savedFlag.dom.innerHTML = "Saved";
               Crave.dishDisplayPanel.current_menu_item.user_saved_menu_item_id = saved_menu_item.id;
             }
           }
@@ -568,7 +568,7 @@ Crave.buildDishDisplayPanel = function() {
           failure: Crave.handle_failure,
           success: function(response, options) {
             var saved_menu_item = Ext.decode(response.responseText).user_saved_menu_item;
-            savedFlag.dom.innerHTML = "Remove";
+            savedFlag.dom.innerHTML = "Saved";
             savedFlag.addCls('saved');
             this.current_menu_item.user_saved_menu_item_id = saved_menu_item.id;
           }
