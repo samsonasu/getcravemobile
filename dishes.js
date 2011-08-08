@@ -545,6 +545,7 @@ Crave.buildDishDisplayPanel = function() {
     },
     toggle_saved: function() {
       var savedFlag = this.el.down(".savedFlag");
+      TouchBS.wait("Please wait...");
       if (this.current_menu_item.user_saved_menu_item_id) {
         Ext.Ajax.request({
           method: "DELETE",
@@ -552,6 +553,7 @@ Crave.buildDishDisplayPanel = function() {
           failure: Crave.handle_failure,
           scope: this,
           success: function(response, options) {
+            TouchBS.stop_waiting();
             savedFlag.dom.innerHTML = "Save";
             savedFlag.removeCls('saved');
             this.current_menu_item.saved_by_current_user = false;
@@ -570,6 +572,7 @@ Crave.buildDishDisplayPanel = function() {
           scope: this,
           failure: Crave.handle_failure,
           success: function(response, options) {
+            TouchBS.stop_waiting();
             var saved_menu_item = Ext.decode(response.responseText).user_saved_menu_item;
             savedFlag.dom.innerHTML = "Saved";
             savedFlag.addCls('saved');
