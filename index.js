@@ -291,59 +291,50 @@ Crave.alreadyCheckedCity = false;
 
 Crave.updateLocation = function(callback) {
   var position_callback = function(coords) {
+    //first store the position for later
     Crave.latest_position = coords;
-    Crave.checkSupportedCity(coords, function(supported, city) {
-      if (!supported && !Crave.alreadyCheckedCity) {
-        Crave.cityVotePanel.set_city(city);
-        Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
-        return;
-//        coords = { //force sanfran
-//          latitude: 37.77494,
-//          longitude: -122.41958
-//        }
-//
-//        if (!Crave.alreadyCheckedCity) { //don't badger the nice people
-//          Crave.alreadyCheckedCity = true;
-//          Ext.Msg.show({
-//            title: "Not Here yet.",
-//            msg: "Sorry, we're not available in " + city + " yet.  Do you want to vote for Crave to come to " + city + "?",
-//            buttons: Ext.MessageBox.YESNO,
-//            fn: function(btn) {
-//              if (btn === 'yes') {
-//                Crave.cityVotePanel.set_city(city);
-//                Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
-//              }
-//            }
-//          });
-//        }
-      }
-
-      //We have a good fix in San Fran, so never send them to the vote page
-      Crave.alreadyCheckedCity = true;
-      if (callback) {
-        callback(coords);
-      }
-    });   
+    
+    if (Crave.alreadyCheckedCity) {
+      if (callback){ callback(coords); }  
+    } else {  //if this is the first location, check if their city is supported
+  Crave.checkSupportedCity(coords, function(supported, city) {
+        Crave.alreadyCheckedCity = true;
+        if (!supported) {
+          Crave.cityVotePanel.set_city(city);
+          Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
+          return;
+        }
+        if (callback) {
+          callback(coords);
+        }
+      });
+    }
   };
   
   navigator.geolocation.getCurrentPosition(function(position) {
     var coords = position.coords;
     //spoof san fran for testing
-//    if(window.location.toString().indexOf("local")>-1) {
-//      coords = {
-//        latitude: 37.77494,
-//        longitude: -122.41958
-//      };
-//    }
+    if(window.location.toString().indexOf("local")>-1) {
+      coords = {
+        latitude: 37.77494,
+        longitude: -122.41958
+      };
+    }
     position_callback(coords);
     
   }, function() {
     //failure handler
     console.log("no location available: using sanfran");
-    Ext.Msg.alert("No Location", "We couldn't find your location so we're showing results near San Fransisco.")
-    position_callback({
-      latitude: 37.77494,
-      longitude: -122.41958
-    });
+    if (Crave.latest_position) {
+      Ext.Msg.alert("No Location", "We couldn't find your location so we're using your last known position.")
+      position_callback(Crave.latest_position);
+    } else {
+      Ext.Msg.alert("No Location", "We couldn't find your location so we're showing results near San Fransisco.")
+      position_callback({
+        latitude: 37.77494,
+        longitude: -122.41958
+      });
+    }
+
   });
 }

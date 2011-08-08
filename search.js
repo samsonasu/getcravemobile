@@ -158,6 +158,7 @@ Crave.buildSearchResultsPanel = function() {
     useClearIcon:true,
     ui: 'search',
     placeHolder: 'Search for dish, restaurant or diet...',
+    autoCorrect: false,
     listeners: {
       change: doTextSearch,
       beforesubmit: doTextSearch

@@ -196,11 +196,16 @@ TouchBS.get_address_component_type = function(address_components, type) {
 }
 
 TouchBS.wait = function(msg) {
-  Ext.getBody().mask(msg, 'x-mask-loading');
+  if (TouchBS.wait_mask) {
+    TouchBS.wait_mask.destroy();
+  }
+  TouchBS.wait_mask = new Ext.LoadMask(Ext.getBody(), {msg: msg});
+  TouchBS.wait_mask.show();
 };
 
 TouchBS.stop_waiting = function() {
-  Ext.getBody().unmask();
+  TouchBS.wait_mask.destroy();
+  TouchBS.wait_mask = null;
 };
 
 
@@ -257,7 +262,7 @@ if (Ext.is.iOS) {
 
     this.initialHeight = window.innerHeight;
     this.initialOrientation = this.orientation;
-    if (!PhoneGap) {
+    if (typeof(PhoneGap) === 'undefined') {
       this.scrollToTop();
     }
     if (fn) {

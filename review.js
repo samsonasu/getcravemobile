@@ -35,6 +35,7 @@ Crave.buildRateDishPanel = function() {
         ui:'normal',
         handler:function() {
           reviewText.blur();
+          TouchBS.wait("Submitting Review...");
           var rating = {
             menu_item_id: Crave.rateDishPanel.current_menu_item.id,
             user_id: Crave.currentUserId(),
@@ -49,6 +50,7 @@ Crave.buildRateDishPanel = function() {
             },
             failure: TouchBS.handle_failure,
             success: function(response, options) {
+              TouchBS.stop_waiting();
               Crave.rateDishPanel.setActiveItem(labelsPanel);
             }
           });
@@ -62,16 +64,16 @@ Crave.buildRateDishPanel = function() {
     ]
   });
 
+  var thanks_callback = function() {
+    Ext.Msg.alert("It's Been Craved!", 'Thanks for your review');
+    Crave.back_handler();
+    Crave.show_menu_item(Crave.rateDishPanel.current_menu_item.id); //reload
+  }
+
   var labelsPanel = Crave.buildAddLabelPanel({
     cancel_label: "Skip",
-    success_callback: function() {
-      Ext.Msg.alert("It's Been Craved!", 'Thanks for your review');
-      Crave.back_handler();
-    },
-    cancel_callback: function() {
-      Ext.Msg.alert("It's Been Craved!", 'Thanks for your review');
-      Crave.back_handler();
-    }
+    success_callback: thanks_callback,
+    cancel_callback: thanks_callback
   });
 
   Crave.rateDishPanel = new Ext.Panel({

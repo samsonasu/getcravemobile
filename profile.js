@@ -169,6 +169,11 @@ Crave.buildProfilePanel = function(mine) {
         var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
         setupBackStack(followerList);
         Crave.show_user_profile(record.data.user_id);
+      },
+      activate: function() {
+        if (mine) {
+          settingsButton.hide();
+        }
       }
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
@@ -194,6 +199,11 @@ Crave.buildProfilePanel = function(mine) {
         var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
         setupBackStack(followingList);
         Crave.show_user_profile(record.data.following_user_id);
+      },
+      activate: function() {
+        if (mine) {
+          settingsButton.hide();
+        }
       }
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
@@ -231,7 +241,6 @@ Crave.buildProfilePanel = function(mine) {
               }
             });
             backButton.show();
-            settingsButton.hide();  
           }
         }
       },{
@@ -250,7 +259,6 @@ Crave.buildProfilePanel = function(mine) {
           });
           profilePnl.setActiveItem(followingList, 'pop');
           backButton.show();
-          settingsButton.hide();  
         }
       },{
         flex: 1,
@@ -268,7 +276,6 @@ Crave.buildProfilePanel = function(mine) {
           });
           profilePnl.setActiveItem(followerList, 'pop');
           backButton.show();
-          settingsButton.hide();  
         }
       },]
     }]
@@ -288,6 +295,10 @@ Crave.buildProfilePanel = function(mine) {
     listeners: {
       activate: function() {
         userDishList.refresh();  //herp derp
+        console.log('userprofilepanel activate mine=' + mine);
+        if (mine) {
+          settingsButton.show();
+        }
       }
     }
   });
@@ -337,19 +348,17 @@ Crave.buildProfilePanel = function(mine) {
       activate: function(p) {
         if (mine) {
           if (!Crave.isLoggedIn()){
-            p.setActiveItem(profileLoginPnl);
+            p.setActiveItem(profileLoginPnl, false);
             settingsButton.hide();
           } else { 
             //make sure the user data is loaded
             //this will do nothign on subsequest calls
             p.load_user_data(Crave.currentUserId());
-            settingsButton.show();
           }
         }
-        
-        if (p.getActiveItem() === userProfilePnl) {
-          userDishList.refresh();  //herp derp
-        }
+
+        //proxy this event so that the settings button gets shown and hidden appropriately
+        p.getActiveItem().fireEvent('activate');
       }
     },
     set_title: function(title) {
