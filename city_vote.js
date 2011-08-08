@@ -71,7 +71,7 @@ Crave.buildCityVotePanel = function() {
                 }
             },
             success: function() {
-              Ext.Msg.alert("Thanks", "Thanks for your vote!");
+              Ext.Msg.alert("Thanks for voting!", "We'll let you know when we launch in your area.");
             },
             failure: TouchBS.handle_failure
           });
