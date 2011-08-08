@@ -257,8 +257,10 @@ if (Ext.is.iOS) {
 
     this.initialHeight = window.innerHeight;
     this.initialOrientation = this.orientation;
-    this.scrollToTop();
-     if (fn) {
+    if (!PhoneGap) {
+      this.scrollToTop();
+    }
+    if (fn) {
         fn.apply(scope || window);
     }
     return; 
