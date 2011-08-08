@@ -45,10 +45,10 @@ Ext.setup({
     }
     updateNearby();
     Crave.activityStore.load();
-    if (Crave.phonegap) {
-      document.addEventListener('resume', updateNearby, false);
-    }
-    
+//    if (Crave.phonegap) { //I guess they don't want this afterall?
+//      document.addEventListener('resume', updateNearby, false);
+//    }
+//
     var placesList = new Ext.List({
       itemTpl: restaurantTemplate,
       itemSelector: '.aplace',
@@ -291,8 +291,9 @@ Crave.alreadyCheckedCity = false;
 
 Crave.updateLocation = function(callback) {
   var position_callback = function(coords) {
+    Crave.latest_position = coords;
     Crave.checkSupportedCity(coords, function(supported, city) {
-      if (!supported) {
+      if (!supported && !Crave.alreadyCheckedCity) {
         Crave.cityVotePanel.set_city(city);
         Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
         return;
@@ -317,8 +318,8 @@ Crave.updateLocation = function(callback) {
 //        }
       }
 
-      //either way, set the coords and callback whoever wanted updateLocation
-      Crave.latest_position = coords;
+      //We have a good fix in San Fran, so never send them to the vote page
+      Crave.alreadyCheckedCity = true;
       if (callback) {
         callback(coords);
       }
@@ -328,12 +329,12 @@ Crave.updateLocation = function(callback) {
   navigator.geolocation.getCurrentPosition(function(position) {
     var coords = position.coords;
     //spoof san fran for testing
-    if(window.location.toString().indexOf("local")>-1) {
-      coords = {
-        latitude: 37.77494,
-        longitude: -122.41958
-      };
-    }
+//    if(window.location.toString().indexOf("local")>-1) {
+//      coords = {
+//        latitude: 37.77494,
+//        longitude: -122.41958
+//      };
+//    }
     position_callback(coords);
     
   }, function() {

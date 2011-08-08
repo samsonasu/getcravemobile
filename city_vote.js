@@ -61,7 +61,7 @@ Crave.buildCityVotePanel = function() {
         } else {
           Ext.Ajax.request({
             method: "POST",
-            url: '/user_vote_city.json',
+            url: '/user_vote_cities.json',
             jsonData: {
               "user_vote_city":{
                 "email":email_field.getValue(),
@@ -71,7 +71,7 @@ Crave.buildCityVotePanel = function() {
                 }
             },
             success: function() {
-              Crave.viewport.setActiveItem(Crave.nearbyPanel);
+              Ext.Msg.alert("Thanks", "Thanks for your vote!");
             },
             failure: TouchBS.handle_failure
           });
