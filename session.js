@@ -14,6 +14,7 @@ Crave.currentUserId = function() {
 
 Crave.sign_out = function() {
   localStorage.setItem("uid","");
+  Crave.myProfilePanel.displayed_user_id = null;
 }
 
 Crave.handle_failure = function() {
