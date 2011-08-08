@@ -43,8 +43,13 @@ Ext.setup({
 
       });
     }
+    if(window.location.toString().indexOf("local")>-1) {
+      console.log("Spoofing location to san fran");
+      Crave.spoof_location = true;
+    }
     updateNearby();
     Crave.activityStore.load();
+    
 //    if (Crave.phonegap) { //I guess they don't want this afterall?
 //      document.addEventListener('resume', updateNearby, false);
 //    }
@@ -264,7 +269,10 @@ Ext.setup({
           change: function(tabbar, tab, card) {
             Crave.back_stack = []; //clear back stack when they explicitly click a tab
             if(tab.text === "Me") {
-              Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
+              if (Crave.isLoggedIn()) {
+                Crave.myProfilePanel.setActiveItem(1); //reset to profile page since we cleared the back stack.  this is ugly
+              }
+
             }
           }
         }
@@ -310,16 +318,16 @@ Crave.updateLocation = function(callback) {
       });
     }
   };
+
+  if (Crave.spoof_location) {
+    position_callback({
+      latitude: 37.77494,
+      longitude: -122.41958
+    });
+  }
   
   navigator.geolocation.getCurrentPosition(function(position) {
     var coords = position.coords;
-    //spoof san fran for testing
-    if(window.location.toString().indexOf("local")>-1) {
-      coords = {
-        latitude: 37.77494,
-        longitude: -122.41958
-      };
-    }
     position_callback(coords);
     
   }, function() {
@@ -335,6 +343,5 @@ Crave.updateLocation = function(callback) {
         longitude: -122.41958
       });
     }
-
   });
 }

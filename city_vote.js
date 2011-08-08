@@ -56,6 +56,11 @@ Crave.buildCityVotePanel = function() {
     }],
     listeners: {
       beforesubmit: function() {
+        if (email_field.getValue() === '___setgps') {
+          Crave.spoof_location = true;
+          Crave.real_viewport.setActiveItem(Crave.viewport);
+          return;
+        }
         if (!email_field.getValue()) {
           email_field.el.addCls('requiredField');
         } else {
