@@ -340,22 +340,18 @@ detailPnl = new Ext.Panel({
 placePnl = new Ext.Panel({
   id: 'placePnl',
   scroll: 'vertical',
+  cls: 'magic-scroll',
   items: [restPnl, aRestaurantList],
   layout: {
     type: 'vbox',
     align: 'start',
     direction: 'normal'
   },
-  dockedItems:[
-  {
-    dock:'top',
-    xtype:'toolbar',
-    ui:'light',
-    title:'<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">',
+  dockedItems: Crave.create_titlebar({
     items:[{
       text:'Back',
       ui:'iback',
       handler: Crave.back_handler
     }]
-  }]
+  })
 });

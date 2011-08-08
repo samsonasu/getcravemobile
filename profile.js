@@ -15,7 +15,7 @@ Crave.buildProfilePanel = function(mine) {
           //they just returned to the "other" profile panel via the back button, which means they were on someone else's profile
           profilePnl.load_user_data(backInfo.user_id);
         }
-        profilePnl.setActiveItem(subPanel);
+        profilePnl.setActiveItem(subPanel, false);
       }
     });
   }
@@ -98,6 +98,7 @@ Crave.buildProfilePanel = function(mine) {
       indexBar: false,
       store: savedDishStore, //dishes.js
       scroll:'vertical',
+      cls: 'magic-scroll',
       hideOnMaskTap: false,
       width:'100%',
       height:'100%',
@@ -161,6 +162,7 @@ Crave.buildProfilePanel = function(mine) {
     cardSwitchAnimation: 'pop',
     indexBar: false,
     store: followerStore,
+    loadingText: "Loading...",
     scroll:'vertical',
     hideOnMaskTap: false,
     clearSectionOnDeactivate:true,
@@ -174,6 +176,8 @@ Crave.buildProfilePanel = function(mine) {
         if (mine) {
           settingsButton.hide();
         }
+        followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/followers.json";
+        followerStore.load();
       }
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
@@ -185,6 +189,7 @@ Crave.buildProfilePanel = function(mine) {
     profile_panel_title: "Following",
     cls: 'followList',
     itemSelector: '.followUser',
+    loadingText: "Loading...",
     singleSelect: true,
     grouped: true,
     data: {user: {}},
@@ -204,6 +209,8 @@ Crave.buildProfilePanel = function(mine) {
         if (mine) {
           settingsButton.hide();
         }
+        followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/following.json";
+        followerStore.load();
       }
     },
     plugins: [new Ext.plugins.ListPagingPlugin()]
@@ -247,8 +254,6 @@ Crave.buildProfilePanel = function(mine) {
         flex: 1,
         text: "<span class='chevrony'></span><span class='number following'></span><span class='text'>Following</span>",
         handler: function() {
-          followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/following.json";
-          followerStore.load();
           Crave.back_stack.push({
             fn: function() {
               profilePnl.setActiveItem(userProfilePnl, 'pop');
@@ -264,8 +269,6 @@ Crave.buildProfilePanel = function(mine) {
         flex: 1,
         text: "<span class='chevrony'></span><span class='number followers'></span><span class='text'>Followers</span>",
         handler: function() {
-          followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/followers.json";
-          followerStore.load();
           Crave.back_stack.push({
             fn: function() {
               profilePnl.setActiveItem(userProfilePnl, 'pop');
@@ -295,7 +298,6 @@ Crave.buildProfilePanel = function(mine) {
     listeners: {
       activate: function() {
         userDishList.refresh();  //herp derp
-        console.log('userprofilepanel activate mine=' + mine);
         if (mine) {
           settingsButton.show();
         }
@@ -370,8 +372,6 @@ Crave.buildProfilePanel = function(mine) {
       }
       profilePnl.setActiveItem(userProfilePnl, 'pop');
       userProfilePnl.scroller.scrollTo({x: 0, y: 0});
-  
-
       profilePnl.setLoading(true);
       //load basic info
       Ext.Ajax.request({
@@ -502,9 +502,8 @@ Crave.buildSavedPanel = function() {
     indexBar: false,
     store: savedDishStore,
     scroll:'vertical',
+    cls: 'magic-scroll',
     hideOnMaskTap: false,
-    width:'100%',
-    height:'100%',
     clearSectionOnDeactivate:true,
     listeners: {
       itemtap: function(dataView, index, item, e) {

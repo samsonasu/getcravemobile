@@ -156,11 +156,12 @@ Crave.buildDishDisplayPanel = function() {
   
   //receive the image from phonegap, upload it, and associate with the correct menu item
   var uploadHandler = function(imageURI) { //get the photo
-    console.log('got a photo at: ' + imageURI);
-    var menu_item_id = Crave.dishDisplayPanel.current_menu_item.id; //get a closure on this for later
-    var user_id = Crave.currentUserId(); //this too, in case they log out real quick (unlikely)
     addSheet.hide();
     TouchBS.wait("Uploading photo...");
+
+    var menu_item_id = Crave.dishDisplayPanel.current_menu_item.id; //get a closure on this for later
+    var user_id = Crave.currentUserId(); //this too, in case they log out real quick (unlikely)
+
     var fail_handler = function() {
       TouchBS.stop_waiting();
       Ext.Msg.show({
@@ -173,7 +174,8 @@ Crave.buildDishDisplayPanel = function() {
           } 
         }
       });
-    }
+    };
+
     Crave.uploadPhoto(imageURI, function(photo_url) { //upload it to s3
       //console.log("posting " + photo_url + "to menu_item_photos.json, mi=" + menu_item_id + " user=" + user_id);
       Ext.Ajax.request({ //post the association to the menu item
@@ -349,7 +351,10 @@ Crave.buildDishDisplayPanel = function() {
       data: {user: {}},
       listeners: {  
         afterrender: function(c){
-          c.el.on('click', function(){
+          c.el.on('click', function(comp, target){
+            if (target instanceof HTMLAnchorElement) {
+              return; //they clicked on the link to a person so dont do anything
+            }
             Crave.dishDisplayPanel.setup_back_stack(dishPanel);
             Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
           });
