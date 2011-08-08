@@ -15,7 +15,7 @@ Ext.regModel('Dish',
             if(record.get('menu_item_avg_rating_count').avg_rating) {
                 return record.get('menu_item_avg_rating_count').avg_rating.toString();
             } else {
-                return "Unrated";
+                return "(Unrated)"; //parens are so it gets sorted after the number
             }
         }
       },{

@@ -72,7 +72,8 @@ Crave.magic_scroll_handler = function(comp,target,options) {
 //config.title is the title, or it will be the logo
 //config.items is any buttons you want (back button, etc)
 Crave.create_titlebar = function(config) {
-  var title = config.title || '<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">';
+  var default_title = '<img class="cravelogo" src="../images/crave-logo-horizontal-white@2x.png">';
+  var title = config.title || default_title;
   return {
     dock:'top',
     xtype:'toolbar',
@@ -90,7 +91,7 @@ Crave.create_titlebar = function(config) {
       }
     },
     set_title: function(title) {
-       var theTitle = title || '<img class="cravelogo" src="../images/crave-logo-horizontal-white.png">';
+       var theTitle = title || default_title;
        this.setTitle(theTitle);
     }
   }

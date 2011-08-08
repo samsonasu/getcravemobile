@@ -1,6 +1,6 @@
 Crave.buildLoginPanel = function() {
   return new Ext.Panel({
-    html:'<div class="loginPanel"><img src="../images/profile-cold-food.png"><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="#" onclick="Crave.facebookLogin();" class="loginButton"></a></div>',
+    html:'<div class="loginPanel"><img src="../images/dishes-profile-cold@2x.png"><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="#" onclick="Crave.facebookLogin();" class="loginButton"></a></div>',
     height: '100%'
   });
 }

@@ -9,6 +9,7 @@ Ext.setup({
     if(window.location.toString().indexOf("local")>-1) {
       //urlPrefix = '/wg/proxy.php?url=http://blooming-water-228.heroku.com';
       urlPrefix = '/cravecomp';
+      Crave.spoof_location = true;
       local = true;
     }
 
@@ -24,7 +25,7 @@ Ext.setup({
       }
     }, this);
     
-    updateNearby = function() {
+    var updateNearby = function() {
       Crave.updateLocation(function(coords) {
         dishStore.proxy.extraParams = {
           "lat": coords.latitude,
@@ -43,10 +44,7 @@ Ext.setup({
 
       });
     }
-    if(window.location.toString().indexOf("local")>-1) {
-      console.log("Spoofing location to san fran");
-      Crave.spoof_location = true;
-    }
+
     updateNearby();
     Crave.activityStore.load();
     
@@ -187,24 +185,24 @@ Ext.setup({
           xtype:'segmentedbutton',
           cls: 'filterButtons',
           items:[{
-            text:'Food',
-            id:'dishesButton',
-            pressed:true,
-            handler:function () {
-              Crave.nearbyPanel.setActiveItem(dishList);
-            },
-            ui:'round',
-            width:'100'
-          },{
             text:'Places',
             id:'placesButton',
-            pressed:false,
+            pressed: true,
             handler:function () {
               Crave.nearbyPanel.setActiveItem(placesList);
             },
             ui:'round',
             width:'100'
-          }]
+          },{
+            text:'Food',
+            id:'dishesButton',
+            pressed: false,
+            handler:function () {
+              Crave.nearbyPanel.setActiveItem(dishList);
+            },
+            ui:'round',
+            width:'100'
+          },]
         },{
           xtype:'button',
           iconCls:'filtersButton',
@@ -305,7 +303,7 @@ Crave.updateLocation = function(callback) {
     if (Crave.alreadyCheckedCity) {
       if (callback){ callback(coords); }  
     } else {  //if this is the first location, check if their city is supported
-  Crave.checkSupportedCity(coords, function(supported, city) {
+      Crave.checkSupportedCity(coords, function(supported, city) {
         Crave.alreadyCheckedCity = true;
         if (!supported) {
           Crave.cityVotePanel.set_city(city);
@@ -324,6 +322,7 @@ Crave.updateLocation = function(callback) {
       latitude: 37.77494,
       longitude: -122.41958
     });
+    return;
   }
   
   navigator.geolocation.getCurrentPosition(function(position) {

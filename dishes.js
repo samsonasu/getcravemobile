@@ -3,24 +3,25 @@ Ext.regModel('MenuLabel', {
 });
 
 var dishStore = new Ext.data.Store({
-    model: 'Dish',
-    clearOnPageLoad: false,
-    sorters: [
-      {property: 'arating', direction: 'DESC'},
-      {property: 'distance', direction: 'ASC'}
-    ],
-    getGroupString : function(record) {
-        return Crave.ratingDisplay(record.get('rating'));
-    },
-    proxy: {
-       type:'ajax',
-       url: '/items/nearby.json',
-       reader: {
-           type:'json',
-           record:'menu_item'
-       }
+  model: 'Dish',
+  clearOnPageLoad: false,
+  sorters: [
+    {property: 'rating', direction: 'DESC'},
+    {property: 'distance', direction: 'ASC'}
+  ],
+  getGroupString : function(record) {
+    return Crave.ratingDisplay(record.get('rating'));
+  },
+  proxy: {
+    type:'ajax',
+    url: '/items/nearby.json',
+    reader: {
+      type:'json',
+      record:'menu_item'
     }
+  }
 });
+
 Crave.buildNewDishPanel = function() {
   var submitForm = function() {
     var menu_item = form.getValues();

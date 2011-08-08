@@ -14,7 +14,7 @@ Crave.buildSettingsPanel = function() {
       cls: 'framePanel',
       items: [{
          cls: 'settingItem header',
-         html: '<img src="../images/facebook.png"><span class="title">Facebook</span>'
+         html: '<img src="../images/fb-settings-icon@2x.png"><span class="title">Facebook</span>'
       },{
         layout: 'hbox',
         cls: 'settingItem',
