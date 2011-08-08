@@ -189,10 +189,10 @@ Crave.buildDishDisplayPanel = function() {
           }
         },
         success: function() {
-          TouchBS.stop_waiting();
-          Ext.Msg.alert("Thanks for the photo!", "Keep on Cravin'");
           Crave.dishDisplayPanel.load_dish_data(menu_item_id, function() {
             imageCarousel.setActiveItem(imageCarousel.items.length-1);
+            TouchBS.stop_waiting();
+            Ext.Msg.alert("Thanks for the photo!", "Keep on Cravin'");
           });
         }, 
         failure: fail_handler
