@@ -297,7 +297,7 @@ Crave.buildProfilePanel = function(mine) {
   var backButton = new Ext.Button({
     text: "Back",
     hidden: !!mine,
-    ui: 'back',
+    ui: 'iback',
     handler: Crave.back_handler
   });
 

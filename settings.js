@@ -5,7 +5,7 @@ Crave.buildSettingsPanel = function() {
     dockedItems: Crave.create_titlebar({
       items:[{
         text: "Back", 
-        ui: 'back', 
+        ui: 'iback',
         handler: Crave.back_handler
       }]
     }),

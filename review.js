@@ -24,7 +24,7 @@ Crave.buildRateDishPanel = function() {
     dockedItems:[Crave.create_titlebar({
       items:[{
         text:'Back',
-        ui:'back',
+        ui:'iback',
         handler: function() {
           reviewText.setValue("");
           Crave.rateDishPanel.clear_stars();

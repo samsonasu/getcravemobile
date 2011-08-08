@@ -21,70 +21,72 @@ var dishStore = new Ext.data.Store({
        }
     }
 });
+Crave.buildNewDishPanel = function() {
+  var submitForm = function() {
+    var menu_item = form.getValues();
+    menu_item.restaurant_id = localStorage.getItem('editRestaurantId');
+    menu_item.user_id = localStorage.getItem('uid');
+    TouchBS.wait("Adding Dish");
+    Ext.Ajax.request({
+       url: '/items.json',
+       method: 'POST',
+       jsonData: {
+          menu_item: menu_item
+       },
+       success: function (response, options) {
+         TouchBS.stop_waiting();
+         Ext.Msg.alert("Thanks!", "Keep on Cravin'");
+         var menu_item = Ext.decode(response.responseText).menu_item
+         Crave.show_menu_item(menu_item.id);
+       },
+       failure: TouchBS.handle_failure
+    });
+  };
+  var name_field = new Ext.form.Text({
+     xtype: 'textfield',
+     placeHolder:'Name',
+     name: 'name',
+     id: 'menuItemName'
+  });
 
-var newDishForm = new Ext.form.FormPanel({
-    scroll: 'vertical',
-    dockedItems:[
-       {
-           dock:'top',
-           xtype:'toolbar',
-           ui:'light',
-           title:'Crave',
-           items:[{text:'Back',ui:'back', handler:Crave.back_handler}]
-       }
-    ],
-    items: [
-       {xtype: 'fieldset', title: 'New Restaurant', items: [
-            {
-                xtype: 'textfield',
-                hidden:true,
-                name: 'menu_item[restaurant_id]',
-                id: 'restaurantId'
-		    },
-           {
-               xtype: 'textfield',
-               label:'Name',
-               name: 'menu_item[name]',
-               id: 'menuItemName'
-           },
-           {
-               xtype: 'textfield',
-               label:'Description',
-               name: 'menu_item[description]',
-               id: 'menuItemDescription'
-           },
-           {
-               xtype: 'textfield',
-               hidden:true,
-               name: 'menu_item[user_id]',
-               id: 'userId'
-           },
+  var description_field = new Ext.form.TextArea({
+    xtype: 'textareafield',
+    placeHolder: 'Description',
+    name: 'description',
+    id: 'menuItemDescription'
+  });
 
-           {
-               xtype:'button',
-               text: 'Submit',
-               handler: function() {
-                   Ext.getCmp('restaurantId').setValue(localStorage.getItem('editRestaurantId'));
-                   Ext.getCmp('userId').setValue(localStorage.getItem("uid"));
-                   newDishForm.submit({
-                       url: '/menu_items',
-                       method: 'post',
-                       submitDisabled: true,
-                       waitMsg: 'Saving Data...Please wait.',
-                       success: function (objForm,httpRequest) {
-                           var mbox = new Ext.MessageBox({});
-                           mbox.alert("Record Saved");
-                           //redirect back to restaurant list?
-                       },
-                       failure: function() {
-                           console.log('submissionFailed');
-                       }
-                   })
-               }
-           }
-        ]}
-    ]
-});
+  var form = new Ext.form.FormPanel({
+    cls: 'framePanel',
+    height: "100%",
+    items: [name_field,description_field],
+    listeners: {
+      beforesubmit: function() {
+        submitForm();
+        return false;
+      }
+    }
+  });
+
+  Crave.newDishPanel = new Ext.Panel({
+    height: '100%',
+    //layout: 'fit',
+    dockedItems:Crave.create_titlebar({
+      title: "Add a Menu Item",
+      items: [{
+        ui: 'iback',
+        handler: Crave.back_handler
+      },{
+        text: 'Submit',
+        handler: submitForm
+      }]
+    }),
+    items: form
+  });
+
+  return Crave.newDishPanel;
+};
+
 
 //this is the new dish display, and it's not done yet so don't use it.
 Crave.buildDishDisplayPanel = function() {
@@ -128,7 +130,7 @@ Crave.buildDishDisplayPanel = function() {
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
-        ui: 'back',
+        ui: 'iback',
         handler: Crave.back_handler
       },{
         text: "Add",
@@ -264,13 +266,12 @@ Crave.buildDishDisplayPanel = function() {
   });
 
   var dishPanel = new Ext.Panel({
-    layout: 'vbox',
     width: '100%',
     scroll: 'vertical',
     dockedItems: Crave.create_titlebar({
       items: [{
         text: 'Back',
-        ui: 'back',
+        ui: 'iback',
         handler: Crave.back_handler
       }, {
         text: "Add", 
@@ -402,14 +403,14 @@ Crave.buildDishDisplayPanel = function() {
     items: [dishPanel, reviewsPanel, labelsPanel],
     activeItem: 0, 
     load_dish_data: function(dish_id, callback) {
-      dishPanel.setLoading('Loading');
+      dishPanel.setLoading('Loading...');
+      Crave.dishDisplayPanel.setActiveItem(dishPanel, false);
       Ext.Ajax.request({
         method: "GET",
         url: '/items/' + dish_id + '.json',
         success: function(response, options) {
           var menu_item = Ext.decode(response.responseText).menu_item;
           Crave.dishDisplayPanel.load_dish(menu_item, callback);
-          //and we're done
           dishPanel.setLoading(false);
         }
       });
@@ -431,7 +432,7 @@ Crave.buildDishDisplayPanel = function() {
               var saved_menu_item = Ext.decode(response.responseText).user_saved_menu_item;
               var savedFlag = dishPanel.el.down(".savedFlag");
               savedFlag.addCls('saved');
-              savedFlag.dom.innerHTML = "Remove";
+              savedFlag.dom.innerHTML = "Saved";
               Crave.dishDisplayPanel.current_menu_item.user_saved_menu_item_id = saved_menu_item.id;
             }
           }
@@ -465,21 +466,22 @@ Crave.buildDishDisplayPanel = function() {
       }
       //Dish header is easy, so is description
       Ext.getCmp('dishDetailHeader').update(menu_item);
-      Ext.getCmp('dishDetailHeader').onResize();
+      //Ext.getCmp('dishDetailHeader').doComponentLayout();
       if (menu_item.description == null || menu_item.description === "") {
         Ext.getCmp('dishDescriptionPanel').hide();
       } else {
-        Ext.getCmp('dishDescriptionPanel').update(menu_item);
         Ext.getCmp('dishDescriptionPanel').show();
+        Ext.getCmp('dishDescriptionPanel').update(menu_item);
         Ext.getCmp('dishDescriptionPanel').onResize();
       }
 
       //Update ratings or hide if there aren't any
       var drp = Ext.getCmp('dishRatingPanel');
       if (menu_item.menu_item_ratings.length > 0) {
-        drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
-        drp.update(menu_item.menu_item_ratings[0]);
         drp.show();
+        drp.update(menu_item.menu_item_ratings[0]);
+        drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
+        drp.doComponentLayout();
         
         //Sencha sucks and they modify this in place to become an array of records instead of an array of {}s
         //I hate them
@@ -506,7 +508,6 @@ Crave.buildDishDisplayPanel = function() {
       }
 
       Ext.getCmp('dishLabelsPanel').update({labels: labels});
-      Ext.getCmp('dishLabelsPanel').onResize();
 
       //update the map
       Ext.getCmp('dishMap').update(menu_item.restaurant);
@@ -521,7 +522,6 @@ Crave.buildDishDisplayPanel = function() {
       Ext.getCmp('dishAddress').update(menu_item.restaurant);
 
       dishPanel.scroller.scrollTo({x: 0, y: 0});
-      dishPanel.doLayout();
       if (callback) {
         callback(menu_item);
       }
@@ -566,7 +566,7 @@ Crave.buildDishDisplayPanel = function() {
           failure: Crave.handle_failure,
           success: function(response, options) {
             var saved_menu_item = Ext.decode(response.responseText).user_saved_menu_item;
-            savedFlag.dom.innerHTML = "Remove";
+            savedFlag.dom.innerHTML = "Saved";
             savedFlag.addCls('saved');
             this.current_menu_item.user_saved_menu_item_id = saved_menu_item.id;
           }
