@@ -146,11 +146,11 @@ Ext.setup({
             //get active button, do appropriate search, set card in searchPnl
             if(Ext.getCmp('placesButton').pressed) {
               Crave.viewport.setActiveItem(Crave.searchResultsPanel);
-              Crave.searchResultsPanel.setActiveItem(2);
+              Crave.searchResultsPanel.setActiveItem(1, false);
             }
             if(Ext.getCmp('dishesButton').pressed) {
               Crave.viewport.setActiveItem(Crave.searchResultsPanel);
-              Crave.searchResultsPanel.setActiveItem(1);
+              Crave.searchResultsPanel.setActiveItem(0, false);
             }
           }
         }
@@ -163,7 +163,7 @@ Ext.setup({
       items: [dishList,placesList,newRestaurant],
       layout: 'card',
       width:'100%',
-      activeItem: 0,
+      activeItem: 1,
       height:'100%',
       dockedItems: [{
         id: 'topPanel',
@@ -294,27 +294,33 @@ Ext.setup({
 });
 
 Crave.alreadyCheckedCity = false;
-
+Crave.latest_position = {};
+Crave.latestPositionText = function() {
+  var text = Crave.latest_position.city;
+  if (Crave.latest_position.state) {
+    text = text + ", " + Crave.latest_position.state;
+  }
+  return text;
+}
 Crave.updateLocation = function(callback) {
   var position_callback = function(coords) {
     //first store the position for later
-    Crave.latest_position = coords;
+    Crave.latest_position.latitude = coords.latitude;
+    Crave.latest_position.longitude = coords.longitude;
     
-    if (Crave.alreadyCheckedCity) {
-      if (callback){ callback(coords); }  
-    } else {  //if this is the first location, check if their city is supported
-      Crave.checkSupportedCity(coords, function(supported, city) {
-        Crave.alreadyCheckedCity = true;
-        if (!supported) {
-          Crave.cityVotePanel.set_city(city);
-          Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
-          return;
-        }
-        if (callback) {
-          callback(coords);
-        }
-      });
-    }
+    Crave.checkSupportedCity(coords, function(supported, city, state) {
+      Crave.latest_position.city = city;
+      Crave.latest_position.state = state;
+
+      if (!supported && !Crave.alreadyCheckedCity) {
+        Crave.real_viewport.setActiveItem(Crave.cityVotePanel);
+      }
+      
+      Crave.alreadyCheckedCity = true;
+      if (callback) {
+        callback(Crave.latest_position);
+      }
+    });
   };
 
   if (Crave.spoof_location) {
@@ -332,7 +338,7 @@ Crave.updateLocation = function(callback) {
   }, function() {
     //failure handler
     console.log("no location available: using sanfran");
-    if (Crave.latest_position) {
+    if (Crave.latest_position.latitude) {
       Ext.Msg.alert("No Location", "We couldn't find your location so we're using your last known position.")
       position_callback(Crave.latest_position);
     } else {
