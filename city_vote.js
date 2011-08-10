@@ -49,7 +49,7 @@ Crave.buildCityVotePanel = function() {
     items:  [{
       xtype: 'panel',
       cls: 'label',
-      style: 'text-align: center;',
+      style: 'text-align: center;margin-bottom: 6px;',
       html: "Let us know your city and email, and we'll let you know when we launch there."
     },email_field,city_field, {
       xtype: 'button',

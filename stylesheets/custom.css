@@ -94,7 +94,7 @@ padding: .3em .3em;
 
 /** frame panel thing used on the filters screen and probably elsewhere **/
 .framePanel {
-  margin-top: .5em;
+  margin: .5em 0 .5em 0;
   /*margin: 0em .5em 1em .5em;*/
   border-radius: 1em;
   background: white;
@@ -1199,7 +1199,7 @@ font-size: 22px;
 }
 
 FORM.cityVoteForm {
-  padding-top: 200px;
+  padding-top: 220px;
   background: transparent;
   border: none;
   margin: 0;
