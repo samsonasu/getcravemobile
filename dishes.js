@@ -466,7 +466,8 @@ Crave.buildDishDisplayPanel = function() {
                   c.bs_expanded = !c.bs_expanded;
                   if (c.bs_expanded) {
                     img.style.webkitTransform = "translate(0, 0)";
-                    imageCarousel.setHeight(img.height);
+                    //45 is the height of the title bar
+                    imageCarousel.setHeight(Math.max(img.height, dishPanel.getHeight()-45));
                   } else {
                     img.style.webkitTransform = "translate(0, -" + img.height/2 + "px)";
                     setTimeout(function() {
