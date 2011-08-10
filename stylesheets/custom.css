@@ -21,7 +21,7 @@ body {
   background: url('../../images/arrow-gray@2x.png') no-repeat;
   -webkit-background-size: .6em 1em;
   width: 8px;
-  height: 13px;
+  height: 15px;
   margin: 28px 3px 0 0;
 }
 .adish {overflow:hidden;}
@@ -1210,3 +1210,26 @@ FORM.cityVoteForm .x-button {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#6ccbbf), color-stop(50%,#5ebbb0), color-stop(51%,#54b3a8), color-stop(100%,#5cbaae));
   color: white;
 }
+
+/*pull to refresh*/
+
+.x-list-pullrefresh-message {
+font-weight: bold;
+font-size: 1.1em;
+margin-bottom: 0.1em;
+text-align: left;
+line-height: 21px;
+color: #333;
+}
+
+.x-list-pullrefresh-wrap {
+width: 20em;
+font-size: 0.7em;
+padding-left: 10px;
+}
+
+.x-list-pullrefresh-updated {
+text-align: left;
+}
+
+
