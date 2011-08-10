@@ -82,7 +82,7 @@ Crave.activityPanel = new Ext.Panel({
     grouped: true,
     indexBar: false,
     store: Crave.activityStore,
-    plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({})]
+    plugins: [new TouchBS.BetterPagingPlugin(), new Ext.plugins.PullRefreshPlugin({})]
   }
 });
 

@@ -240,20 +240,22 @@ Crave.buildSearchResultsPanel = function() {
 //    },
     {
       text:'Places',
+      cls: 'placesButton',
       pressed: true,
       handler:function () {
         Crave.searchResultsPanel.setActiveItem(restaurantSearchList);
       },
       ui:'round',
-      width:'75'
+      width: 100
     },{
       text:'Food',
+      cls: 'dishesButton',
       pressed: false,
       handler:function () {
         Crave.searchResultsPanel.setActiveItem(dishSearchList);
       },
       ui:'round',
-      width:'75'
+      width: 100
     }]
   });
 
@@ -274,7 +276,7 @@ Crave.buildSearchResultsPanel = function() {
         iconCls:'filtersButton',
         handler: function() {
           Crave.back_stack.push({
-            panel: Crave.nearbyPanel,
+            panel: Crave.searchResultsPanel,
             anim: {
               type: 'slide',
               direction: 'down'
@@ -393,7 +395,7 @@ Crave.buildFilterPanel = function() {
         text:'Cancel',
         ui:'normal',
         handler: function() {
-          labelList.clear_filters();
+          labelList.setSelectedRecords(Crave.filterPanel.selected_records);
           Crave.back_handler();
         }
       },{
@@ -405,11 +407,13 @@ Crave.buildFilterPanel = function() {
             filters: labelList.get_filters(),
             d: dfb.filter_value
           });
+          Crave.filterPanel.selected_records = labelList.getSelectedRecords();
           Crave.viewport.setActiveItem(Crave.searchResultsPanel);
           //specifically not calling back_handler to preserve it for search panel
         }
       }]
-    }]
+    }],
+    selected_records: []
   });
 
   return Crave.filterPanel;

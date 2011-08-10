@@ -455,7 +455,7 @@ border-bottom-left-radius: 0.4em;*/
   text-shadow: 0px -1px #571e15;
 }
 
-#dishesButton.x-button span {
+.dishesButton.x-button span {
 	background: url('../../images/dish-icon-OFF@2x.png') no-repeat;
     -webkit-background-size: 18px 14px;
 	padding: 0;
@@ -463,11 +463,11 @@ border-bottom-left-radius: 0.4em;*/
     text-indent: 24px;
     margin: 0 8px;
 }
-#dishesButton.x-button-pressed span {
+.dishesButton.x-button-pressed span {
    background: url('../../images/dish-icon-ON@2x.png') no-repeat;   
 }
 
-#placesButton.x-button span {
+.placesButton.x-button span {
     background: url('../../images/restaurant-icon-OFF@2x.png') no-repeat;
     -webkit-background-size: 18px 14px;
 	padding: 0;
@@ -475,7 +475,7 @@ border-bottom-left-radius: 0.4em;*/
     text-indent: 24px;
     margin: 0 8px;
 }
-#placesButton.x-button-pressed span {
+.placesButton.x-button-pressed span {
     background: url('../../images/restaurant-icon-ON@2x.png') no-repeat;
 }
 

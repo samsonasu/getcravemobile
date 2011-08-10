@@ -62,7 +62,7 @@ Ext.setup({
       cls: 'magic-scroll highlightPressed',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
-      plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
+      plugins: [new TouchBS.BetterPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
         refreshFn: function(cb, scope) {
           Crave.updateLocation(function(coords) {
             places.proxy.extraParams.lat = coords.latitude;
@@ -95,7 +95,7 @@ Ext.setup({
       scroll:'vertical',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
-      plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
+      plugins: [new TouchBS.BetterPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
         refreshFn: function(cb, scope) {
           Crave.updateLocation(function(coords) {
             dishStore.proxy.extraParams.lat = coords.latitude;
@@ -188,6 +188,7 @@ Ext.setup({
           items:[{
             text:'Places',
             id:'placesButton',
+            cls: 'placesButton',
             pressed: true,
             handler:function () {
               Crave.nearbyPanel.setActiveItem(placesList);
@@ -197,6 +198,7 @@ Ext.setup({
           },{
             text:'Food',
             id:'dishesButton',
+            cls: 'dishesButton',
             pressed: false,
             handler:function () {
               Crave.nearbyPanel.setActiveItem(dishList);

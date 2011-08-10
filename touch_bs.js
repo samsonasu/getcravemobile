@@ -271,3 +271,30 @@ if (Ext.is.iOS) {
     return; 
   };
 }
+
+TouchBS.BetterPagingPlugin = Ext.extend(Ext.plugins.ListPagingPlugin, {
+  onListUpdate: function() {
+    var ret = TouchBS.BetterPagingPlugin.superclass.onListUpdate.call(this);
+
+    //we dont' support the "total" property yet
+    //should probably be something like
+    //this.list.store.currentPage == this.list.store.getTotalCount() / this.list.store.pageSize
+    if (this.list.store.getCount() % this.list.store.pageSize === 0)
+      this.el.show();
+    else
+      this.el.hide();
+
+    return ret;
+  }
+});
+
+Ext.override(Ext.data.Store, {
+  getTotalCount: function() {
+    var total = this.proxy.reader.jsonData[this.proxy.reader.totalProperty];
+    if (typeof(total) === 'undefined') {
+      return this.getCount();
+    } else {
+      return total;
+    }
+  }
+})

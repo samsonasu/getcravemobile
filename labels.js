@@ -60,6 +60,9 @@ Crave.buildLabelListPanel = function(title) {
     getSelectedRecords: function() {
       return list.getSelectedRecords();
     },
+    setSelectedRecords: function(records) {
+      return list.getSelectionModel().select(records, false, true);
+    },
     get_filters: function() {
       var filters = list.getSelectedRecords();
       var filter_names = [];

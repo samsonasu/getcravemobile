@@ -53,7 +53,7 @@ Crave.buildProfilePanel = function(mine) {
           Crave.show_menu_item(record.data.menu_item_id);
         }
       },
-      plugins: [new Ext.plugins.ListPagingPlugin()]
+      plugins: [new TouchBS.BetterPagingPlugin()]
   });
 
   
@@ -110,7 +110,7 @@ Crave.buildProfilePanel = function(mine) {
           Crave.show_menu_item(dish_id);
         }
       },
-      plugins: [new Ext.plugins.ListPagingPlugin()]
+      plugins: [new TouchBS.BetterPagingPlugin()]
     });
   }
 
@@ -180,7 +180,7 @@ Crave.buildProfilePanel = function(mine) {
         followerStore.load();
       }
     },
-    plugins: [new Ext.plugins.ListPagingPlugin()]
+    plugins: [new TouchBS.BetterPagingPlugin()]
   });
 
   //people i'm following
@@ -213,7 +213,7 @@ Crave.buildProfilePanel = function(mine) {
         followerStore.load();
       }
     },
-    plugins: [new Ext.plugins.ListPagingPlugin()]
+    plugins: [new TouchBS.BetterPagingPlugin()]
   });
 
   var profilePnl = null;
@@ -514,7 +514,7 @@ Crave.buildSavedPanel = function() {
         Crave.show_menu_item(dish_id);
       }
     },
-    plugins: [new Ext.plugins.ListPagingPlugin()]
+    plugins: [new TouchBS.BetterPagingPlugin()]
   });
 
   var savedLoginPanel = Crave.buildLoginPanel();
