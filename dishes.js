@@ -472,7 +472,7 @@ Crave.buildDishDisplayPanel = function() {
                     img.style.webkitTransform = "translate(0, -" + img.height/2 + "px)";
                     setTimeout(function() {
                       imageCarousel.setHeight(100, true);
-                    }, 333);
+                    }, 333/2); //setting this to half the transition period so it looks better
                     
                   }
                   //Crave.show_image('http://src.sencha.io/' +photo.photo, {type: 'slide', direction: 'down'});
