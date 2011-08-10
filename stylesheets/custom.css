@@ -91,10 +91,10 @@ padding: .3em .3em;
 
 /** frame panel thing used on the filters screen and probably elsewhere **/
 .framePanel {
-  margin: .5em .5em .4em .5em;
+  margin-top: .5em;
+  /*margin: 0em .5em 1em .5em;*/
   border-radius: 1em;
   background: white;
-  padding-bottom: .75em;
   font-size: 14px;
   border: 1px solid #B2B2B2;
 }
@@ -105,7 +105,6 @@ FORM.framePanel {
 }
 
 FORM.framePanel DIV.x-panel-body {
-  height: 100%;
   width: 100%;
   background: transparent;
   border: none;
@@ -204,6 +203,7 @@ FORM.framePanel .x-form-field-container {
 .framePanel .x-panel-body {
   background: white;
   border-radius: 1em;
+  min-height: 22px;
 }
 
 .framePanel .x-toolbar.x-toolbar-fancy .x-button {
@@ -213,7 +213,7 @@ FORM.framePanel .x-form-field-container {
 }
 .framePanel .x-toolbar.x-toolbar-fancy .x-button.x-button-pressed{
   background-color: #E8553A;
-  /*background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);*/
+  background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
 
   border-top: 1px solid #B13320;
@@ -225,7 +225,7 @@ FORM.framePanel .x-form-field-container {
 
 .framePanel .settingItem.header {
   border-bottom: 1px solid #ccc;
-  padding: 12px 4px 4px 4px;
+  padding: 12px 4px 4px 8px;
 }
 
 .framePanel .settingItem.header.last {
@@ -238,19 +238,19 @@ FORM.framePanel .x-form-field-container {
   top: -8px;
   height: 32px;
   max-width: 32px;
+  margin-right: 6px;
 }
 
-.framePanel .settingItem.header SPAN.title {
+.framePanel .settingItem.header DIV.title {
   font-size: 16px;
-  margin-left: 4px;
+  margin-left: 2px;
   color: #333;
-  height: 44px;
+  padding: 4px;
   font-weight: bold;
 }
 
 .framePanel .settingItem {
   padding: .5em;
-  height: 40px !important;
 }
 
 .framePanel .settingItem .chevrony {
@@ -916,21 +916,16 @@ IMG.stars {
 }
 
 .arating {
-  padding: 0;
+  min-height: 100px;
 }
 .arating .ratingListItem {
   padding-left: 68px;
-}
-
-.arating .ratingListItem .chevrony {
-  
 }
 
 .arating .ratingListItem SPAN.review {
   color: #333;
   font-size: 14px;
   line-height: 21px;
-  text-shadow: none;
   display:block;
   margin-left: 5px;
 }
@@ -945,7 +940,6 @@ IMG.stars {
 .arating .ratingDescription A:hover {
   text-decoration: underline;
 }
-
 
 /*fix for flickering slide animations  on iphone */
 .x-panel {
@@ -994,11 +988,6 @@ IMG.stars {
   border-radius: 0px;
   height: 100px;
 }
-
-#dishRatingPanel .arating {
-  padding: .5em;
-}
-
 
 .ratingOf0 {
     background:url("../images/rating-my-0@2x.png") no-repeat;

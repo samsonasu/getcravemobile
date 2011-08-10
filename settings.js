@@ -1,6 +1,10 @@
 //this is a better way to build these panels because if everything uses this style the js include order doesn't matter
 Crave.buildSettingsPanel = function() {
   Crave.settingsPanel = new Ext.Panel({
+    layout: {
+      type: 'vbox',
+      align: 'stretch'
+    },
     scroll: 'vertical',
     dockedItems: Crave.create_titlebar({
       items:[{
@@ -9,12 +13,16 @@ Crave.buildSettingsPanel = function() {
         handler: Crave.back_handler
       }]
     }),
+    bodyStyle: 'padding: 4px;',
     items: [{
-      layout: 'vbox',
       cls: 'framePanel',
+      layout: {
+        type: 'vbox',
+        align: 'stretch'
+      },
       items: [{
          cls: 'settingItem header',
-         html: '<img src="../images/fb-settings-icon@2x.png"><span class="title">Facebook</span>'
+         html: '<img src="../images/fb-settings-icon@2x.png"><div class="title">Facebook</div>'
       },{
         layout: 'hbox',
         cls: 'settingItem',
@@ -42,11 +50,14 @@ Crave.buildSettingsPanel = function() {
         }]
       }]
     },{
-      layout: 'vbox',
+      layout: {
+        type: 'vbox',
+        align: 'stretch'
+      },
       cls: 'framePanel',
       items: [{
          cls: 'settingItem header',
-         html: '<img src="../images/foursquare.png"><span class="title">Foursquare</span>'
+         html: '<img src="../images/foursquare.png"><div class="title">Foursquare</div>'
       },{
         layout: 'hbox',
         cls: 'settingItem',
@@ -74,11 +85,14 @@ Crave.buildSettingsPanel = function() {
         }]
       }]
     },{
-      layout: 'vbox',
+      layout: {
+        type: 'vbox',
+        align: 'stretch'
+      },
       cls: 'framePanel',
       items: [{
          cls: 'settingItem header',
-         html: "<span class='title'>Send Feedback</span><span class='chevrony'></span>",
+         html: "<div class='title'>Send Feedback</span><span class='chevrony'></div>",
          listeners: {
           afterrender: function(c){
             c.el.on('click', function(){
@@ -88,26 +102,21 @@ Crave.buildSettingsPanel = function() {
         }
       },{
          cls: 'settingItem header',
-         html: "<span class='title'>Terms Of Service</span><span class='chevrony'></span>"
+         html: "<div class='title'>Terms Of Service</span><span class='chevrony'></div>"
       },{
          cls: 'settingItem header last',
-         html: "<span class='title'>Version</span><span class='version'>1.0</span>"
+         html: "<div class='title'>Version</span><span class='version'>1.0</div>"
       }]
     },{
-      cls: 'framePanel',
-      items: [{
-        cls: 'settingItem header last',
-        bodyStyle: 'text-align: center',
-        html: "<span id='signoutText' class='title'>Sign Out</span>"
-      }],
-      listeners: {
-        afterrender: function(c){
-          c.el.on('click', function(){
-            Crave.sign_out();
-            Crave.back_stack = [];
-            Crave.viewport.setActiveItem(Crave.myProfilePanel);
-          });
-        }
+      xtype: 'button',
+      text: "Sign out",
+      style: 'margin-top: .5em; background: white;',
+      height: 44,
+      width: '100%',
+      handler: function() {
+        Crave.sign_out();
+        Crave.back_stack = [];
+        Crave.viewport.setActiveItem(Crave.myProfilePanel);
       }
     }], 
     listeners: {

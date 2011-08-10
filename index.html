@@ -152,11 +152,11 @@
 <textarea id="dishRatingTemplate" style="display:none">
     <tpl for=".">
         <div class="arating">
-            <img src="{[Crave.photo_url(values.user)]}" class="dishImg" style="height: 60px;">
+            <img src="{[Crave.photo_url(values.user)]}" class="dishImg">
             <div class="ratingListItem">
                 <span class="ratingDescription">
                   <a style="font-weight: bold;" href="#" onclick="Crave.dishDisplayPanel.setup_back_stack({[this.getBackPanelIndex()]});Crave.show_user_profile({user.id});">{user.user_name}</a><br/>
-                {[Crave.ratingDisplay(values.rating)]}</span><br/>
+                {[Crave.ratingDisplay(values.rating)]}</span>
                 <span class="review">{review}</span>
             </div>
         </div>

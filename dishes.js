@@ -268,6 +268,7 @@ Crave.buildDishDisplayPanel = function() {
     }
   });
 
+  
   var dishPanel = new Ext.Panel({
     width: '100%',
     scroll: 'vertical',
@@ -277,7 +278,7 @@ Crave.buildDishDisplayPanel = function() {
         ui: 'iback',
         handler: Crave.back_handler
       }, {
-        text: "Add", 
+        text: "Add",
         handler: addButtonHandler
       }]
     }),
@@ -291,116 +292,121 @@ Crave.buildDishDisplayPanel = function() {
            '@ <a href="#" onclick="Crave.dishDisplayPanel.setup_back_stack(0);Crave.show_restaurant({restaurant.id});">{restaurant.name}</a><br>' +
            '<tpl if="menu_item_avg_rating_count">' +
            '{[Crave.ratingDisplay(values.menu_item_avg_rating_count.avg_rating)]}' +
-           '{menu_item_avg_rating_count.count} ratings</div>' + 
+           '{menu_item_avg_rating_count.count} ratings</div>' +
            '</tpl>',
       data: {restaurant: {}}
-    },{
+    },{ //these frame panels need to be wrapped in a panel with side padding
+        //because Ext freaks out if a panel has side margin
       xtype: 'panel',
-      cls: 'framePanel',
-      width: '100%',
-      id: 'dishLabelsPanel',
-      dockedItems: [{
-        dock : 'top',
-        xtype: 'toolbar',
-        cls: 'title clickable',
-        title: 'Dish Labels'
-      }],
-      tpl: '<div class="dishLabels">{[values.labels.join(", ")]}</div>',
-      data: {labels: []},
-      listeners: {
-        afterrender: function(c){
-          c.el.on('click', function(){
-            if (!Crave.isLoggedIn()) {
-              Crave.viewport.setActiveItem(Crave.myProfilePanel);
-              return;
-            }
-            Crave.dishDisplayPanel.setup_back_stack(dishPanel);
-            labelsPanel.set_menu_item(Crave.dishDisplayPanel.current_menu_item);
-            Crave.dishDisplayPanel.setActiveItem(labelsPanel, {type: 'slide', direction: 'left'});
-          });
-        }
-      }
-    },{
-      xtype: 'panel',
-      cls: 'framePanel',
-      width: '100%',
-      id: 'dishDescriptionPanel',
-      dockedItems: [{
-        dock : 'top',
-        xtype: 'toolbar',
-        cls: 'title',
-        title: 'Description'
-      }],
-      tpl: '<div class="dishDescription">{description}</div>',
-      data: {}
-    },{
-      xtype: 'panel',
-      cls: 'framePanel',
-      width: '100%',
-      id: 'dishRatingPanel',
-      dockedItems: [{
-        dock : 'top',
-        xtype: 'toolbar',
-        cls: 'title clickable',
-        title: 'Reviews'
-      }],
-      tpl: new Ext.XTemplate.from('dishRatingTemplate', {
-        getBackPanelIndex: function() {
-          return Crave.dishDisplayPanel.items.indexOf(dishPanel);
-        }
-      }),
-      data: {user: {}},
-      listeners: {  
-        afterrender: function(c){
-          c.el.on('click', function(comp, target){
-            if (target instanceof HTMLAnchorElement) {
-              return; //they clicked on the link to a person so dont do anything
-            }
-            Crave.dishDisplayPanel.setup_back_stack(dishPanel);
-            Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
-          });
-        }
-      }
-    },{
-      xtype: 'panel', 
-      cls: 'framePanel',
-      width: '100%',
-      dockedItems: [{
-        dock : 'top',
-        xtype: 'toolbar',
-        cls: 'title clickable',
-        style: 'margin: 0;',
-        title: 'Address'
-      }],
+      bodyStyle: "padding: 0 .5em 0 .5em;",
       items: [{
-        id: 'dishMap',
-        xtype: 'map',
-        useCurrentLocation: false,
-        height: 125,
+        xtype: 'panel',
+        cls: 'framePanel',
         width: '100%',
-        mapOptions : {
-          center : new google.maps.LatLng(37.774518,-122.420101),  //SF
-          //not really centering here, just putting it in top right corner
-          zoom : 17,
-          mapTypeId : google.maps.MapTypeId.ROADMAP,
-          disableDefaultUI: true,
-          navigationControl: false,
-          draggable: false
+        id: 'dishLabelsPanel',
+        dockedItems: [{
+          dock : 'top',
+          xtype: 'toolbar',
+          cls: 'title clickable',
+          title: 'Dish Labels'
+        }],
+        tpl: '<div class="dishLabels">{[values.labels.join(", ")]}</div>',
+        data: {labels: []},
+        listeners: {
+          afterrender: function(c){
+            c.el.on('click', function(){
+              if (!Crave.isLoggedIn()) {
+                Crave.viewport.setActiveItem(Crave.myProfilePanel);
+                return;
+              }
+              Crave.dishDisplayPanel.setup_back_stack(dishPanel);
+              labelsPanel.set_menu_item(Crave.dishDisplayPanel.current_menu_item);
+              Crave.dishDisplayPanel.setActiveItem(labelsPanel, {type: 'slide', direction: 'left'});
+            });
+          }
         }
       },{
-        xtype: 'panel', 
-        id: 'dishAddress', 
-        tpl: '<div class="dishAddress">{street_address}<br/>{city}, {state} {zip}</div>',
+        xtype: 'panel',
+        cls: 'framePanel',
+        width: '100%',
+        id: 'dishDescriptionPanel',
+        dockedItems: [{
+          dock : 'top',
+          xtype: 'toolbar',
+          cls: 'title',
+          title: 'Description'
+        }],
+        tpl: '<div class="dishDescription">{description}</div>',
         data: {}
-      }],
-      listeners: {  
-        afterrender: function(c){
-          c.el.on('click', function(){
-            var mi = Crave.dishDisplayPanel.current_menu_item;
-            window.open(Crave.restaurant_map_url(mi.restaurant));
-          });
+      },{
+        xtype: 'panel',
+        cls: 'framePanel',
+        width: '100%',
+        id: 'dishRatingPanel',
+        dockedItems: [{
+          dock : 'top',
+          xtype: 'toolbar',
+          cls: 'title clickable',
+          title: 'Reviews'
+        }],
+        tpl: new Ext.XTemplate.from('dishRatingTemplate', {
+          getBackPanelIndex: function() {
+            return Crave.dishDisplayPanel.items.indexOf(dishPanel);
+          }
+        }),
+        data: {user: {}},
+        listeners: {
+          afterrender: function(c){
+            c.el.on('click', function(comp, target){
+              if (target instanceof HTMLAnchorElement) {
+                return; //they clicked on the link to a person so dont do anything
+              }
+              Crave.dishDisplayPanel.setup_back_stack(dishPanel);
+              Crave.dishDisplayPanel.setActiveItem(reviewsPanel, {type: 'slide', direction: 'left'});
+            });
+          }
         }
-      }
+      },{
+        xtype: 'panel',
+        cls: 'framePanel',
+        width: '100%',
+        dockedItems: [{
+          dock : 'top',
+          xtype: 'toolbar',
+          cls: 'title clickable',
+          style: 'margin: 0;',
+          title: 'Address'
+        }],
+        items: [{
+          id: 'dishMap',
+          xtype: 'map',
+          useCurrentLocation: false,
+          height: 125,
+          width: '100%',
+          mapOptions : {
+            center : new google.maps.LatLng(37.774518,-122.420101),  //SF
+            //not really centering here, just putting it in top right corner
+            zoom : 17,
+            mapTypeId : google.maps.MapTypeId.ROADMAP,
+            disableDefaultUI: true,
+            navigationControl: false,
+            draggable: false
+          }
+        },{
+          xtype: 'panel',
+          id: 'dishAddress',
+          tpl: '<div class="dishAddress">{street_address}<br/>{city}, {state} {zip}</div>',
+          data: {}
+        }],
+        listeners: {
+          afterrender: function(c){
+            c.el.on('click', function(){
+              var mi = Crave.dishDisplayPanel.current_menu_item;
+              window.open(Crave.restaurant_map_url(mi.restaurant));
+            });
+          }
+        }
+      }]
     }]
   });
   
@@ -485,9 +491,12 @@ Crave.buildDishDisplayPanel = function() {
       var drp = Ext.getCmp('dishRatingPanel');
       if (menu_item.menu_item_ratings.length > 0) {
         drp.show();
-        drp.update(menu_item.menu_item_ratings[0]);
         drp.getEl().down('.x-toolbar-title').dom.innerHTML = 'Reviews <span class="count">(' + menu_item.menu_item_ratings.length + ")</span>";
-        drp.doComponentLayout();
+        
+        drp.update({user:{}});
+        drp.doLayout();
+        drp.update(menu_item.menu_item_ratings[0]);
+        dishPanel.doComponentLayout();
         
         //Sencha sucks and they modify this in place to become an array of records instead of an array of {}s
         //I hate them
