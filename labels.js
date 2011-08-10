@@ -34,6 +34,7 @@ Crave.buildLabelListPanel = function(title) {
   var list = new Ext.List({
       scroll: false,
       loadingText: "Loading",
+      cls: 'labelList',
       itemTpl : '<span class="labelname">{menu_label}</span>',
       grouped : false,
       multiSelect: true,
@@ -84,6 +85,7 @@ Crave.buildAddLabelPanel = function(config) {
   var labelsPanel = new Ext.Panel({
     width: '100%',
     scroll: 'vertical',
+    bodyStyle: 'padding: 0 .5em 0 .5em;',
     dockedItems: Crave.create_titlebar({
       title: "Add a Label",
       items: [{

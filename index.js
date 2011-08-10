@@ -54,12 +54,12 @@ Ext.setup({
 //
     var placesList = new Ext.List({
       itemTpl: restaurantTemplate,
-      itemSelector: '.aplace',
+      itemSelector: '.x-list-item',
       singleSelect: true,
       grouped: false,
       store: places,
       scroll: 'vertical',
-      cls: 'magic-scroll',
+      cls: 'magic-scroll highlightPressed',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,
       plugins: [new Ext.plugins.ListPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
@@ -85,13 +85,13 @@ Ext.setup({
 
     var dishList = new Ext.List({
       itemTpl: Crave.dishTemplate,
-      itemSelector: '.adish',
+      itemSelector: '.x-list-item',
       singleSelect: true,
       grouped: true,
       indexBar: false,
       store: dishStore,
       id:'dishesNearbyList',
-      cls: 'magic-scroll',
+      cls: 'magic-scroll highlightPressed',
       scroll:'vertical',
       hideOnMaskTap: false,
       clearSectionOnDeactivate:true,

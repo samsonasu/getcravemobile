@@ -93,6 +93,7 @@ Crave.buildNewDishPanel = function() {
 Crave.buildDishDisplayPanel = function() {
   
   var imageCarousel = new Ext.Carousel({
+    cls: 'dishCarousel',
     height: 100,
     width: '100%',
     hidden: true,
@@ -461,7 +462,19 @@ Crave.buildDishDisplayPanel = function() {
             listeners: {
               render: function(c) {
                 c.el.on('click', function() {
-                  Crave.show_image('http://src.sencha.io/' +photo.photo, {type: 'slide', direction: 'down'});
+                  var img = c.el.down('IMG').dom;
+                  c.bs_expanded = !c.bs_expanded;
+                  if (c.bs_expanded) {
+                    img.style.webkitTransform = "translate(0, 0)";
+                    imageCarousel.setHeight(img.height);
+                  } else {
+                    img.style.webkitTransform = "translate(0, -" + img.height/2 + "px)";
+                    setTimeout(function() {
+                      imageCarousel.setHeight(100, true);
+                    }, 333);
+                    
+                  }
+                  //Crave.show_image('http://src.sencha.io/' +photo.photo, {type: 'slide', direction: 'down'});
                 });
               }
             }
@@ -469,12 +482,13 @@ Crave.buildDishDisplayPanel = function() {
         });
         imageCarousel.removeAll();
         if (items.length > 0) {
+          imageCarousel.setHeight(100);
           imageCarousel.add(items);
           imageCarousel.show();
-          imageCarousel.doLayout();
         } else {
           imageCarousel.hide();
         }
+        imageCarousel.doLayout();
       }
       //Dish header is easy, so is description
       Ext.getCmp('dishDetailHeader').update(menu_item);
@@ -597,7 +611,13 @@ Crave.buildDishDisplayPanel = function() {
 
 Crave.dishImageLoaded = function(img) {
   var y = img.height / 2;
-  img.style["-webkit-transform"] = "translate(0, -" + y + "px)";
+  //img.style["-webkit-transform"] = "translate(0, -" + y + "px)";
+
+  img.style.webkitTransition = "";
+  img.style.webkitTransform = "translate(0, -" + y + "px)";
+  setTimeout(function() {
+    img.style.webkitTransition = "-webkit-transform .3s ease-in";
+  }, 100);
 };
 
 //obj is something with a photo, so far either a menu item or a user

@@ -54,15 +54,8 @@ padding: .3em .3em;
 .x-list .x-list-disclosure {
   background: #d3d3d3 none;
 }
-.x-list .x-list-item.x-item-selected {
-  background-color: inherit;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #F1F1F1));;
-  border-top-color: #ccc;
-  border-bottom-color: inherit;
-  text-shadow: none;
-  color: inherit;
-}
-.x-list .x-list-item.x-item-selected .x-list-item-body SPAN::before {
+
+.labelList.x-list .x-list-item.x-item-selected .x-list-item-body SPAN::before {
   content: "";
   float: right;
   width: 16px;
@@ -71,7 +64,8 @@ padding: .3em .3em;
   -webkit-background-size: 16px 16px;
 }
 
-.x-list .x-list-item {
+/*don't hightlight selected list items ever */
+.x-list .x-list-item, .x-list .x-list-item.x-item-selected {
   border-top: solid 1px #CCC;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #F1F1F1));
 }
@@ -88,6 +82,15 @@ padding: .3em .3em;
   min-height: 2.6em;
 }
 
+.x-list .x-list-item.x-item-pressed {
+  border-top-color: #ccc;
+  background-image: inherit;
+}
+
+.highlightPressed.x-list .x-list-item.x-item-pressed {
+  border-top-color: #ccc;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #FFFCCC));
+}
 
 /** frame panel thing used on the filters screen and probably elsewhere **/
 .framePanel {
@@ -203,7 +206,7 @@ FORM.framePanel .x-form-field-container {
 .framePanel .x-panel-body {
   background: white;
   border-radius: 1em;
-  min-height: 22px;
+  min-height: 28px;
 }
 
 .framePanel .x-toolbar.x-toolbar-fancy .x-button {
@@ -265,6 +268,7 @@ FORM.framePanel .x-form-field-container {
 .framePanel .x-list .x-list-item:first-child .x-list-item-body {
   border-top-left-radius: 1em;
   border-top-right-radius: 1em;
+  border: none !important;
 }
 .framePanel .x-list .x-list-item:last-child,
 .framePanel .x-list .x-list-item:last-child .x-list-item-body {
@@ -278,6 +282,7 @@ FORM.framePanel .x-form-field-container {
 
 .framePanel .x-list-item, .framePanel .x-list-item.x-item-selected {
   background: white;
+  color: black;
 }
 
 .dishListinfo {
@@ -370,6 +375,10 @@ font-weight: lighter;
    background: url('../../images/saved-icon-ON@2x.png') no-repeat 12px 0;
 	-webkit-background-size: 30px 40px;
    color: #70b9b6;
+}
+
+.dishCarousel {
+
 }
 
 .dishCarouselImage IMG {
@@ -651,13 +660,14 @@ word-wrap:break-word;
 }
 
 .searchForm .searchStatus {
-  font-size: 13px;
-  height: 20px;
+  font-size: 12px;
   vertical-align: middle;
+  height: 20px;
   color: #555;
   padding-left: 4px;
   background: white;
   border-bottom: 1px solid #ccc;
+  overflow: hidden;
 }
 
 .x-field-clear-container {
@@ -916,7 +926,7 @@ IMG.stars {
 }
 
 .arating {
-  min-height: 100px;
+  min-height: 80px;
 }
 .arating .ratingListItem {
   padding-left: 68px;
@@ -927,7 +937,7 @@ IMG.stars {
   font-size: 14px;
   line-height: 21px;
   display:block;
-  margin-left: 5px;
+  padding: 4px
 }
 
 .arating .ratingDescription A {

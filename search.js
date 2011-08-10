@@ -15,9 +15,7 @@ Crave.buildSearchResultsPanel = function() {
     },
     listeners: {
       load: function() {
-        search_status.update({
-          status: dishSearchStore.getCount() + " results in " + Crave.latestPositionText()
-        });
+        update_status(dishSearchStore.getCount());
         dishSearchList.scroller.scrollTo({x: 0, y:0});
       }
     }
@@ -53,6 +51,20 @@ Crave.buildSearchResultsPanel = function() {
     Crave.show_menu_item(record.data.id);
   });
 
+  var update_status = function(result_count) {
+    var status = result_count + " results in " + Crave.latestPositionText();
+    if (Crave.searchResultsPanel.search_query) {
+      status += " for '" + Crave.searchResultsPanel.search_query + "'";
+    }
+    if (Crave.searchResultsPanel.active_filters && Crave.searchResultsPanel.active_filters.length > 0) {
+      status += " [" + Crave.searchResultsPanel.active_filters.join(', ') + ']';
+    }
+    
+    search_status.update({
+      status: status
+    });
+  }
+
   var restaurantSearchStore = new Ext.data.Store({
     model: 'Restaurant',
     id: 'restaurants',
@@ -73,15 +85,13 @@ Crave.buildSearchResultsPanel = function() {
     },
     listeners: {
       load: function() {
-        search_status.update({
-          status: restaurantSearchStore.getCount() + " results in " + Crave.latestPositionText()
-        });
+        update_status(restaurantSearchStore.getCount());
         restaurantSearchList.scroller.scrollTo({x: 0, y:0});
       }
     }
   });
   var restaurantSearchList = new Ext.List({
-    itemTpl: restaurantTemplate,
+    itemTpl: Ext.XTemplate.from('restaurantSearchTemplate'),
     singleSelect: true,
     itemSelector: '.aplace',
     grouped: false,
@@ -96,9 +106,7 @@ Crave.buildSearchResultsPanel = function() {
           status: "Searching..."
         });
         restaurantSearchStore.load(function() {
-          search_status.update({
-            status: restaurantSearchStore.getCount() + " results in " + Crave.latestPositionText()
-          });
+          update_status(restaurantSearchStore.getCount());
         });
         restaurantSearchList.refresh();
         
@@ -245,7 +253,7 @@ Crave.buildSearchResultsPanel = function() {
         Crave.searchResultsPanel.setActiveItem(dishSearchList);
       },
       ui:'round',
-      width:'50'
+      width:'75'
     }]
   });
 
@@ -366,6 +374,7 @@ Crave.buildFilterPanel = function() {
 
   var labelList = Crave.buildLabelListPanel("Dietary Preference");
   Crave.filterPanel = new Ext.Panel({
+    bodyStyle: 'padding: 0 .5em 0 .5em;',
     items: [distancePanel, labelList],
     id: 'filterListPnl',
     width:'100%',
