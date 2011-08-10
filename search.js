@@ -24,12 +24,12 @@ Crave.buildSearchResultsPanel = function() {
   var dishSearchList = new Ext.List({
     itemTpl: Ext.XTemplate.from('reviewDishTemplate'),
     singleSelect: true,
-    itemSelector: '.adish',
+    itemSelector: '.x-list-item',
     grouped: false,
     indexBar: false,
     store: dishSearchStore,
     loadingText: "Loading...",
-    cls: 'magic-scroll',
+    cls: 'magic-scroll highlightPressed',
     clearSectionOnDeactivate:true,
     scroll:'vertical',
     listeners: {
@@ -93,10 +93,10 @@ Crave.buildSearchResultsPanel = function() {
   var restaurantSearchList = new Ext.List({
     itemTpl: Ext.XTemplate.from('restaurantSearchTemplate'),
     singleSelect: true,
-    itemSelector: '.aplace',
+    itemSelector: '.x-list-item',
     grouped: false,
     indexBar: false,
-    cls: 'magic-scroll',
+    cls: 'magic-scroll highlightPressed',
     clearSectionOnDeactivate:true,
     store: restaurantSearchStore,
     loadingText: "Loading...",

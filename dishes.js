@@ -100,10 +100,36 @@ Crave.buildDishDisplayPanel = function() {
     items: [{
         xtype: 'panel',
         html: '<p>No Image Available</p>'
-    },{
-        xtype: 'panel',
-        html: '<p>No Image Available</p>'
-    }]
+    }],
+    listeners: {
+      render: function(c) {
+        c.el.on('click', function() {
+          var images = c.el.query('IMG');
+          imageCarousel.bs_expanded = !c.bs_expanded;
+          for (var i=0; i<images.length; i++) {
+            var img = images[i];
+            if (imageCarousel.bs_expanded) {
+              img.style.webkitTransform = "translate(0, 0)";
+              //45 is the height of the title bar
+              imageCarousel.setHeight(Math.min(img.height, dishPanel.getHeight()-45));
+            } else {
+              img.style.webkitTransform = "translate(0, -" + img.height/2 + "px)";
+              setTimeout(function() {
+                imageCarousel.setHeight(100, true);
+              }, 333/2); //setting this to half the transition period so it looks better
+            }
+          }
+          //Crave.show_image('http://src.sencha.io/' +photo.photo, {type: 'slide', direction: 'down'});
+        });
+      },
+      cardswitch: function(carousel, newCard, oldCard, anim) {
+         if (imageCarousel.bs_expanded) {
+           var img = newCard.el.down('IMG').dom;
+           //45 is the height of the title bar
+           imageCarousel.setHeight(Math.min(img.height, dishPanel.getHeight()-45));
+         }
+      }
+    }
   });
   
   
@@ -223,6 +249,7 @@ Crave.buildDishDisplayPanel = function() {
       text: "Take a Photo", 
       hidden: !Crave.phonegap,
       handler: function() {
+        TouchBS.wait("Please wait");
         navigator.camera.getPicture(uploadHandler, function (message) {
           //Photo capture failed, usually this is because they clicked cancel
           addSheet.hide();
@@ -240,6 +267,7 @@ Crave.buildDishDisplayPanel = function() {
       text: "Use an Existing Photo", 
       hidden: !Crave.phonegap,
       handler: function() {
+        TouchBS.wait("Please wait");
         navigator.camera.getPicture(uploadHandler, function (message) {
           //Photo capture failed, usually this is because they clicked cancel
           addSheet.hide();
@@ -459,26 +487,7 @@ Crave.buildDishDisplayPanel = function() {
           items.push(new Ext.Panel({
             cls: 'dishCarouselImage', 
             html: '<img onload="Crave.dishImageLoaded(this);" src="http://src.sencha.io/' + photo.photo + '">',
-            listeners: {
-              render: function(c) {
-                c.el.on('click', function() {
-                  var img = c.el.down('IMG').dom;
-                  c.bs_expanded = !c.bs_expanded;
-                  if (c.bs_expanded) {
-                    img.style.webkitTransform = "translate(0, 0)";
-                    //45 is the height of the title bar
-                    imageCarousel.setHeight(Math.min(img.height, dishPanel.getHeight()-45));
-                  } else {
-                    img.style.webkitTransform = "translate(0, -" + img.height/2 + "px)";
-                    setTimeout(function() {
-                      imageCarousel.setHeight(100, true);
-                    }, 333/2); //setting this to half the transition period so it looks better
-                    
-                  }
-                  //Crave.show_image('http://src.sencha.io/' +photo.photo, {type: 'slide', direction: 'down'});
-                });
-              }
-            }
+            
           }));
         });
         imageCarousel.removeAll();

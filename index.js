@@ -126,6 +126,7 @@ Ext.setup({
         id: 'searchBox',
         ui: 'search',
         placeHolder: 'Search for dish, restaurant or diet...',
+        autoCorrect: false,
         listeners: {
           change: function() {
             var searchValue = Ext.getCmp("searchBox").getValue();
