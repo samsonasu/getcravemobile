@@ -585,3 +585,27 @@ Crave.facebookLogin = function() {
     location.href = "http://getcrave.com/auth/facebook";
   }
 }
+
+Crave.foursquareLogin = function() {
+  if (Crave.phonegap) {
+    var client_browser = ChildBrowser.install();
+    client_browser.onLocationChange = function(loc){
+      //once facebook redirects back to getcrave.com, that will redirect to the mobile page that sets the uid
+      //we want to grab that uid out of the request and close the browser because that's all we need here
+      var match = /mobile\/uid\/\?uid=(\d+)/.exec(loc);
+      if (match) {
+         var uid = match[1];
+         localStorage.setItem('uid', uid);
+         Crave.myProfilePanel.load_user_data(uid);
+
+         //TODO: go back to whatever called the login thing?
+         client_browser.close();
+      }
+    };
+    if(client_browser != null) {
+      window.plugins.childBrowser.showWebPage("http://getcrave.com/auth/foursquare?redirect_to=mobile");
+    }
+  } else {
+    location.href = "http://getcrave.com/auth/foursquare";
+  }
+}

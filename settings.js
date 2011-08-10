@@ -59,6 +59,16 @@ Crave.buildSettingsPanel = function() {
          cls: 'settingItem header',
          html: '<img src="../images/foursquare.png"><div class="title">Foursquare</div>'
       },{
+        id: 'foursquareLoginContainer',
+        cls: 'settingItem',
+        html: "<div class='title'>Login with Foursquare<span class='chevrony'></span></div>",
+        listeners: {
+          render: function(c) {
+            c.el.on('click', Crave.foursquareLogin);
+          }
+        }
+      },{
+        id: 'foursquareToggleContainer',
         layout: 'hbox',
         cls: 'settingItem',
         items: [{
@@ -77,8 +87,24 @@ Crave.buildSettingsPanel = function() {
               //i hate ext, why would they fire the change event on the initial load
             },
             change: function(slider, thumb, newValue, oldValue) {
-              if (this.actually_rendered && newValue === 1) {
-                location.href="/auth/foursquare";
+//              if (this.actually_rendered && newValue === 1) {
+//                location.href="/auth/foursquare";
+//              }
+              if (this.actually_rendered) {
+                TouchBS.wait("Updating preferences");
+                Ext.Ajax.request({
+                  url: '/users/' + Crave.currentUserId() + '.json',
+                  method: 'PUT',
+                  jsonData: {
+                    user: {
+                      get_foursquare_recommendations: newValue
+                    }
+                  },
+                  failure: TouchBS.handle_failure,
+                  success: function() {
+                    TouchBS.stop_waiting();
+                  }
+                });
               }
             }
           }
@@ -138,25 +164,30 @@ Crave.buildSettingsPanel = function() {
   });
   
   Crave.settingsPanel.set_user = function(user) {
-    var fbValue = 0;
-    var fsValue = 0;
+    var fbValue = false;
+    var fsValue = false;
 
     Ext.each(user.authorizations, function(auth) {
-      if (auth.provider === 'facebook')
-        fbValue = 1;
-      else if (auth.provider === 'foursquare')
-        fsValue = 1;
+      if (auth.provider === 'facebook') {
+        fbValue = true;
+      }
+      if (auth.provider === 'foursquare') {
+        fsValue = true;
+      }
     });
 
     var fbToggle = Ext.getCmp('facebookToggle');
     var fsToggle = Ext.getCmp('foursquareToggle');
     if (fbToggle.rendered) {
       fbToggle.setValue(fbValue);
-      fsToggle.setValue(fsValue);
+      fsToggle.setValue(user.get_foursquare_recommendations);
     } else {
       fbToggle.value = fbValue;
-      fsToggle.value = fsValue;
+      fsToggle.value = user.get_foursquare_recommendations;
     }
+
+    Ext.getCmp('foursquareToggleContainer').setVisible(fsValue);
+    Ext.getCmp('foursquareLoginContainer').setVisible(!fsValue);
     
     Crave.settingsPanel.user_loaded = true;
   }
