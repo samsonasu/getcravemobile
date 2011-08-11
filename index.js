@@ -33,7 +33,9 @@ Ext.setup({
           distance: "yes",
           limit: 25
         }
-        dishStore.load();
+        dishStore.load(function() {
+          dishList.refresh();
+        });
         
         places.proxy.extraParams = {
           "lat": coords.latitude,

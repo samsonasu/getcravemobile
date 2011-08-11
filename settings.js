@@ -172,6 +172,7 @@ Crave.buildSettingsPanel = function() {
         fbValue = true;
       }
       if (auth.provider === 'foursquare') {
+        console.log('found foursquare auth');
         fsValue = true;
       }
     });
@@ -186,7 +187,9 @@ Crave.buildSettingsPanel = function() {
       fsToggle.value = user.get_foursquare_recommendations;
     }
 
+    console.log('setting fstogglecontainer visilbe=' + fsValue);
     Ext.getCmp('foursquareToggleContainer').setVisible(fsValue);
+    console.log('setting fstogglecontainer visilbe=' + !fsValue);
     Ext.getCmp('foursquareLoginContainer').setVisible(!fsValue);
     
     Crave.settingsPanel.user_loaded = true;

@@ -238,16 +238,18 @@ Crave.buildProfilePanel = function(mine) {
           if (mine) {
             Crave.viewport.setActiveItem(Crave.savedPanel, {type: 'slide', direction: 'right'});
           } else {
-            profilePnl.setActiveItem(savedDishList, 'pop');
-            Crave.back_stack.push({
-              fn: function() {
-                profilePnl.setActiveItem(userProfilePnl, 'pop');
-                if (Crave.back_stack.length === 0) {
-                  backButton.hide();
+            if (savedDishList.user_saved_count > 0) {
+              profilePnl.setActiveItem(savedDishList, 'pop');
+              Crave.back_stack.push({
+                fn: function() {
+                  profilePnl.setActiveItem(userProfilePnl, 'pop');
+                  if (Crave.back_stack.length === 0) {
+                    backButton.hide();
+                  }
                 }
-              }
-            });
-            backButton.show();
+              });
+              backButton.show();
+            }
           }
         }
       },{
@@ -398,8 +400,11 @@ Crave.buildProfilePanel = function(mine) {
             }
           }
           userInfoPanel.update(html);
+          savedDishList.user_saved_count = user.saved_count;
           userInfoPanel.el.down('.saved').dom.innerHTML = user.saved_count;
+          followingList.user_following_count = user.following_count;
           userInfoPanel.el.down('.following').dom.innerHTML = user.following_count;
+          followerList.user_follower_count = user.followers_count
           userInfoPanel.el.down('.followers').dom.innerHTML = user.followers_count;
           if (mine) {
             //set up the settings panel if we loaded our own profile, this saves us an ajax call later
@@ -594,6 +599,7 @@ Crave.foursquareLogin = function() {
       //we want to grab that uid out of the request and close the browser because that's all we need here
       var match = /mobile\/uid\/\?uid=(\d+)/.exec(loc);
       if (match) {
+        console.log('back from FS, got uid=' + uid);
          var uid = match[1];
          localStorage.setItem('uid', uid);
          Crave.myProfilePanel.load_user_data(uid, true);
