@@ -366,8 +366,8 @@ Crave.buildProfilePanel = function(mine) {
     set_title: function(title) {
       profilePnl.dockedItems.get(0).set_title(title);
     },
-    load_user_data: function(user_id) {
-      if (profilePnl.displayed_user_id === user_id) {
+    load_user_data: function(user_id, force) {
+      if (profilePnl.displayed_user_id === user_id && !force) {
         return;
       }
       profilePnl.setActiveItem(userProfilePnl, 'pop');
@@ -596,14 +596,14 @@ Crave.foursquareLogin = function() {
       if (match) {
          var uid = match[1];
          localStorage.setItem('uid', uid);
-         Crave.myProfilePanel.load_user_data(uid);
+         Crave.myProfilePanel.load_user_data(uid, true);
 
          //TODO: go back to whatever called the login thing?
          client_browser.close();
       }
     };
     if(client_browser != null) {
-      window.plugins.childBrowser.showWebPage("http://getcrave.com/auth/foursquare?redirect_to=mobile");
+      window.plugins.childBrowser.showWebPage("http://secure.getcrave.com/auth/foursquare?redirect_to=mobile ");
     }
   } else {
     location.href = "http://getcrave.com/auth/foursquare";
