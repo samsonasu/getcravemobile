@@ -256,31 +256,35 @@ Crave.buildProfilePanel = function(mine) {
         flex: 1,
         text: "<span class='chevrony'></span><span class='number following'></span><span class='text'>Following</span>",
         handler: function() {
-          Crave.back_stack.push({
-            fn: function() {
-              profilePnl.setActiveItem(userProfilePnl, 'pop');
-              if (Crave.back_stack.length === 0) {
-                backButton.hide();
+          if (followingList.user_following_count > 0) {
+            Crave.back_stack.push({
+              fn: function() {
+                profilePnl.setActiveItem(userProfilePnl, 'pop');
+                if (Crave.back_stack.length === 0) {
+                  backButton.hide();
+                }
               }
-            }
-          });
-          profilePnl.setActiveItem(followingList, 'pop');
-          backButton.show();
+            });
+            profilePnl.setActiveItem(followingList, 'pop');
+            backButton.show();
+          }
         }
       },{
         flex: 1,
         text: "<span class='chevrony'></span><span class='number followers'></span><span class='text'>Followers</span>",
         handler: function() {
-          Crave.back_stack.push({
-            fn: function() {
-              profilePnl.setActiveItem(userProfilePnl, 'pop');
-              if (Crave.back_stack.length === 0) {
-                backButton.hide();
+          if (followerList.user_follower_count > 0) {
+            Crave.back_stack.push({
+              fn: function() {
+                profilePnl.setActiveItem(userProfilePnl, 'pop');
+                if (Crave.back_stack.length === 0) {
+                  backButton.hide();
+                }
               }
-            }
-          });
-          profilePnl.setActiveItem(followerList, 'pop');
-          backButton.show();
+            });
+            profilePnl.setActiveItem(followerList, 'pop');
+            backButton.show();
+          }
         }
       },]
     }]
