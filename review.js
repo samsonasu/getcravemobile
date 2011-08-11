@@ -51,6 +51,8 @@ Crave.buildRateDishPanel = function() {
             failure: TouchBS.handle_failure,
             success: function(response, options) {
               TouchBS.stop_waiting();
+              reviewText.setValue("");
+              Crave.rateDishPanel.clear_stars();
               Crave.rateDishPanel.setActiveItem(labelsPanel);
             }
           });
