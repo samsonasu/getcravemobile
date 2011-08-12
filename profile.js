@@ -110,7 +110,10 @@ Crave.buildProfilePanel = function(mine) {
           Crave.show_menu_item(dish_id);
         }
       },
-      plugins: [new TouchBS.BetterPagingPlugin()]
+      plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.BetterPagingPlugin({
+          title: "You haven't saved any items yet.",
+          message: "Save items that look delicious so you can try them later."
+      })]
     });
   }
 
@@ -412,8 +415,8 @@ Crave.buildProfilePanel = function(mine) {
           userInfoPanel.el.down('.followers').dom.innerHTML = user.followers_count;
           if (mine) {
             //set up the settings panel if we loaded our own profile, this saves us an ajax call later
-            Crave.settingsPanel.set_user(user);
-            Crave.savedPanel.set_user(user);
+            Crave.settingsPanel.set_user(user, force);
+            Crave.savedPanel.set_user(user, force);
           }
         },
         failure: Crave.handle_failure
@@ -603,13 +606,13 @@ Crave.foursquareLogin = function() {
       //we want to grab that uid out of the request and close the browser because that's all we need here
       var match = /mobile\/uid\/\?uid=(\d+)/.exec(loc);
       if (match) {
+        var uid = match[1];
         console.log('back from FS, got uid=' + uid);
-         var uid = match[1];
-         localStorage.setItem('uid', uid);
-         Crave.myProfilePanel.load_user_data(uid, true);
 
-         //TODO: go back to whatever called the login thing?
-         client_browser.close();
+        //TODO: go back to whatever called the login thing?
+        client_browser.close();        
+        Crave.myProfilePanel.load_user_data(uid, true);
+
       }
     };
     if(client_browser != null) {

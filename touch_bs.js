@@ -288,6 +288,7 @@ TouchBS.BetterPagingPlugin = Ext.extend(Ext.plugins.ListPagingPlugin, {
   }
 });
 
+
 Ext.override(Ext.data.Store, {
   getTotalCount: function() {
     var total = this.proxy.reader.jsonData[this.proxy.reader.totalProperty];
@@ -297,4 +298,48 @@ Ext.override(Ext.data.Store, {
       return total;
     }
   }
-})
+});
+
+/**
+ * @class Ext.plugins.ListPagingPlugin
+ * @extends Ext.util.Observable
+ * This plugin adds pull to refresh functionality to the List.
+ */
+TouchBS.NoResultsPlugin = Ext.extend(Ext.util.Observable, {
+  /**
+   * @cfg {XTemplate/String/Array} pullTpl The template being used for the pull to refresh markup.
+   */
+  noResultTpl: new Ext.XTemplate(
+      '<div class="x-list-noresult">',
+          '<h3 class="x-list-noresult-title">{title}</h3>',
+          '<div class="x-list-noresult-message>{message}</div>',
+      '</div>'
+  ),
+  init: function(list) {
+    this.list = list;
+    this.lastUpdated = new Date();
+
+    list.on('update', this.onListUpdate, this);
+  },
+  onListUpdate: function() {
+    if (this.list.store.getCount() === 0) {
+      this.list.getTargetEl().insertFirst(this.el);
+    }
+  },
+  render: function() {
+    var list = this.list,
+        targetEl = list.getTargetEl(),
+        scroller = targetEl.getScrollParent();
+
+    if (!this.noResultTpl.isTemplate) {
+        this.noResultTpl = new Ext.XTemplate(this.noResultTpl);
+    }
+
+    this.el = this.noResultTpl.insertFirst(targetEl, {
+        message: this.message || "Please try again later",
+        title: this.title || "No Results Found"
+    }, true);
+    
+    this.rendered = true;
+  }
+});

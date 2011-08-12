@@ -254,6 +254,7 @@ FORM.framePanel .x-form-field-container {
 
 .framePanel .settingItem {
   padding: .5em;
+  width: 100%;
 }
 
 .framePanel .settingItem .chevrony {
