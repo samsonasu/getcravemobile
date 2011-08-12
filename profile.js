@@ -13,7 +13,7 @@ Crave.buildProfilePanel = function(mine) {
       callback: function(backInfo) {
         if (!mine) {
           //they just returned to the "other" profile panel via the back button, which means they were on someone else's profile
-          profilePnl.load_user_data(backInfo.user_id);
+          profilePnl.load_user_data(backInfo.user_id);         
         }
         profilePnl.setActiveItem(subPanel, false);
       }
@@ -92,27 +92,34 @@ Crave.buildProfilePanel = function(mine) {
     });
     savedDishList = new Ext.List({
       itemTpl: Crave.savedDishTemplate,
-      itemSelector: '.adish',
       singleSelect: true,
+      itemSelector: '.x-list-item',
       grouped: true,
       indexBar: false,
       store: savedDishStore, //dishes.js
       scroll:'vertical',
-      cls: 'magic-scroll',
+      cls: 'magic-scroll highlightPressed',
       hideOnMaskTap: false,
-      width:'100%',
-      height:'100%',
-      clearSectionOnDeactivate:true,
       listeners: {
         itemtap: function(dataView, index, item, e) {
           var dish_id = savedDishStore.getAt(index).data.menu_item.id;
           setupBackStack(savedDishList);
           Crave.show_menu_item(dish_id);
+        },
+        activate: function() {
+          if (profilePnl.displayed_user_id !== savedDishList.displayed_user_id) {
+            savedDishStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/saved.json";
+            savedDishStore.load(function() {
+              debugger;
+              savedDishList.displayed_user_id = profilePnl.displayed_user_id;
+              savedDishList.updateList();
+            });
+          }
         }
       },
-      plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.BetterPagingPlugin({
+      plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.NoResultsPlugin({
           title: "You haven't saved any items yet.",
-          message: "Save items that look delicious so you can try them later."
+          message: "Save items that look delicious so that you can try them later."
       })]
     });
   }
@@ -147,6 +154,8 @@ Crave.buildProfilePanel = function(mine) {
       return user.user_name[0].toUpperCase();
     }
   });
+  
+  
   var followTemplate = Ext.XTemplate.from('followUserTemplate', {
     get_user: function(values) {
       return values.user || values.following_user.user;
@@ -179,11 +188,49 @@ Crave.buildProfilePanel = function(mine) {
         if (mine) {
           settingsButton.hide();
         }
-        followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/followers.json";
-        followerStore.load();
+        if (profilePnl.displayed_user_id !== followerList.displayed_user_id) {
+          followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/followers.json";
+          followerStore.load(function() {
+            followerList.displayed_user_id = profilePnl.displayed_user_id;
+          });
+        }
       }
     },
-    plugins: [new TouchBS.BetterPagingPlugin()]
+    plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.NoResultsPlugin({
+          title: "You don't have any followers yet.",
+          message: "Crave some dishes and follow others."
+      })]
+  });
+  
+  var followingStore = new Ext.data.Store({
+    model: "FollowUser",
+    clearOnPageLoad: false,
+    autoLoad: false,
+    sorters: [{
+      sorterFn: function(o1, o2) {
+        var user1 = o1.data.user || o1.data.following_user.user;
+        var user2 = o2.data.user || o2.data.following_user.user;
+        
+        var v1 = user1.user_name[0].toUpperCase();
+        var v2 = user2.user_name[0].toUpperCase();
+
+        return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+      }
+    }],
+    proxy: {
+      type:'ajax',
+      extraParams: {},
+      url: '',
+      reader: {
+        type:'json',
+        model: 'FollowUser',
+        record: 'user_following'
+      }
+    },
+    getGroupString : function(record) {
+      var user = record.data.user || record.data.following_user.user
+      return user.user_name[0].toUpperCase();
+    }
   });
 
   //people i'm following
@@ -198,13 +245,13 @@ Crave.buildProfilePanel = function(mine) {
     data: {user: {}},
     cardSwitchAnimation: 'pop',
     indexBar: false,
-    store: followerStore,
+    store: followingStore,
     scroll:'vertical',
     hideOnMaskTap: false,
     clearSectionOnDeactivate:true,
     listeners: {
       itemtap: function(dataView, index, item, e) {
-        var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
+        var record = followingStore.getAt(this.displayIndexToRecordIndex(index));
         setupBackStack(followingList);
         Crave.show_user_profile(record.data.following_user_id);
       },
@@ -212,11 +259,17 @@ Crave.buildProfilePanel = function(mine) {
         if (mine) {
           settingsButton.hide();
         }
-        followerStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/following.json";
-        followerStore.load();
+        if (followingList.displayed_user_id !== profilePnl.displayed_user_id) {
+          followingStore.proxy.url = "/users/" + profilePnl.displayed_user_id + "/following.json";
+          followingStore.load();
+          followingList.displayed_user_id = profilePnl.displayed_user_id;
+        }
       }
     },
-    plugins: [new TouchBS.BetterPagingPlugin()]
+    plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.NoResultsPlugin({
+          title: "You aren't following anyone yet.",
+          message: "Follow other users on crave and discover amazing food!"
+      })]
   });
 
   var profilePnl = null;
@@ -241,53 +294,47 @@ Crave.buildProfilePanel = function(mine) {
           if (mine) {
             Crave.viewport.setActiveItem(Crave.savedPanel, {type: 'slide', direction: 'right'});
           } else {
-            if (savedDishList.user_saved_count > 0) {
-              profilePnl.setActiveItem(savedDishList, 'pop');
-              Crave.back_stack.push({
-                fn: function() {
-                  profilePnl.setActiveItem(userProfilePnl, 'pop');
-                  if (Crave.back_stack.length === 0) {
-                    backButton.hide();
-                  }
+            profilePnl.setActiveItem(savedDishList, 'pop');
+            Crave.back_stack.push({
+              fn: function() {
+                profilePnl.setActiveItem(userProfilePnl, 'pop');
+                if (Crave.back_stack.length === 0) {
+                  backButton.hide();
                 }
-              });
-              backButton.show();
-            }
+              }
+            });
+            backButton.show();
           }
         }
       },{
         flex: 1,
         text: "<span class='chevrony'></span><span class='number following'></span><span class='text'>Following</span>",
         handler: function() {
-          if (followingList.user_following_count > 0) {
-            Crave.back_stack.push({
-              fn: function() {
-                profilePnl.setActiveItem(userProfilePnl, 'pop');
-                if (Crave.back_stack.length === 0) {
-                  backButton.hide();
-                }
+          Crave.back_stack.push({
+            fn: function() {
+              profilePnl.setActiveItem(userProfilePnl, 'pop');
+              if (Crave.back_stack.length === 0) {
+                backButton.hide();
               }
-            });
-            profilePnl.setActiveItem(followingList, 'pop');
-            backButton.show();
-          }
+            }
+          });
+          profilePnl.setActiveItem(followingList, 'pop');
+          backButton.show();
         }
       },{
         flex: 1,
         text: "<span class='chevrony'></span><span class='number followers'></span><span class='text'>Followers</span>",
         handler: function() {
-          if (followerList.user_follower_count > 0) {
-            Crave.back_stack.push({
-              fn: function() {
-                profilePnl.setActiveItem(userProfilePnl, 'pop');
-                if (Crave.back_stack.length === 0) {
-                  backButton.hide();
-                }
+          Crave.back_stack.push({
+            fn: function() {
+              profilePnl.setActiveItem(userProfilePnl, 'pop');
+              if (Crave.back_stack.length === 0) {
+                backButton.hide();
               }
-            });
-            profilePnl.setActiveItem(followerList, 'pop');
-            backButton.show();
-          }
+            }
+          });
+          profilePnl.setActiveItem(followerList, 'pop');
+          backButton.show();
         }
       },]
     }]
@@ -407,11 +454,8 @@ Crave.buildProfilePanel = function(mine) {
             }
           }
           userInfoPanel.update(html);
-          savedDishList.user_saved_count = user.saved_count;
           userInfoPanel.el.down('.saved').dom.innerHTML = user.saved_count;
-          followingList.user_following_count = user.following_count;
           userInfoPanel.el.down('.following').dom.innerHTML = user.following_count;
-          followerList.user_follower_count = user.followers_count
           userInfoPanel.el.down('.followers').dom.innerHTML = user.followers_count;
           if (mine) {
             //set up the settings panel if we loaded our own profile, this saves us an ajax call later
@@ -428,11 +472,6 @@ Crave.buildProfilePanel = function(mine) {
           page: 1
         }
       });
-      
-      if (!mine) {
-        savedDishStore.proxy.url = "/users/" + user_id + "/saved.json";
-        savedDishStore.load();
-      }
     }
   });
   return profilePnl;
@@ -445,7 +484,7 @@ Crave.follow_user_toggle = function(user_id, button) {
   if (following) {
     Ext.Ajax.request({
       method: "DELETE",
-      url: '/following.json',
+      url: '/user_followings.json',
       jsonData:{
         user_following: {
           user_id: Crave.currentUserId(),

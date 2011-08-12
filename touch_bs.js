@@ -279,7 +279,8 @@ TouchBS.BetterPagingPlugin = Ext.extend(Ext.plugins.ListPagingPlugin, {
     //we dont' support the "total" property yet
     //should probably be something like
     //this.list.store.currentPage == this.list.store.getTotalCount() / this.list.store.pageSize
-    if (this.list.store.getCount() % this.list.store.pageSize === 0)
+    var count = this.list.store.getCount();
+    if (count > 0 && (count % this.list.store.pageSize === 0))
       this.el.show();
     else
       this.el.hide();
@@ -306,40 +307,36 @@ Ext.override(Ext.data.Store, {
  * This plugin adds pull to refresh functionality to the List.
  */
 TouchBS.NoResultsPlugin = Ext.extend(Ext.util.Observable, {
-  /**
-   * @cfg {XTemplate/String/Array} pullTpl The template being used for the pull to refresh markup.
-   */
-  noResultTpl: new Ext.XTemplate(
-      '<div class="x-list-noresult">',
-          '<h3 class="x-list-noresult-title">{title}</h3>',
-          '<div class="x-list-noresult-message>{message}</div>',
-      '</div>'
-  ),
   init: function(list) {
     this.list = list;
-    this.lastUpdated = new Date();
-
-    list.on('update', this.onListUpdate, this);
+    list.onBeforeLoad = Ext.util.Functions.createInterceptor(list.onBeforeLoad, this.onBeforeLoad, this);
+    this.mon(list, 'update', this.onListUpdate, this);
   },
-  onListUpdate: function() {
-    if (this.list.store.getCount() === 0) {
-      this.list.getTargetEl().insertFirst(this.el);
+  onListUpdate : function() {
+    if (!this.rendered) {
+        this.render();
+    }
+
+    this.el.appendTo(this.list.getTargetEl());
+    if (this.list.store.getCount() > 0) {
+      this.el.hide();
+    } else {
+      this.el.show();
     }
   },
-  render: function() {
+  render : function() {
     var list = this.list,
         targetEl = list.getTargetEl(),
-        scroller = targetEl.getScrollParent();
+        html = '';
 
-    if (!this.noResultTpl.isTemplate) {
-        this.noResultTpl = new Ext.XTemplate(this.noResultTpl);
-    }
+    html += '<div class="x-list-noresult-title">' + this.title + '</div>';
+    html += '<div class="x-list-noresult-message">' + this.message +'</div>';
 
-    this.el = this.noResultTpl.insertFirst(targetEl, {
-        message: this.message || "Please try again later",
-        title: this.title || "No Results Found"
-    }, true);
-    
+    this.el = targetEl.createChild({
+      cls: 'x-list-noresult ',
+      html: html
+    });
+
     this.rendered = true;
   }
 });

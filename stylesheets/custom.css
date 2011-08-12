@@ -1233,4 +1233,18 @@ padding-left: 10px;
 text-align: left;
 }
 
+.x-list-noresult {
+  height: 100%;
+  text-align: center;
+  padding: 45% 10% 0 10%;
+  font-size: 14px;
+  color: #999;
+}
+.x-list-noresult-title {
+  margin-bottom: 1em;
+  font-weight: bold;
+}
+.x-list-noresult-message {
+}
+
 
