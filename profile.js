@@ -652,7 +652,7 @@ Crave.foursquareLogin = function() {
       }
     };
     if(client_browser != null) {
-      window.plugins.childBrowser.showWebPage("http://secure.getcrave.com/auth/foursquare?redirect_to=mobile ");
+      window.plugins.childBrowser.showWebPage("http://secure.getcrave.com/auth/foursquare?redirect_to=mobile&user_id=" + Crave.currentUserId());
     }
   } else {
     location.href = "http://getcrave.com/auth/foursquare";

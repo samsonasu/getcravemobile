@@ -37,14 +37,14 @@ Crave.buildSettingsPanel = function() {
           id: 'facebookToggle',
           name: 'facebook_toggle',
           value : 0,
+          suppress_change: true,
           listeners: {
-            afterrender: function() {
-              this.actually_rendered = true;
-              //i hate ext, why would they fire the change event on the initial load
-            },
-            change: function(slider, thumb, newValue, oldValue) {
-              if (this.actually_rendered) {
-                alert('tell the server about this');
+            change: function(slider, thumb, newValue, oldValue)  {
+              console.log(newValue);
+              if (this.suppress_change) {
+                this.suppress_change = false;
+              } else {
+                Ext.Msg.alert("Server", "This needs to be implemented");
               }
             }
           }
@@ -67,6 +67,7 @@ Crave.buildSettingsPanel = function() {
         activeItem: 0,
         items: [{
           cls: 'settingItem',
+          style: 'padding-top: 6px;',
           html: "<div class='title'>Login with Foursquare<span class='chevrony'></span></div>",
           listeners: {
             render: function(c) {
@@ -86,14 +87,12 @@ Crave.buildSettingsPanel = function() {
             id: 'foursquareToggle',
             name: 'foursquare_toggle',
             value : 0,
+            suppress_change: true,
             listeners: {
-              afterrender: function() {
-                this.actually_rendered = true;
-                //i hate ext, why would they fire the change event on the initial load
-                Crave.settingsPanel.doLayout();
-              },
               change: function(slider, thumb, newValue, oldValue) {
-                if (this.actually_rendered) {
+                if (this.suppress_change) {
+                  this.suppress_change = false;
+                } else {
                   TouchBS.wait("Updating preferences");
                   Ext.Ajax.request({
                     url: '/users/' + Crave.currentUserId() + '.json',
@@ -182,18 +181,16 @@ Crave.buildSettingsPanel = function() {
 
     var fbToggle = Ext.getCmp('facebookToggle');
     var fsToggle = Ext.getCmp('foursquareToggle');
-    if (!Crave.firstor_testor) {
-      Crave.firstor_testor = true;
-      fsValue = false;
-    }
     
     if (fbToggle.rendered) {
+      fbToggle.suppress_change = true;
       fbToggle.setValue(fbValue);
     } else {
       fbToggle.value = fbValue;
     }
     
     if (fsToggle.rendered) {
+      fsToggle.suppress_change = true;
       fsToggle.setValue(user.get_foursquare_recommendations);
     } else {
       fsToggle.value = user.get_foursquare_recommendations;
