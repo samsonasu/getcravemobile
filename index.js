@@ -240,12 +240,12 @@ Ext.setup({
         placePnl, Crave.buildNewDishPanel(), Crave.buildRateDishPanel(),
         Crave.buildDishDisplayPanel(), Crave.buildSettingsPanel(),
         Crave.otherProfilePanel, Crave.buildSearchResultsPanel()],
-      cardSwitchAnimation: 'slide',
       direction:'horizontal',
+      cardSwitchAnimation: 'slide',
       dockedItems: [new Ext.TabBar({
         dock: 'bottom',
         //xtype: 'toolbar',
-        cardSwitchAnimation: 'slide',
+        cardSwitchAnimation: false,
         id: 'mainTabbar',
         ui: 'dark',
         layout: {

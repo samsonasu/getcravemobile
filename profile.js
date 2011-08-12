@@ -38,7 +38,7 @@ Crave.buildProfilePanel = function(mine) {
 
   var userDishList = new Ext.List({
       itemTpl: new Ext.XTemplate.from('profileRatingTemplate'),
-      itemSelector: '.arating',
+      cls: 'highlightPressed',
       singleSelect: true,
       grouped: false,
       indexBar: false,
@@ -165,11 +165,10 @@ Crave.buildProfilePanel = function(mine) {
   //people who follow me
   var followerList = new Ext.List({
     itemTpl: followTemplate,
-    itemSelector: '.followUser',
     singleSelect: true,
     grouped: true,
     profile_panel_title: "Followers",
-    cls: 'followList',
+    cls: 'followList highlightPressed magic-scroll',
     data: {user: {}},
     cardSwitchAnimation: 'pop',
     indexBar: false,
@@ -237,8 +236,7 @@ Crave.buildProfilePanel = function(mine) {
   var followingList = new Ext.List({
     itemTpl: followTemplate,
     profile_panel_title: "Following",
-    cls: 'followList',
-    itemSelector: '.followUser',
+    cls: 'followList highlightPressed magic-scroll',
     loadingText: "Loading...",
     singleSelect: true,
     grouped: true,
@@ -547,13 +545,12 @@ Crave.buildSavedPanel = function() {
 
   var savedList = new Ext.List({
     itemTpl: Crave.savedDishTemplate,
-    itemSelector: '.adish',
     singleSelect: true,
     grouped: true,
     indexBar: false,
     store: savedDishStore,
     scroll:'vertical',
-    cls: 'magic-scroll',
+    cls: 'magic-scroll highlightPressed',
     hideOnMaskTap: false,
     clearSectionOnDeactivate:true,
     listeners: {
