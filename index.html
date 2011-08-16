@@ -26,7 +26,7 @@
     var Crave = {};
     </script>
 
-        <!-- Phone Gap includes (uncomment when builing in xcode) 
+        <!-- Phone Gap includes (uncomment when builing in xcode) -->
         <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
         <script type="text/javascript" charset="utf-8" src="ChildBrowser.js"></script>
 
@@ -110,13 +110,14 @@
     </tpl>
 </textarea>
 
-<textarea id="reviewDishTemplate" style="display:none">
+<textarea id="dishSearchTemplate" style="display:none">
     <tpl for=".">
         <div class="adish">
             <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 60px;">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">@{restaurant.name}</span>
+                <span class="distanceFigure">{[Crave.distDisplay(values.distance)]}</span>
             </div>
             <span class="chevrony"></span>
             </span>

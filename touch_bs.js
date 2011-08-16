@@ -340,3 +340,9 @@ TouchBS.NoResultsPlugin = Ext.extend(Ext.util.Observable, {
     this.rendered = true;
   }
 });
+
+Ext.override(Ext.form.Text, {
+  setPlaceHolder: function(placeHolder) {
+    this.fieldEl.dom.setAttribute('placeholder', placeHolder);
+  }
+});

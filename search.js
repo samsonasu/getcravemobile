@@ -4,9 +4,10 @@ Crave.buildSearchResultsPanel = function() {
     clearOnPageLoad: false,
     proxy: {
       type:'ajax',
-      url:'/items/search.json',
+      url:'/search.json',
       extraParams: {
-        distance: 'yes'
+        distance: 'yes',
+        search_dishes: true
       },
       reader: {
         type:'json',
@@ -22,7 +23,7 @@ Crave.buildSearchResultsPanel = function() {
   });
 
   var dishSearchList = new Ext.List({
-    itemTpl: Ext.XTemplate.from('reviewDishTemplate'),
+    itemTpl: Ext.XTemplate.from('dishSearchTemplate'),
     singleSelect: true,
     itemSelector: '.x-list-item',
     grouped: false,
@@ -69,14 +70,12 @@ Crave.buildSearchResultsPanel = function() {
     model: 'Restaurant',
     id: 'restaurants',
     clearOnPageLoad: false,
-    extraParams: {
-      
-    },
     proxy: {
-      type:'ajax',
-      url:'/places/search.json',
+      type: 'ajax',
+      url: '/search.json',
       extraParams: {
-        distance: 'yes'
+        distance: 'yes',
+        search_restaurants: true
       },
       reader: {
         type:'json',
@@ -178,10 +177,11 @@ Crave.buildSearchResultsPanel = function() {
 //  });
 
   var doTextSearch = function() {
+    var item = Crave.searchResultsPanel.getActiveItem();
+    debugger;
     Crave.searchResultsPanel.set_search_params({
       q: search_field.getValue()
     });
-    var item = Crave.searchResultsPanel.getActiveItem();
     item.setLoading(true);
     item.getStore().load({
       callback: function(){
@@ -198,7 +198,7 @@ Crave.buildSearchResultsPanel = function() {
     useClearIcon:true,
     width: '100%',
     ui: 'search',
-    placeHolder: 'Search for dish, restaurant or diet...',
+    placeHolder: 'Search for a place',
     autoCorrect: false,
     listeners: {
       change: doTextSearch
@@ -220,7 +220,9 @@ Crave.buildSearchResultsPanel = function() {
     width: "100%",
     items: [search_field, search_status],
     listeners: {
-      beforesubmit: doTextSearch
+      beforesubmit: function() {
+        return false;
+      }
     }
   });
 
@@ -243,6 +245,7 @@ Crave.buildSearchResultsPanel = function() {
       cls: 'placesButton',
       pressed: true,
       handler:function () {
+        search_field.setPlaceHolder("Search for a place");
         Crave.searchResultsPanel.setActiveItem(restaurantSearchList);
       },
       ui:'round',
@@ -252,6 +255,7 @@ Crave.buildSearchResultsPanel = function() {
       cls: 'dishesButton',
       pressed: false,
       handler:function () {
+        search_field.setPlaceHolder("Search for a dish");
         Crave.searchResultsPanel.setActiveItem(dishSearchList);
       },
       ui:'round',
@@ -310,8 +314,8 @@ Crave.buildSearchResultsPanel = function() {
         q: Crave.searchResultsPanel.search_query + " " + Crave.searchResultsPanel.active_filters.join(' '),
         d: Crave.searchResultsPanel.search_radius
       }
-      dishSearchStore.proxy.extraParams = Ext.apply({}, params);
-      restaurantSearchStore.proxy.extraParams = Ext.apply({}, params);
+      Ext.apply(dishSearchStore.proxy.extraParams, params);
+      Ext.apply(restaurantSearchStore.proxy.extraParams, params);
       //bothStore.proxy.extraParams = Ext.apply({}, params);
       
       var activePanel = Crave.searchResultsPanel.getActiveItem();
@@ -375,6 +379,7 @@ Crave.buildFilterPanel = function() {
   });
 
   var labelList = Crave.buildLabelListPanel("Dietary Preference");
+
   Crave.filterPanel = new Ext.Panel({
     bodyStyle: 'padding: 0 .5em 0 .5em;',
     items: [distancePanel, labelList],
@@ -413,7 +418,12 @@ Crave.buildFilterPanel = function() {
         }
       }]
     }],
-    selected_records: []
+    selected_records: [],
+    listeners: {
+      activate: function() {
+        Crave.filterPanel.doComponentLayout();
+      }
+    }
   });
 
   return Crave.filterPanel;
