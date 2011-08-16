@@ -1,11 +1,11 @@
 /* default Ext.Msg.alert uses "dark" ui */
-.x-msgbox.x-msgbox-dark {
-  background-image: -webkit-radial-gradient(top, 300% 100%, rgba(255,255,255,.6) 0%, rgba(240,240,240,.6) 10%, rgba(230,230,230,.4) 20%, rgba(20,30,120, 0.3) 21%, rgba(20,30,120, 0.3) 100%);
-  border: 2px solid #eee !important;
-  border-radius: .5em;
+DIV.x-sheet.x-msgbox.x-msgbox-dark {
+  background-image: -webkit-radial-gradient(top, 300% 100%, rgba(255,255,255,.5) 0%, rgba(245,245,245,.5) 10%, rgba(235,235,235,.4) 20%, rgba(20,30,120, 0.3) 21%, rgba(20,30,120, 0.3) 100%);
+  border: 2px solid #eee;
+  -webkit-border-radius: .5em;
 }
 
-.x-msgbox.x-msgbox-dark .x-button.x-button-action {
+DIV.x-sheet.x-msgbox.x-msgbox-dark .x-button.x-button-action {
    width: 100%;
    /*background-image: -webkit-linear-gradient(top,rgb(180,180,200) 0%,rgb(47,58,93) 50%, rgb(25,35,73) 51%, rgb(49,60,95) 100%);*/
    background-image: -webkit-linear-gradient(top,rgb(180,180,200) 0%,rgb(47,58,93) 50%, rgb(57,67,98) 51%, rgb(85,93,124) 100%);
