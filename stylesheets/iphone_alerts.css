@@ -6,8 +6,21 @@ DIV.x-sheet.x-msgbox.x-msgbox-dark {
 }
 
 DIV.x-sheet.x-msgbox.x-msgbox-dark .x-button.x-button-action {
-   width: 100%;
    /*background-image: -webkit-linear-gradient(top,rgb(180,180,200) 0%,rgb(47,58,93) 50%, rgb(25,35,73) 51%, rgb(49,60,95) 100%);*/
    background-image: -webkit-linear-gradient(top,rgb(180,180,200) 0%,rgb(47,58,93) 50%, rgb(57,67,98) 51%, rgb(85,93,124) 100%);
-   
+   opacity: .8;
+}
+
+DIV.x-sheet.x-msgbox.x-msgbox-dark .x-button.x-button-normal {
+   background-image: -webkit-linear-gradient(top,rgb(180,180,200) 0%,rgb(47,58,93) 50%, rgb(25,35,73) 51%, rgb(49,60,95) 100%);
+   border: 1px solid black;
+   opacity: .8;
+}
+
+DIV.x-sheet.x-msgbox.x-msgbox-dark .x-button SPAN.x-button-label {
+  opacity: 1;
+  font-weight: bold;
+  color: white;
+  text-shadow: none;
+  font-size: 16px;
 }

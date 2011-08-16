@@ -1203,7 +1203,7 @@ text-shadow: rgba(0, 0, 0, 0.5) 0 -0.08em 0;
 .x-button.x-button-action, .x-button.x-button-action.x-button-back::after, .x-button.x-button-action.x-button-forward::after, .x-toolbar .x-button.x-button-action, .x-toolbar .x-button.x-button-action.x-button-back::after, .x-toolbar .x-button.x-button-action.x-button-forward::after, .x-button.x-button-action-round, .x-button.x-button-action-round.x-button-back::after, .x-button.x-button-action-round.x-button-forward::after, .x-toolbar .x-button.x-button-action-round, .x-toolbar .x-button.x-button-action-round.x-button-back::after, .x-toolbar .x-button.x-button-action-round.x-button-forward::after, .x-button.x-button-action-small, .x-button.x-button-action-small.x-button-back::after, .x-button.x-button-action-small.x-button-forward::after, .x-toolbar .x-button.x-button-action-small, .x-toolbar .x-button.x-button-action-small.x-button-back::after, .x-toolbar .x-button.x-button-action-small.x-button-forward::after {
 background-color: #333;
 background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#8D8D8D), color-stop(50%,#5E5E5E), color-stop(51%,#4C4C4C), color-stop(100%,#414141));
-height: 40px;
+height: 32px;
 padding-bottom: 6px;
 }
 
@@ -1222,15 +1222,6 @@ border: none;
 	background-image:linear-gradient(#11498f,#1454a6 10%,#1760bd 65%,#1761bf)
 	}
 */
-
-.x-button.x-button-action, .x-button.x-button-action.x-button-back::after, .x-button.x-button-action.x-button-forward::after, .x-toolbar .x-button.x-button-action, .x-toolbar .x-button.x-button-action.x-button-back::after, .x-toolbar .x-button.x-button-action.x-button-forward::after, .x-button.x-button-action-round, .x-button.x-button-action-round.x-button-back::after, .x-button.x-button-action-round.x-button-forward::after, .x-toolbar .x-button.x-button-action-round, .x-toolbar .x-button.x-button-action-round.x-button-back::after, .x-toolbar .x-button.x-button-action-round.x-button-forward::after, .x-button.x-button-action-small, .x-button.x-button-action-small.x-button-back::after, .x-button.x-button-action-small.x-button-forward::after, .x-toolbar .x-button.x-button-action-small, .x-toolbar .x-button.x-button-action-small.x-button-back::after, .x-toolbar .x-button.x-button-action-small.x-button-forward::after {
-background-color: #333;
-background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#8D8D8D), color-stop(50%,#5E5E5E), color-stop(51%,#4C4C4C), color-stop(100%,#414141));
-height: 40px;
-padding-bottom: 6px;
-font-size: 22px;
-}
-
 
 
 .cityVoteBody {
