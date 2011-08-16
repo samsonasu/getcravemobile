@@ -24,6 +24,20 @@ Ext.setup({
         options.params.mobile = "true";
       }
     }, this);
+ 
+    //get user info in case we need their name, etc. 
+    if (Crave.isLoggedIn()) {
+      Ext.Ajax.request({
+        method: "GET",
+        url: '/users/' + Crave.currentUserId() + '.json',
+        params: {
+          current_user_id: Crave.currentUserId()
+        },
+        success: function(response, options) {
+          Crave.current_user = Ext.decode(response.responseText).user;
+        }
+      });
+    }
     
     var updateNearby = function() {
       Crave.updateLocation(function(coords) {

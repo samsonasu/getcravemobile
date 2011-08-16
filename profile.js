@@ -45,7 +45,7 @@ Crave.buildProfilePanel = function(mine) {
       store: userDishStore,
       loadingText: "Loading...",
       scroll: false,
-      clearSectionOnDeactivate:true,
+      clearSectionOnDeactivate: true,
       listeners: {
         itemtap:  function(dataView, index, item, e) {
           var record = userDishStore.getAt(index);
@@ -427,6 +427,7 @@ Crave.buildProfilePanel = function(mine) {
       profilePnl.setActiveItem(userProfilePnl, 'pop');
       userProfilePnl.scroller.scrollTo({x: 0, y: 0});
       profilePnl.setLoading(true);
+      
       //load basic info
       Ext.Ajax.request({
         method: "GET",
@@ -435,9 +436,9 @@ Crave.buildProfilePanel = function(mine) {
           current_user_id: Crave.currentUserId()
         },
         success: function(response, options) {
-          profilePnl.setLoading(false);
           profilePnl.setActiveItem(userProfilePnl, 'pop');
           userProfilePnl.scroller.scrollTo({x: 0, y: 0});
+          profilePnl.setLoading(false);
           profilePnl.displayed_user_id = user_id;
           var user = Ext.decode(response.responseText).user;
           var html = '<div class="userTopPnl"><div class="userPic">';
@@ -457,6 +458,7 @@ Crave.buildProfilePanel = function(mine) {
           userInfoPanel.el.down('.followers').dom.innerHTML = user.followers_count;
           if (mine) {
             //set up the settings panel if we loaded our own profile, this saves us an ajax call later
+            Crave.current_user = user;
             Crave.settingsPanel.set_user(user, force);
             Crave.savedPanel.set_user(user, force);
           }

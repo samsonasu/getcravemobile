@@ -50,17 +50,24 @@ Crave.buildNewDishPanel = function() {
      id: 'menuItemName'
   });
 
+  var price_field = new Ext.form.Text({
+    placeHolder: "Price", 
+    name: "price",
+    id: "menuItemPrice"
+  })
+
   var description_field = new Ext.form.TextArea({
     xtype: 'textareafield',
-    placeHolder: 'Description',
+    placeHolder: 'Description...',
     name: 'description',
     id: 'menuItemDescription'
   });
+  
 
   var form = new Ext.form.FormPanel({
     cls: 'framePanel',
     height: "100%",
-    items: [name_field,description_field],
+    items: [name_field,price_field, description_field],
     listeners: {
       beforesubmit: function() {
         submitForm();
@@ -71,9 +78,10 @@ Crave.buildNewDishPanel = function() {
 
   Crave.newDishPanel = new Ext.Panel({
     height: '100%',
+    cls: 'newDishPanel',
     //layout: 'fit',
     dockedItems:Crave.create_titlebar({
-      title: "Add a Menu Item",
+      title: "Add Food or Drink",
       items: [{
         ui: 'iback',
         handler: Crave.back_handler
@@ -145,12 +153,38 @@ Crave.buildDishDisplayPanel = function() {
   });
   
   var marker = null;
-  var addButtonHandler = function() {
-    if (Crave.isLoggedIn()) {
-      addSheet.show();
-    } else {
-      Crave.viewport.setActiveItem(Crave.myProfilePanel);
-    }
+  var shareSheet = new Ext.ActionSheet({
+    items: [{
+      text: 'Share via Email',
+      handler: function() {
+        if (Crave.isLoggedIn()) {
+          var url = "http://getcrave.com/items/" + Crave.dishDisplayPanel.current_menu_item.id;
+          location.href = "mailto:?subject=" + Crave.current_user.user_name + " thinks you should crave this&body=" + 
+            "Hey there, %0A" + Crave.current_user.user_name + " thinks you should try " + Crave.dishDisplayPanel.current_menu_item.name + 
+            "- " + url + "%0A-Your friends at crave";
+        } else {
+          Crave.viewport.setActiveItem(Crave.myProfilePanel);
+        }
+        shareSheet.hide();
+      }
+    },{
+      text: 'Share via Text',
+      hidden: typeof(PhoneGap) === 'undefined',
+      handler: function() {
+        if (Crave.isLoggedIn()) {
+          
+          var url = "http://getcrave.com/items/" + Crave.dishDisplayPanel.current_menu_item.id;
+          window.plugins.smsComposer.showSMSComposer("", 
+            Crave.current_user.user_name + " thinks you should try " + Crave.dishDisplayPanel.current_menu_item.name + "- " + url);
+        } else {
+          Crave.viewport.setActiveItem(Crave.myProfilePanel);
+        }
+        shareSheet.hide();
+      }
+    }]
+  });
+  var shareButtonHandler = function() {
+    shareSheet.show();
   };
 
   var reviewsPanel = new Ext.Panel({
@@ -161,8 +195,8 @@ Crave.buildDishDisplayPanel = function() {
         ui: 'iback',
         handler: Crave.back_handler
       },{
-        text: "Add",
-        handler: addButtonHandler
+        text: "Share",
+        handler: shareButtonHandler
       }]
     }),
     items: new Ext.List({
@@ -307,8 +341,8 @@ Crave.buildDishDisplayPanel = function() {
         ui: 'iback',
         handler: Crave.back_handler
       }, {
-        text: "Add",
-        handler: addButtonHandler
+        text: "Share",
+        handler: shareButtonHandler
       }]
     }),
     items: [imageCarousel,{
@@ -324,6 +358,17 @@ Crave.buildDishDisplayPanel = function() {
            '{menu_item_avg_rating_count.count} ratings</div>' +
            '</tpl>',
       data: {restaurant: {}}
+    },{
+      xtype: 'panel', 
+      bodyStyle: 'background: white; padding: .5em; border-bottom: 1px solid #ddd;',
+      items: {
+        xtype: 'button', 
+        cls: 'craveButton',
+        text: "<b style='font-size: 16px'>+</b> Add a Review, Photo or Label",
+        handler: function() {
+          addSheet.show();
+        }
+      }
     },{ //these frame panels need to be wrapped in a panel with side padding
         //because Ext freaks out if a panel has side margin
       xtype: 'panel',
@@ -435,6 +480,11 @@ Crave.buildDishDisplayPanel = function() {
             });
           }
         }
+      },{
+        //spacer to add a little scroll space at the bottom of all these pages
+        xtype: 'panel',
+        height: 30,
+        html: ''
       }]
     }]
   });
@@ -486,8 +536,7 @@ Crave.buildDishDisplayPanel = function() {
         Ext.each(menu_item.menu_item_photos, function(photo) {
           items.push(new Ext.Panel({
             cls: 'dishCarouselImage', 
-            html: '<img onload="Crave.dishImageLoaded(this);" src="http://src.sencha.io/' + photo.photo + '">',
-            
+            html: '<img onload="Crave.dishImageLoaded(this);" src="http://src.sencha.io/' + photo.photo + '">'
           }));
         });
         imageCarousel.removeAll();
@@ -542,11 +591,13 @@ Crave.buildDishDisplayPanel = function() {
         labels.push(l + " (" + label_map[l] + ")");
       }
 
+      var dlp = Ext.getCmp('dishLabelsPanel');
       if (labels.length === 0) {
-        labels.push("Add a Label");
+        dlp.hide();
+      } else {
+        dlp.show();
+        dlp.update({labels: labels});
       }
-
-      Ext.getCmp('dishLabelsPanel').update({labels: labels});
 
       //update the map
       Ext.getCmp('dishMap').update(menu_item.restaurant);

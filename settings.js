@@ -197,7 +197,13 @@ Crave.buildSettingsPanel = function() {
     }
     
     if (fsValue) {
-      Ext.getCmp('foursquareContainer').setActiveItem(fsValue ? 1 : 0, false)
+      var container = Ext.getCmp('foursquareContainer');
+      var activeItem = fsValue ? 1 : 0;
+      if (container.rendered) {
+        container.setActiveItem(activeItem, false);
+      } else {
+        container.activeITem = activeItem;
+      }
     }
       
 

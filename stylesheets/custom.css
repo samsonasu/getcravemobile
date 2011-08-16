@@ -68,6 +68,7 @@ padding: .3em .3em;
 .x-list .x-list-item, .x-list .x-list-item.x-item-selected {
   border-top: solid 1px #CCC;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #F1F1F1));
+  color: black;
 }
 
 .x-list .x-list-item .x-list-item-body span {
@@ -355,22 +356,22 @@ font-weight: lighter;
   -webkit-tap-highlight-color: red;
 }
 .dishInfo, #reviewPnl {
-	padding: 12px;
-	font-size: 16px;
-	line-height: 24px;
-	border-bottom: 1px solid #CCC;
-	color:#333333;
+  padding: 12px;
+  font-size: 16px;
+  line-height: 24px;
+  border-bottom: 1px solid #DDD;
+  color:#333333;
 }
 
 .dishInfo .savedFlag {
-	height: 65px;
-	width: 55px;
-	float: right;
-	background: url('../../images/saved-icon-OFF@2x.png') no-repeat 12px 0;
-	-webkit-background-size: 30px 40px;
-	padding-top: 39px;
-	color: #B7B7B7;
-	text-align: center;
+  height: 65px;
+  width: 55px;
+  float: right;
+  background: url('../../images/saved-icon-OFF@2x.png') no-repeat 12px 0;
+  -webkit-background-size: 30px 40px;
+  padding-top: 39px;
+  color: #B7B7B7;
+  text-align: center;
 }
 .dishInfo .savedFlag.saved {
    background: url('../../images/saved-icon-ON@2x.png') no-repeat 12px 0;
@@ -418,13 +419,30 @@ font-weight: lighter;
 	color:#333333;
 }
 .restaurantInfo {
-	width: 100%;
-	height: 100px;
-	background-color: #F8ECC0;
-	padding: 12px;
-	font-size: 14px;
-	color: #282828;
+  width: 100%;
+  height: 100px;
+  background-color: #F8ECC0;
+  padding: 12px;
+  font-size: 14px;
+  color: #282828;
 }
+
+.newDishPanel FORM {
+  margin: 0;
+  border-radius: 0;
+  background: white;
+}
+
+.newDishPanel ::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+.newDishPanel input[name=name]::-webkit-input-placeholder {
+  font-weight: bold;
+  font-style: normal;
+  color: black;
+}
+
 .dashedBorder {border:dashed 1px;}
 /*sencha overrides */
 .x-toolbar-dark {
@@ -603,6 +621,8 @@ border-bottom-left-radius: 0.4em;*/
 border-bottom: .1em solid #73271A;
 }
 
+
+/*hide the webkit search clear button because ext provides a different one  */
 input[type=search]::-webkit-search-decoration,
 input[type=search]::-webkit-search-cancel-button,
 input[type=search]::-webkit-search-results-button,
@@ -735,6 +755,23 @@ border-top: 1px solid #ffffff;
     border-bottom-right-radius: 10px;
 }
 
+.craveButton {
+  border-radius: 10px;
+  border: 1px solid #B2B2B2;
+  background: #EEE;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
+  font-family: helvetica neue,helvetica,sans-serif;
+  height: 30px;
+  padding-top: 3px;
+}
+
+.craveButton .x-button-label {
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  color: #069;
+}
+
 .loginPanel {
   background: white;
   height: 100%;
@@ -816,18 +853,18 @@ text-rendering: optimizeLegibility;
 }
 
 .userTopPnl .userInfo BUTTON.follow {
-	border-radius: 10px;
-	font-size: 14px;
-	margin-top: 6px;
-	width: 100px;
-	text-align: center;
-	color: #069;
-	border: 1px solid #B2B2B2;
-	background: #EEE;
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
-	font-family: helvetica neue,helvetica,sans-serif;
-	height: 30px;
-	padding-top: 3px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 6px;
+  width: 100px;
+  text-align: center;
+  color: #069;
+  border: 1px solid #B2B2B2;
+  background: #EEE;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(3%,#EFEFEF), color-stop(100%,#DDD));
+  font-family: helvetica neue,helvetica,sans-serif;
+  height: 30px;
+  padding-top: 3px;
 }
 
 .profileToolbar {
