@@ -216,7 +216,7 @@ Crave.create_setting_item = function(config) {
               },
               failure: TouchBS.handle_failure,
               success: function() {
-                Crave.current_user[config.name] = newValue();
+                Crave.current_user[config.name] = newValue;
                 TouchBS.stop_waiting();
               }
             });

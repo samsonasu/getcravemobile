@@ -53,6 +53,7 @@ Crave.buildCityVotePanel = function() {
       html: "Let us know your city and email, and we'll let you know when we launch there."
     },email_field,city_field, {
       xtype: 'button',
+      cls: 'submitButton',
       text: "Vote for your city",
       handler: function() {
         form.submit();
