@@ -181,6 +181,12 @@ Crave.buildDishDisplayPanel = function() {
         }
         shareSheet.hide();
       }
+    },{
+      text: 'Cancel', 
+      ui: 'action', 
+      handler: function() {
+        shareSheet.hide();
+      }
     }]
   });
   var shareButtonHandler = function() {

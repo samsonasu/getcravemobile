@@ -330,9 +330,13 @@ TouchBS.NoResultsPlugin = Ext.extend(Ext.util.Observable, {
     var list = this.list,
         targetEl = list.getTargetEl(),
         html = '';
-
-    html += '<div class="x-list-noresult-title">' + this.title + '</div>';
-    html += '<div class="x-list-noresult-message">' + this.message +'</div>';
+        
+    
+    if (this.title) 
+      html += '<div class="x-list-noresult-title">' + this.title + '</div>';
+    
+    if (this.message)
+      html += '<div class="x-list-noresult-message">' + this.message +'</div>';
 
     this.el = targetEl.createChild({
       cls: 'x-list-noresult ',

@@ -117,9 +117,8 @@ Crave.buildProfilePanel = function(mine) {
           }
         }
       },
-      plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.NoResultsPlugin({
-          title: "You haven't saved any items yet.",
-          message: "Save items that look delicious so that you can try them later."
+      plugins: [new Ext.plugins.PullRefreshPlugin({}), new TouchBS.BetterPagingPlugin(), new TouchBS.NoResultsPlugin({
+          title: "This user hasn't saved anything yet."
       })]
     });
   }
@@ -196,8 +195,8 @@ Crave.buildProfilePanel = function(mine) {
       }
     },
     plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.NoResultsPlugin({
-          title: "You don't have any followers yet.",
-          message: "Crave some dishes and follow others."
+          title: mine ? "You don't have any followers yet." : "This user isn't followed by anyone yet",
+          message: mine ? "Crave some dishes and follow others." : "You can be the first!"
       })]
   });
   
@@ -265,8 +264,8 @@ Crave.buildProfilePanel = function(mine) {
       }
     },
     plugins: [new TouchBS.BetterPagingPlugin(), new TouchBS.NoResultsPlugin({
-          title: "You aren't following anyone yet.",
-          message: "Follow other users on crave and discover amazing food!"
+          title: mine ? "You aren't following anyone yet." : "This user isn't following anytone yet",
+          message: mine ? "Follow other users on crave and discover amazing food!" : ""
       })]
   });
 
@@ -564,7 +563,7 @@ Crave.buildSavedPanel = function() {
         Crave.show_menu_item(dish_id);
       }
     },
-    plugins: [new TouchBS.BetterPagingPlugin()]
+    plugins: [new TouchBS.BetterPagingPlugin(), new Ext.plugins.PullRefreshPlugin({})]
   });
 
   var savedLoginPanel = Crave.buildLoginPanel();
