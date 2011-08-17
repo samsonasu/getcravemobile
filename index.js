@@ -159,20 +159,20 @@ Ext.setup({
       return false;
     };
     
-
+    var searchBox = new Ext.form.Search({
+      xtype: 'searchfield',
+      name: 'searchString',
+      inputType: 'search',
+      useClearIcon:true,
+      id: 'searchBox',
+      ui: 'search',
+      placeHolder: 'Search for a place',
+      autoCorrect: false
+    });
     var searchForm = new Ext.form.FormPanel({ //Search form goes here
       cls: 'searchForm',
       layout: 'auto',
-      items: [{
-        xtype: 'searchfield',
-        name: 'searchString',
-        inputType: 'search',
-        useClearIcon:true,
-        id: 'searchBox',
-        ui: 'search',
-        placeHolder: 'Search for dish, restaurant or diet...',
-        autoCorrect: false
-      }],
+      items: [searchBox],
       listeners: {
         beforesubmit: doSearch
       }
@@ -211,6 +211,7 @@ Ext.setup({
             cls: 'placesButton',
             pressed: true,
             handler:function () {
+              searchBox.setPlaceHolder("Search for a place");
               Crave.nearbyPanel.setActiveItem(placesList);
             },
             ui:'round',
@@ -221,6 +222,7 @@ Ext.setup({
             cls: 'dishesButton',
             pressed: false,
             handler:function () {
+              searchBox.setPlaceHolder("Search for a dish");
               Crave.nearbyPanel.setActiveItem(dishList);
             },
             ui:'round',

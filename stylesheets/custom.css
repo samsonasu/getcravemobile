@@ -228,12 +228,12 @@ FORM.framePanel .x-form-field-container {
 }
 
 .framePanel .settingItem.header {
-  border-bottom: 1px solid #ccc;
+  border-top: none;
   padding: 12px 4px 4px 8px;
 }
 
-.framePanel .settingItem.header.last {
-  border-bottom: none;
+.framePanel .settingItem.header.borderTop {
+  border-top: 1px solid #ccc;
 }
 
 .framePanel .settingItem.header IMG {
@@ -256,7 +256,13 @@ FORM.framePanel .x-form-field-container {
 .framePanel .settingItem {
   padding: .5em;
   width: 100%;
+  border-top: 1px solid #ccc;
 }
+
+.framePanel .settingItem.first {
+  border-top: none;
+}
+
 
 .framePanel .settingItem .chevrony {
   margin-top: 0px;

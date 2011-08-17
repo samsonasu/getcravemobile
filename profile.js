@@ -657,6 +657,6 @@ Crave.foursquareLogin = function() {
       window.plugins.childBrowser.showWebPage("http://secure.getcrave.com/auth/foursquare?redirect_to=mobile&user_id=" + Crave.currentUserId());
     }
   } else {
-    location.href = "http://getcrave.com/auth/foursquare";
+    location.href = "http://secure.getcrave.com/auth/foursquare?redirect_to=mobile";
   }
 }

@@ -1,6 +1,24 @@
 /* default Ext.Msg.alert uses "dark" ui */
 DIV.x-sheet.x-msgbox.x-msgbox-dark {
-  background-image: -webkit-radial-gradient(top, 300% 100%, rgba(255,255,255,.5) 0%, rgba(245,245,245,.5) 10%, rgba(235,235,235,.4) 20%, rgba(20,30,120, 0.3) 21%, rgba(20,30,120, 0.3) 100%);
+  /*
+  background-image: -webkit-radial-gradient(top, 300% 100%, rgba(255,255,255,.5) 0%, rgba(245,245,245,.5) 10%, rgba(235,235,235,.4) 20%, rgba(20,30,120, 0.3) 21%, rgba(20,30,120, 0.3) 100%);*/
+  
+  /*
+  background-image: -webkit-gradient(linear, left top, left bottom, 
+    color-stop(0%,rgba(255,255,255,.5)), 
+    color-stop(10%,rgba(245,245,245,.5)), 
+    color-stop(20%,rgba(235,235,235,.4)), 
+    color-stop(21%,rgba(20,30,120, 0.3)), 
+    color-stop(100%,rgba(20,30,120, 0.3))
+    );
+  */
+  background-image: -webkit-gradient(radial, 50% -728, 0, 50% 0%, 3000,
+    color-stop(0%,rgba(255, 255, 255, .5)), 
+    color-stop(19.8%, rgba(245, 245, 245, .5)), 
+    color-stop(20.19%, rgba(235, 235, 235, .4)), 
+    color-stop(20.35%, rgba(20, 30, 120, 0.3)), 
+    color-stop(100%, rgba(20, 30, 120, 0.3)) 
+  );
   border: 2px solid #eee;
   -webkit-border-radius: .5em;
 }

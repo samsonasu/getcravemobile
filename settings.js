@@ -22,49 +22,26 @@ Crave.buildSettingsPanel = function() {
         align: 'stretch'
       },
       items: [{
-         cls: 'settingItem header',
-         html: '<img src="../images/fb-settings-icon@2x.png"><div class="title">Facebook</div>'
-      },{
-        layout: 'hbox',
-        cls: 'settingItem',
-        items: [{
-          flex: 1.5,
-          xtype: 'panel',
-          html: "Send my reviews to my profile"
-        },{
-          flex: 1,
-          xtype: 'togglefield',
-          id: 'facebookToggle',
-          name: 'facebook_toggle',
-          value : 0,
-          suppress_change: true,
-          listeners: {
-            change: function(slider, thumb, newValue, oldValue)  {
-              console.log(newValue);
-              if (this.suppress_change) {
-                this.suppress_change = false;
-              } else {
-                Ext.Msg.alert("Server", "This needs to be implemented");
-              }
-            }
-          }
-        }]
-      }]
+        cls: 'settingItem header',
+        html: '<img src="../images/fb-settings-icon@2x.png"><div class="title">Facebook</div>'
+      },Crave.create_setting_item({
+        text: "Send my reviews to my profile", 
+        name: 'auto_post_to_facebook',
+        id: 'facebookToggle'
+      })]
     },{
       layout: {
         type: 'vbox',
         align: 'stretch'
       },
       cls: 'framePanel',
+      id: 'foursquareLoginPanel',
       items: [{
          cls: 'settingItem header',
          html: '<img src="../images/foursquare.png"><div class="title">Foursquare</div>'
       },{
         xtype: 'panel', 
-        id: 'foursquareContainer', 
-        height: 48,
-        layout: 'card', 
-        activeItem: 0,
+        activeItem: 1,
         items: [{
           cls: 'settingItem',
           style: 'padding-top: 6px;',
@@ -74,45 +51,28 @@ Crave.buildSettingsPanel = function() {
               c.el.on('click', Crave.foursquareLogin);
             }
           }
-        },{
-          layout: 'hbox',
-          cls: 'settingItem',
-          items: [{
-            flex: 1.5,
-            xtype: 'panel',
-            html: "Receive recommendations when I check in"
-          },{
-            flex: 1,
-            xtype: 'togglefield',
-            id: 'foursquareToggle',
-            name: 'foursquare_toggle',
-            value : 0,
-            suppress_change: true,
-            listeners: {
-              change: function(slider, thumb, newValue, oldValue) {
-                if (this.suppress_change) {
-                  this.suppress_change = false;
-                } else {
-                  TouchBS.wait("Updating preferences");
-                  Ext.Ajax.request({
-                    url: '/users/' + Crave.currentUserId() + '.json',
-                    method: 'PUT',
-                    jsonData: {
-                      user: {
-                        get_foursquare_recommendations: newValue
-                      }
-                    },
-                    failure: TouchBS.handle_failure,
-                    success: function() {
-                      TouchBS.stop_waiting();
-                    }
-                  });
-                }
-              }
-            }
-          }]
         }]
       }]
+    },{
+      layout: {
+        type: 'vbox', 
+        align: 'stretch'
+      },
+      hidden: true,
+      cls: 'framePanel', 
+      id: 'foursquareSettingsPanel', 
+      items: [{
+         cls: 'settingItem header',
+         html: '<img src="../images/foursquare.png"><div class="title">Foursquare</div>'
+      },Crave.create_setting_item({
+        name: 'get_foursquare_recommendations', 
+        id: 'foursquareToggle', 
+        text: "Receive recommendations when I check in"
+      }),Crave.create_setting_item({
+        name: 'auto_post_to_foursquare', 
+        id: 'foursquarePostToggle', 
+        text: "Send my reviews to my profile"
+      })]
     },{
       layout: {
         type: 'vbox',
@@ -130,10 +90,10 @@ Crave.buildSettingsPanel = function() {
           }
         }
       },{
-         cls: 'settingItem header',
+         cls: 'settingItem header borderTop',
          html: "<div class='title'>Terms Of Service</span><span class='chevrony'></div>"
       },{
-         cls: 'settingItem header last',
+         cls: 'settingItem header borderTop',
          html: "<div class='title'>Version</span><span class='version'>1.0</div>"
       }]
     },{
@@ -167,21 +127,8 @@ Crave.buildSettingsPanel = function() {
   });
   
   Crave.settingsPanel.set_user = function(user) {
-    var fbValue = false;
-    var fsValue = false;
-
-    Ext.each(user.authorizations, function(auth) {
-      if (auth.provider === 'facebook') {
-        fbValue = true;
-      }
-      if (auth.provider === 'foursquare') {
-        fsValue = true;
-      }
-    });
-
+    var fbValue = user.auto_post_to_facebook;
     var fbToggle = Ext.getCmp('facebookToggle');
-    var fsToggle = Ext.getCmp('foursquareToggle');
-    
     if (fbToggle.rendered) {
       fbToggle.suppress_change = true;
       fbToggle.setValue(fbValue);
@@ -189,26 +136,98 @@ Crave.buildSettingsPanel = function() {
       fbToggle.value = fbValue;
     }
     
-    if (fsToggle.rendered) {
-      fsToggle.suppress_change = true;
-      fsToggle.setValue(user.get_foursquare_recommendations);
-    } else {
-      fsToggle.value = user.get_foursquare_recommendations;
-    }
+    //foursquare settings
     
-    if (fsValue) {
-      var container = Ext.getCmp('foursquareContainer');
-      var activeItem = fsValue ? 1 : 0;
-      if (container.rendered) {
-        container.setActiveItem(activeItem, false);
-      } else {
-        container.activeITem = activeItem;
+    var fs_auth = false;
+
+    Ext.each(user.authorizations, function(auth) {
+      if (auth.provider === 'foursquare') {
+        fs_auth = true;
       }
+    });
+
+    
+    var fsSettings = Ext.getCmp('foursquareSettingsPanel');
+    var fsLogin = Ext.getCmp('foursquareLoginPanel');
+    if (fs_auth) {
+      fsSettings.show();
+      fsSettings.doLayout();
+      fsLogin.hide();
+      var fsToggle = Ext.getCmp('foursquareToggle');
+      if (fsToggle.rendered) {
+        fsToggle.suppress_change = true;
+        fsToggle.setValue(user.get_foursquare_recommendations);
+      } else {
+        fsToggle.value = user.get_foursquare_recommendations;
+      }
+      
+      fsToggle = Ext.getCmp('foursquarePostToggle');
+      if (fsToggle.rendered) {
+        fsToggle.suppress_change = true;
+        fsToggle.setValue(user.auto_post_to_foursquare);
+      } else {
+        fsToggle.value = user.auto_post_to_foursquare;
+      }
+    } else {
+      fsSettings.hide();
+      fsLogin.show();      
+      fsLogin.doLayout();
     }
       
 
     Crave.settingsPanel.user_loaded = true;
   }
   return Crave.settingsPanel;
-}
+};
+
+/* this makes toggle fields
+ * config: 
+ *   text: setting text
+ *   id: field id
+ *   name: name of the setting on user object
+ */
+Crave.create_setting_item = function(config) {
+  var setting_item = new Ext.Panel({
+    layout: 'hbox',
+    cls: 'settingItem',
+    items: [{
+      flex: 1.5,
+      xtype: 'panel',
+      html: config.text
+    },{
+      flex: 1,
+      xtype: 'togglefield',
+      id: config.id,
+      value : 0,
+      suppress_change: true,
+      listeners: {
+        change: function(slider, thumb, newValue, oldValue) {
+          if (this.suppress_change) {
+            this.suppress_change = false;
+          } else {
+            TouchBS.wait("Updating preferences");
+            var user = {};
+            user[config.name] = newValue;
+            Ext.Ajax.request({
+              url: '/users/' + Crave.currentUserId() + '.json',
+              method: 'PUT',
+              jsonData: {
+                user: user
+              },
+              failure: TouchBS.handle_failure,
+              success: function() {
+                TouchBS.stop_waiting();
+              }
+            });
+          }
+        }
+      }
+    }],
+    suppress_next: function() {
+      this.suppress_change = true;
+    }
+  });
+
+  return setting_item;
+};
 
