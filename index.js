@@ -276,7 +276,7 @@ Ext.setup({
           text: 'Nearby',
           iconCls: 'nearBy',
           card: Crave.nearbyPanel
-		},{
+        },{
           text: "Activity",
           iconCls: 'activity',
           card: Crave.activityPanel
