@@ -54,6 +54,7 @@ Ext.setup({
         places.proxy.extraParams = {
           "lat": coords.latitude,
           "long": coords.longitude,
+          distance: 'yes',
           limit: 25
         }
         places.load();
@@ -326,7 +327,8 @@ Crave.latestPositionText = function() {
     text = text + ", " + Crave.latest_position.state;
   }
   return text;
-}
+};
+
 Crave.updateLocation = function(callback) {
   var position_callback = function(coords) {
     //first store the position for later

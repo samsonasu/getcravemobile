@@ -34,7 +34,7 @@ Crave.buildLabelListPanel = function(title) {
   var list = new Ext.List({
       scroll: false,
       loadingText: "Loading",
-      cls: 'labelList',
+      cls: 'labelList highlightPressed',
       itemTpl : '<span class="labelname">{menu_label}</span>',
       grouped : false,
       multiSelect: true,

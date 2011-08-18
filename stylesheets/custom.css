@@ -1054,13 +1054,15 @@ IMG.stars {
   padding: 4px;
 }
 
-.rateDishPanel .x-panel.reviewSharePanel .x-button {
+.rateDishPanel .x-panel.reviewSharePanel .shareButton {
   border-radius: 6px;
   height: 100%;
   margin-right: 4px;
   padding: 0;
   width: 51px;
   border: none;
+  float: right !important;
+  z-index: 1000;
   -webkit-background-size: 100% 100%;
 }
 
@@ -1074,26 +1076,26 @@ IMG.stars {
   border-radius: 0px;
 }
 
-.x-button.facebookShare {
-  background: url("../images/facebook-off@2x.png") no-repeat;
+.shareButton.facebookShare {
+  background: url("../images/facebook-off@2x.png") no-repeat !important;
 }
 
-.x-button.facebookShare.x-button-pressed {
-  background: url("../images/facebook-on@2x.png") no-repeat;
+.shareButton.facebookShare.x-button-pressed {
+  background: url("../images/facebook-on@2x.png") no-repeat !important;
 }
-.x-button.foursquareShare {
-  background: url("../images/foursquare-off@2x.png") no-repeat;
-}
-
-.x-button.foursquareShare.x-button-pressed {
-  background: url("../images/foursquare-on@2x.png") no-repeat;
-}
-.x-button.twitterShare {
-  background: url("../images/twitter-off@2x.png") no-repeat;
+.shareButton.foursquareShare {
+  background: url("../images/foursquare-off@2x.png") no-repeat !important;
 }
 
-.x-button.twitterShare.x-button-pressed {
-  background: url("../images/twitter-on@2x.png") no-repeat;
+.shareButton.foursquareShare.x-button-pressed {
+  background: url("../images/foursquare-on@2x.png") no-repeat !important;
+}
+.shareButton.twitterShare {
+  background: url("../images/twitter-off@2x.png") no-repeat !important;
+}
+
+.shareButton.twitterShare.x-button-pressed {
+  background: url("../images/twitter-on@2x.png") no-repeat !important;
 }
 
 .ratingOf0 {

@@ -513,6 +513,7 @@ Crave.buildDishDisplayPanel = function() {
       });
     },
     load_dish: function(menu_item, callback) {
+      Crave.dishDisplayPanel.setActiveItem(dishPanel, false);
       Crave.dishDisplayPanel.current_menu_item = menu_item;
       //check to see if this is saved
       if (Crave.isLoggedIn()) {
@@ -615,12 +616,14 @@ Crave.buildDishDisplayPanel = function() {
         map: Ext.getCmp('dishMap').map,
         title: 'restaurant'
       });
+      console.log("restaurant at:" + menu_item.restaurant.latitude + ", " + menu_item.restaurant.longitude);
       Ext.getCmp('dishAddress').update(menu_item.restaurant);
 
       dishPanel.scroller.scrollTo({x: 0, y: 0});
       if (callback) {
         callback(menu_item);
       }
+      Crave.dishDisplayPanel.doComponentLayout();
     },
     setup_back_stack: function(subPanel) {
       Crave.back_stack.push({

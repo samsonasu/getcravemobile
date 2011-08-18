@@ -10,22 +10,24 @@ Crave.buildRateDishPanel = function() {
       rating: ratingField.getValue(),
       review: reviewText.getValue()
     };
+    
+    var jsonData = {
+      menu_item_rating: rating
+    };
     var query = [];
     if (share_facebook.pressed) {
-      query.push('facebook=yes');
+      jsonData.facebook = 'yes';
     }
     if (share_twitter.pressed) {
-      query.push('twitter=yes');
+      jsonData.twitter = 'yes';
     }
     if (share_foursquare.pressed) {
-      query.push('foursquare=yes');
+      jsonData.foursquare = 'yes';
     }
     Ext.Ajax.request({
       url: '/ratings.json?' + query.join('&'),
       method: "POST",
-      jsonData: {
-        menu_item_rating: rating
-      },
+      jsonData: jsonData,
       failure: TouchBS.handle_failure,
       success: function(response, options) {
         TouchBS.stop_waiting();
@@ -64,9 +66,10 @@ Crave.buildRateDishPanel = function() {
   var make_share_button = function(network) {
     return new Ext.Button({
       pressed: false, 
-      pressedCls: 'x-button-active',
-      cls: network + 'Share',
-      handler: function(btn) {
+      cls: network + 'Share shareButton',
+      height: 32,
+      width: 51,
+      handler: function(c) {
         this.setPressed(!this.pressed);
       },
       setPressed: function(pressed) {
@@ -78,9 +81,20 @@ Crave.buildRateDishPanel = function() {
         }
       },
       determinePressed: function() {
+        var display = false;
+        Ext.each(Crave.current_user.authorizations, function(auth) {
+          if (auth.provider === network) {
+            display = true
+          }
+        });
         this.setPressed(!!Crave.current_user['auto_post_to_' + network]);
+        if (display) {
+          this.show();
+        } else {
+          this.hide();
+        }
       }
-    })
+    });
   }
   
   
@@ -89,17 +103,13 @@ Crave.buildRateDishPanel = function() {
   var share_foursquare = make_share_button('foursquare');
   
   var sharePanel = new Ext.Panel({
-    layout: {
-      type: 'hbox',
-      pack: 'start'
-    },
     height: 40,
     cls: 'reviewSharePanel',
-    items: [{
+    items: [share_foursquare, share_twitter, share_facebook, {
       xtype: 'panel', 
       flex: 1,
       html: "<span>Share on...</span>"
-    }, share_facebook, share_twitter, share_foursquare]
+    }]
   });
 
 

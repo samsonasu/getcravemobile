@@ -16,6 +16,9 @@ var places = new Ext.data.Store({
    proxy: {
      type:'ajax',
      url: '/places.json',
+     extraParams: {
+       distance: 'yes'
+     },
      reader: {
        type: 'json',
        record: 'restaurant'
@@ -80,10 +83,14 @@ function placeDisplay(restaurant_id) {
       renderTo: aRestaurantList.getTargetEl(),
       text: "+ Add a Menu Item",
       handler:  function() {
-        Crave.back_stack.push({
-          panel: placePnl
-        });
-        Crave.viewport.setActiveItem(Crave.newDishPanel);
+        if (Crave.isLoggedIn()) {
+          Crave.back_stack.push({
+            panel: placePnl
+          });
+          Crave.viewport.setActiveItem(Crave.newDishPanel);
+        } else {
+          Ext.Msg.alert("Login first", "Please login before you add a new Dish");
+        }
       }
     });
 
@@ -132,113 +139,132 @@ function placeDisplay(restaurant_id) {
   });
 }
 var newRestaurant = new Ext.form.FormPanel({
-    scroll: 'vertical',
-    dockedItems:[Crave.create_titlebar({
-      items: [{
-        text:'Back',
-        ui:'iback',
-        handler: Crave.back_handler
-      }]
-    })],
+  scroll: 'vertical',
+  dockedItems:[Crave.create_titlebar({
+    items: [{
+      text:'Back',
+      ui:'iback',
+      handler: Crave.back_handler
+    }]
+  })],
+  items: [
+  {
+    xtype: 'fieldset', 
+    title: 'New Restaurant', 
     items: [
-       {xtype: 'fieldset', title: 'New Restaurant', items: [
-            {
-                xtype: 'textfield',
-                label:'Name',
-                name: 'restaurant[name]',
-                id: 'restaurantName'
-		    },
-           {xtype: 'textfield', name: 'restaurant[latitude]', id: 'latfield', hidden: true},
-           {xtype: 'textfield', name: 'restaurant[longitude]', id: 'lngfield', hidden: true},
-           {
-               xtype: 'textfield',
-               label:'Address',
-               name: 'restaurant[street_address]',
-               id: 'restaurantAddress'
-           },
-           {
-               xtype: 'textfield',
-               label:'Neighborhood',
-               name: 'restaurant[neighborhood]',
-               id: 'restaurantNeighborhood'
-           },
-           {
-               xtype: 'textfield',
-               label:'City',
-               value: 'San Francisco',
-               name: 'restaurant[city]',
-               id: 'restaurantCity'
-           },
-           {
-               xtype: 'textfield',
-               value: 'CA',
-               label:'State',
-               name: 'restaurant[state]',
-               id: 'restaurantState'
-           },
-           {
-               xtype: 'textfield',
-               label:'Zip',
-               name: 'restaurant[zip]',
-               id: 'restaurantZip'
-           },
-           {
-               xtype: 'textfield',
-               label:'Country',
-               value: 'USA',
-               name: 'restaurant[country]',
-               id: 'restaurantCountry'
-           },
-           {
-               xtype: 'textfield',
-               label:'Cross Street',
-               name: 'restaurant[cross_street]',
-               id: 'restaurantCross'
-           },
-           {
-               xtype:'button',
-               text: 'Submit',
-               handler: function() {
-                   var s = Ext.getCmp('restaurantAddress').getValue()+" "+Ext.getCmp('restaurantCity').getValue()+" "+Ext.getCmp('restaurantState').getValue()+" "+Ext.getCmp('restaurantZip').getValue();
 
-                   var geocoder = new google.maps.Geocoder();
-                   geocoder.geocode( {'address': s}, function(results, status) {
-                       if (status == google.maps.GeocoderStatus.OK) {
-                           stringLocation = results[0].geometry.location.toString().replace("(","").replace(")","");
-                           coordsArray = stringLocation.split(",");
-                           Ext.getCmp('latfield').setValue($.trim(coordsArray[0]));
-                           Ext.getCmp('lngfield').setValue($.trim(coordsArray[1]));
-                           newRestaurant.submit({
-                               url: '/places',
-                               method: 'post',
-                               submitDisabled: true,
-                               waitMsg: 'Saving Data...Please wait.',
-                               success: function (objForm,httpRequest) {
-                                   var mbox = new Ext.MessageBox({});
-                                   mbox.alert("Record Saved");
-                                   //redirect back to restaurant list?
-                               },
-                               failure: function() {
-                                   console.log('submissionFailed');
-                               }
-                           })
-                       } else {
-                           alert("Cannot resolve that address for the following reason: " + status);
-                       }
-                   });
-               }
-           }
-        ]}
+    {
+      xtype: 'textfield',
+      label:'Name',
+      name: 'restaurant[name]',
+      id: 'restaurantName'
+    },
+    {
+      xtype: 'textfield', 
+      name: 'restaurant[latitude]', 
+      id: 'latfield', 
+      hidden: true
+    },
+
+    {
+      xtype: 'textfield', 
+      name: 'restaurant[longitude]', 
+      id: 'lngfield', 
+      hidden: true
+    },
+
+    {
+      xtype: 'textfield',
+      label:'Address',
+      name: 'restaurant[street_address]',
+      id: 'restaurantAddress'
+    },
+    {
+      xtype: 'textfield',
+      label:'Neighborhood',
+      name: 'restaurant[neighborhood]',
+      id: 'restaurantNeighborhood'
+    },
+    {
+      xtype: 'textfield',
+      label:'City',
+      value: 'San Francisco',
+      name: 'restaurant[city]',
+      id: 'restaurantCity'
+    },
+    {
+      xtype: 'textfield',
+      value: 'CA',
+      label:'State',
+      name: 'restaurant[state]',
+      id: 'restaurantState'
+    },
+    {
+      xtype: 'textfield',
+      label:'Zip',
+      name: 'restaurant[zip]',
+      id: 'restaurantZip'
+    },
+    {
+      xtype: 'textfield',
+      label:'Country',
+      value: 'USA',
+      name: 'restaurant[country]',
+      id: 'restaurantCountry'
+    },
+    {
+      xtype: 'textfield',
+      label:'Cross Street',
+      name: 'restaurant[cross_street]',
+      id: 'restaurantCross'
+    },
+    {
+      xtype:'button',
+      text: 'Submit',
+      handler: function() {
+        var s = Ext.getCmp('restaurantAddress').getValue()+" "+Ext.getCmp('restaurantCity').getValue()+" "+Ext.getCmp('restaurantState').getValue()+" "+Ext.getCmp('restaurantZip').getValue();
+
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode( {
+          'address': s
+        }, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            stringLocation = results[0].geometry.location.toString().replace("(","").replace(")","");
+            coordsArray = stringLocation.split(",");
+            Ext.getCmp('latfield').setValue($.trim(coordsArray[0]));
+            Ext.getCmp('lngfield').setValue($.trim(coordsArray[1]));
+            newRestaurant.submit({
+              url: '/places',
+              method: 'post',
+              submitDisabled: true,
+              waitMsg: 'Saving Data...Please wait.',
+              success: function (objForm,httpRequest) {
+                var mbox = new Ext.MessageBox({});
+                mbox.alert("Record Saved");
+              //redirect back to restaurant list?
+              },
+              failure: function() {
+                console.log('submissionFailed');
+              }
+            })
+          } else {
+            alert("Cannot resolve that address for the following reason: " + status);
+          }
+        });
+      }
+    }
     ]
+    }
+  ]
 });
 
 var aRestaurantList = new Ext.List({
     id:'aRestaurantList',
     itemTpl: restaurantDishTemplate,
-    itemSelector: '.adish',
     singleSelect: true,
     grouped: true,
     indexBar: false,
+    cls: 'highlightPressed',
     layout:{type:'vbox'},
     store: singleRestaurantStore,
     scroll: false,

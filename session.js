@@ -16,6 +16,10 @@ Crave.sign_out = function() {
   localStorage.setItem("uid","");
   Crave.myProfilePanel.displayed_user_id = null;
   Crave.current_user = null;
+  if (Crave.phonegap) {
+    console.log('running deleteCookies');
+    window.plugins.childBrowser.deleteCookies();
+  }
 }
 
 Crave.handle_failure = function() {

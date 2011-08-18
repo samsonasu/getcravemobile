@@ -58,6 +58,10 @@ ChildBrowser.prototype.jsExec = function(jsString)
 	//PhoneGap.exec("ChildBrowserCommand.jsExec",jsString);
 }
 
+ChildBrowser.prototype.deleteCookies = function() { 
+  PhoneGap.exec("ChildBrowserCommand.deleteCookies");
+} 
+
 // Note: this plugin does NOT install itself, call this method some time after deviceready to install it
 // it will be returned, and also available globally from window.plugins.childBrowser
 ChildBrowser.install = function()
