@@ -76,9 +76,8 @@ Ext.setup({
       grouped: false,
       store: places,
       scroll: 'vertical',
-      cls: 'magic-scroll highlightPressed',
+      cls: 'magic-scroll highlightPressed highlightSelected',
       hideOnMaskTap: false,
-      clearSectionOnDeactivate:true,
       plugins: [new TouchBS.BetterPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
         refreshFn: function(cb, scope) {
           Crave.updateLocation(function(coords) {
@@ -90,7 +89,13 @@ Ext.setup({
             });
           });
         }
-      })]
+      })],
+      listeners: {
+        beforeselect: function() {
+          debugger;
+          return false;
+        }
+      }
     });
     placesList.on('itemtap', function(dataView, index, item, e) {
       var record = dataView.store.data.items[index];
@@ -98,6 +103,7 @@ Ext.setup({
         panel: Crave.nearbyPanel
       });
       placeDisplay(record.data.id);
+      setTimeout(function() {dataView.deselect(index)}, 500);
     });
 
     var dishList = new Ext.List({
@@ -108,10 +114,9 @@ Ext.setup({
       indexBar: false,
       store: dishStore,
       id:'dishesNearbyList',
-      cls: 'magic-scroll highlightPressed',
+      cls: 'magic-scroll highlightPressed highlightSelected',
       scroll:'vertical',
       hideOnMaskTap: false,
-      clearSectionOnDeactivate:true,
       plugins: [new TouchBS.BetterPagingPlugin(), new Ext.plugins.PullRefreshPlugin({
         refreshFn: function(cb, scope) {
           Crave.updateLocation(function(coords) {
@@ -130,6 +135,7 @@ Ext.setup({
       var thisId = dishStore.findRecord("name",$(".dishname", item).text()).data.id;
       Crave.back_stack.push({panel: Crave.nearbyPanel});
       Crave.show_menu_item(thisId);
+      setTimeout(function() {dataView.deselect(index)}, 500);
     });
     
     var doSearch = function() {

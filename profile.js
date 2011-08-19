@@ -40,7 +40,7 @@ Crave.buildProfilePanel = function(mine) {
 
   var userDishList = new Ext.List({
       itemTpl: new Ext.XTemplate.from('profileRatingTemplate'),
-      cls: 'highlightPressed',
+      cls: 'highlightPressed highlightSelected',
       singleSelect: true,
       grouped: false,
       indexBar: false,
@@ -53,6 +53,7 @@ Crave.buildProfilePanel = function(mine) {
           var record = userDishStore.getAt(index);
           setupBackStack(userProfilePnl);
           Crave.show_menu_item(record.data.menu_item_id);
+          setTimeout(function(){dataView.deselect(index);}, 500);
         }
       },
       plugins: [new TouchBS.BetterPagingPlugin()]
@@ -100,13 +101,14 @@ Crave.buildProfilePanel = function(mine) {
       indexBar: false,
       store: savedDishStore, //dishes.js
       scroll:'vertical',
-      cls: 'magic-scroll highlightPressed',
+      cls: 'magic-scroll highlightPressed highlightSelected',
       hideOnMaskTap: false,
       listeners: {
         itemtap: function(dataView, index, item, e) {
           var dish_id = savedDishStore.getAt(index).data.menu_item.id;
           setupBackStack(savedDishList);
           Crave.show_menu_item(dish_id);
+          setTimeout(function(){dataView.deselect(index);}, 500);
         },
         activate: function() {
           if (profilePnl.displayed_user_id !== savedDishList.displayed_user_id) {
@@ -169,7 +171,7 @@ Crave.buildProfilePanel = function(mine) {
     singleSelect: true,
     grouped: true,
     profile_panel_title: "Followers",
-    cls: 'followList highlightPressed magic-scroll',
+    cls: 'followList highlightPressed highlightSelected magic-scroll',
     data: {user: {}},
     cardSwitchAnimation: 'pop',
     indexBar: false,
@@ -177,12 +179,12 @@ Crave.buildProfilePanel = function(mine) {
     loadingText: "Loading...",
     scroll:'vertical',
     hideOnMaskTap: false,
-    clearSectionOnDeactivate:true,
     listeners: {
       itemtap: function(dataView, index, item, e) {
         var record = followerStore.getAt(this.displayIndexToRecordIndex(index));
         setupBackStack(followerList);
         Crave.show_user_profile(record.data.user_id);
+        setTimeout(function(){dataView.deselect(index);}, 500);
       },
       activate: function() {
         if (mine) {
@@ -237,7 +239,7 @@ Crave.buildProfilePanel = function(mine) {
   var followingList = new Ext.List({
     itemTpl: followTemplate,
     profile_panel_title: "Following",
-    cls: 'followList highlightPressed magic-scroll',
+    cls: 'followList highlightPressed highlightSelected magic-scroll',
     loadingText: "Loading...",
     singleSelect: true,
     grouped: true,
@@ -253,6 +255,7 @@ Crave.buildProfilePanel = function(mine) {
         var record = followingStore.getAt(this.displayIndexToRecordIndex(index));
         setupBackStack(followingList);
         Crave.show_user_profile(record.data.following_user_id);
+        setTimeout(function(){dataView.deselect(index);}, 500);
       },
       activate: function() {
         if (mine) {
@@ -557,7 +560,7 @@ Crave.buildSavedPanel = function() {
     indexBar: false,
     store: savedDishStore,
     scroll:'vertical',
-    cls: 'magic-scroll highlightPressed',
+    cls: 'magic-scroll highlightPressed highlightSelected',
     hideOnMaskTap: false,
     clearSectionOnDeactivate:true,
     listeners: {
@@ -567,6 +570,7 @@ Crave.buildSavedPanel = function() {
           panel: Crave.savedPanel
         });
         Crave.show_menu_item(dish_id);
+        setTimeout(function(){dataView.deselect(index);}, 500);
       }
     },
     plugins: [new TouchBS.BetterPagingPlugin(), new Ext.plugins.PullRefreshPlugin({})]
