@@ -88,7 +88,7 @@ padding: .3em .3em;
   background-image: inherit;
 }
 
-.highlightPressed.x-list .x-list-item.x-item-pressed {
+.highlightPressed.x-list .x-list-item.x-item-pressed, .highlightSelected.x-list .x-list-item.x-item-selected {
   border-top-color: #ccc;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #FFFCCC));
 }

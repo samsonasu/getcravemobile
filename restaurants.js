@@ -264,7 +264,7 @@ var aRestaurantList = new Ext.List({
     singleSelect: true,
     grouped: true,
     indexBar: false,
-    cls: 'highlightPressed',
+    cls: 'highlightPressed highlightSelected',
     layout:{type:'vbox'},
     store: singleRestaurantStore,
     scroll: false,
@@ -278,6 +278,7 @@ aRestaurantList.on('itemtap', function(dataView, index, item, e) {
     panel: placePnl
   });
   Crave.show_menu_item(record.data.id);
+  setTimeout(function(){dataView.deselect(index);}, 500);
 });
 
 var infoPnl = new Ext.Panel({

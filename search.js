@@ -30,7 +30,7 @@ Crave.buildSearchResultsPanel = function() {
     indexBar: false,
     store: dishSearchStore,
     loadingText: "Loading...",
-    cls: 'magic-scroll highlightPressed',
+    cls: 'magic-scroll highlightPressed highlightSelected',
     clearSectionOnDeactivate:true,
     scroll:'vertical',
     listeners: {
@@ -50,6 +50,7 @@ Crave.buildSearchResultsPanel = function() {
       panel: Crave.searchResultsPanel
     });
     Crave.show_menu_item(record.data.id);
+    setTimeout(function(){dataView.deselect(index);}, 500);
   });
 
   var update_status = function(result_count) {
@@ -95,7 +96,7 @@ Crave.buildSearchResultsPanel = function() {
     itemSelector: '.x-list-item',
     grouped: false,
     indexBar: false,
-    cls: 'magic-scroll highlightPressed',
+    cls: 'magic-scroll highlightPressed highlightSelected',
     clearSectionOnDeactivate:true,
     store: restaurantSearchStore,
     loadingText: "Loading...",
@@ -123,6 +124,7 @@ Crave.buildSearchResultsPanel = function() {
       panel: Crave.searchResultsPanel
     });
     Crave.show_restaurant(record.data.id);
+    setTimeout(function(){dataView.deselect(index);}, 500);
   });
 
 //  var bothStore = new Ext.data.Store({

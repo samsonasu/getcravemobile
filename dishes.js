@@ -172,7 +172,6 @@ Crave.buildDishDisplayPanel = function() {
       hidden: typeof(PhoneGap) === 'undefined',
       handler: function() {
         if (Crave.isLoggedIn()) {
-          
           var url = "http://getcrave.com/items/" + Crave.dishDisplayPanel.current_menu_item.id;
           window.plugins.smsComposer.showSMSComposer("", 
             Crave.current_user.user_name + " thinks you should try " + Crave.dishDisplayPanel.current_menu_item.name + "- " + url);
