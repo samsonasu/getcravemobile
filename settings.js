@@ -25,7 +25,7 @@ Crave.buildSettingsPanel = function() {
         cls: 'settingItem header',
         html: '<img src="../images/fb-settings-icon@2x.png"><div class="title">Facebook</div>'
       },Crave.create_setting_item({
-        text: "Send my reviews to my profile", 
+        text: "Post my reviews to my wall", 
         name: 'auto_post_to_facebook',
         id: 'facebookToggle'
       })]
@@ -67,11 +67,11 @@ Crave.buildSettingsPanel = function() {
       },Crave.create_setting_item({
         name: 'get_foursquare_recommendations', 
         id: 'foursquareToggle', 
-        text: "Receive recommendations when I check in"
+        text: "Receive food recommendations when I check in"
       }),Crave.create_setting_item({
         name: 'auto_post_to_foursquare', 
         id: 'foursquarePostToggle', 
-        text: "Send my reviews to my profile"
+        text: "Add my reviews as foursquare tips"
       })]
     },{
       layout: {
