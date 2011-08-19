@@ -345,13 +345,15 @@ Crave.buildFilterPanel = function() {
       text: d + " miles",
       ui: 'round',
       pressed: d === '.5',
-      width: 64,
+      width: 56,
+	  height: 30,
       filter_value: d
     });
   });
   items.push({
     text: "All",
-    width: 35,
+    width: 56,
+	height: 30,
     ui: 'round'
   });
   var distancePanel = new Ext.Panel({

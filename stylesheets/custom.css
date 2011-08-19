@@ -212,15 +212,17 @@ FORM.framePanel .x-form-field-container {
 
 .framePanel .x-toolbar.x-toolbar-fancy .x-button {
   border-right: 1px solid #414141;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(1%,#8D8D8D), color-stop(50%,#5E5E5E), color-stop(51%,#4C4C4C), color-stop(100%,#414141));
+  background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #818181), color-stop(1, #505050) );
   color: #ccc;
+  font-size: 16px;
+  text-shadow: 0px 1px #333;
 }
 .framePanel .x-toolbar.x-toolbar-fancy .x-button.x-button-pressed{
   background-color: #E8553A;
-  background-image: -webkit-linear-gradient(top, #E8553A 0%,#E1371A 100%);
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #E8553A), color-stop(100%, #E1371A));
-
+  background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #e75136), color-stop(1, #e1371a) );
+  color:#fff;
   border-top: 1px solid #B13320;
+  font-size: 16px;
 }
 
 .framePanel .x-panel {
@@ -482,7 +484,7 @@ border-bottom-left-radius: 0.4em;*/
 
 .dishesButton.x-button span {
 	background: url('../../images/dish-icon-OFF@2x.png') no-repeat;
-    -webkit-background-size: 18px 14px;
+    -webkit-background-size: 20px 14px;
 	padding: 0;
     text-align: left;
     text-indent: 24px;
@@ -1171,7 +1173,7 @@ background-image: linear-gradient(#EFEFEF,#D9D9D9 50%,#CCC 51%,#DDD);
 	color: #333;
 	text-shadow: rgba(255, 255, 255, 0.25) 0 0.08em 0;
 	-webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 0.1em 0;
-	border-right: none;
+	/*border-right: none;*/
 }
 
 .x-list-paging .x-list-paging-msg {
@@ -1236,18 +1238,18 @@ opacity: 0.95;
 }
 
 .x-button-label, .x-hasbadge .x-badge {
--webkit-box-flex: 1;
-box-flex: 1;
--webkit-box-align: center;
-box-align: center;
-white-space: nowrap;
-text-overflow: ellipsis;
-text-align: center;
-font-weight: bold;
-line-height: 1.2em;
-display: block;
-overflow: hidden;
-font-size: 20px;
+	-webkit-box-flex: 1;
+	box-flex: 1;
+	-webkit-box-align: center;
+	box-align: center;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: center;
+	font-weight: bold;
+	line-height: 1.2em;
+	display: block;
+	overflow: hidden;
+	font-size: 16px;
 }
 
 .x-button.x-button-action, .x-toolbar .x-button.x-button-action, .x-button.x-button-action-round, .x-toolbar .x-button.x-button-action-round, .x-button.x-button-action-small, .x-toolbar .x-button.x-button-action-small {
