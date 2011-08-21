@@ -159,7 +159,7 @@ Crave.buildDishDisplayPanel = function() {
       handler: function() {
         if (Crave.isLoggedIn()) {
           var url = "http://getcrave.com/items/" + Crave.dishDisplayPanel.current_menu_item.id;
-          location.href = "mailto:?subject=" + Crave.current_user.user_name + " thinks you should crave this&body=" + 
+          location.href = "mailto:?subject=" + Crave.current_user.user_name + " thinks you should try this&body=" + 
             "Hey there, %0A" + Crave.current_user.user_name + " thinks you should try " + Crave.dishDisplayPanel.current_menu_item.name + 
             "- " + url + "%0A-Your friends at crave";
         } else {
@@ -174,7 +174,7 @@ Crave.buildDishDisplayPanel = function() {
         if (Crave.isLoggedIn()) {
           var url = "http://getcrave.com/items/" + Crave.dishDisplayPanel.current_menu_item.id;
           window.plugins.smsComposer.showSMSComposer("", 
-            Crave.current_user.user_name + " thinks you should try " + Crave.dishDisplayPanel.current_menu_item.name + "- " + url);
+            "Try this: " + Crave.dishDisplayPanel.current_menu_item.name + "- " + url);
         } else {
           Crave.viewport.setActiveItem(Crave.myProfilePanel);
         }
