@@ -67,7 +67,7 @@ Crave.buildSettingsPanel = function() {
       },Crave.create_setting_item({
         name: 'get_foursquare_recommendations', 
         id: 'foursquareToggle', 
-        text: "Receive food recommendations when I check in"
+        text: "Get recommendations when I check in"
       }),Crave.create_setting_item({
         name: 'auto_post_to_foursquare', 
         id: 'foursquarePostToggle', 
