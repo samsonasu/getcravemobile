@@ -67,7 +67,7 @@ padding: .3em .3em;
 /*don't hightlight selected list items ever */
 .x-list .x-list-item, .x-list .x-list-item.x-item-selected {
   border-top: solid 1px #CCC;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #F1F1F1));
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(45%,#ffffff), color-stop(100%,#f1f1f1));
   color: black;
 }
 
@@ -242,8 +242,8 @@ FORM.framePanel .x-form-field-container {
   float: left;
   position: relative;
   top: -8px;
-  height: 32px;
-  max-width: 32px;
+  height: 24px;
+  max-width: 24px;
   margin-right: 6px;
 }
 
