@@ -453,7 +453,7 @@ Crave.buildDishDisplayPanel = function() {
           dock : 'top',
           xtype: 'toolbar',
           cls: 'title clickable',
-          style: 'margin: 0;',
+          style: 'margin: -1px, -1px,0,0;',
           title: 'Address'
         }],
         items: [{
