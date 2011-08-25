@@ -1339,3 +1339,8 @@ text-align: left;
 }
 
 
+.x-carousel-indicator-dark span.x-carousel-indicator-active {
+background-color: rgba(255, 255, 255, 0.3);
+background-image: none;
+}
+
