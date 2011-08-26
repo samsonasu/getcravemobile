@@ -1,7 +1,7 @@
 Crave.buildLoginPanel = function() {
   return new Ext.Panel({
     layout: 'fit',
-    html:'<div class="loginPanel"><img src="../images/dishes-profile-cold@2x.png"><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="#" onclick="Crave.facebookLogin();" class="loginButton"></a><a href="#" onclick="Crave.facebookLogin();" class="loginButtonTwitter"></a></div>',
+    html:'<div class="loginPanel"><img src="../images/dishes-profile-cold@2x.png"><div class="explanation">Rate & Save Dishes, Follow Foodies</div><a href="#" onclick="Crave.facebookLogin();" class="loginButton"></a><a href="#" onclick="Crave.twitterLogin();" class="loginButtonTwitter"></a></div>',
     height: '100%',
     width: '100%'
   });
@@ -620,6 +620,36 @@ Crave.squareFitImage = function(img) {
   }
 }
 
+Crave.twitterLogin = function() { 
+  if (Crave.phonegap) {
+    /* On Twitter Login */
+    var my_redirect_uri   = "http://getcrave.com/mobile/uid/",
+    my_type           = "user_agent",
+    my_display        = "touch"
+
+    var client_browser = ChildBrowser.install(); 
+    client_browser.onLocationChange = function(loc){
+      //once facebook redirects back to getcrave.com, that will redirect to the mobile page that sets the uid
+      //we want to grab that uid out of the request and close the browser because that's all we need here
+      var match = /mobile\/uid\/\?uid=(\d+)/.exec(loc);
+      if (match) { 
+         var uid = match[1];
+         localStorage.setItem('uid', uid);
+         
+         client_browser.close();
+         var ai = Crave.viewport.getActiveItem();
+         
+         if (ai.login_callback)
+           ai.login_callback();
+      }  
+    };
+    if(client_browser != null) {
+      window.plugins.childBrowser.showWebPage("http://getcrave.com/auth/twitter?redirect_to=mobile");
+    }
+  } else {
+    location.href = "http://getcrave.com/auth/twitter";
+  }
+}
 
 Crave.facebookLogin = function() { 
   if (Crave.phonegap) {
