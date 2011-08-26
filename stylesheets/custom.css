@@ -627,6 +627,8 @@ border-bottom-left-radius: 0.4em;*/
 }
 .x-toolbar.x-docked-top {
 border-bottom: .1em solid #73271A;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
 }
 
 
@@ -789,6 +791,16 @@ border-top: 1px solid #ffffff;
 }
 .loginButton {
     background: url("../../images/facebook-button@2x.png") no-repeat;
+    -webkit-background-size: 100% 100%;
+    width: 302px;
+    height: 36px;
+    border: none;
+    margin: 12px auto;
+    display:block;
+}
+
+.loginButtonTwitter {
+    background: url("../../images/twitter-button@2x.png") no-repeat;
     -webkit-background-size: 100% 100%;
     width: 302px;
     height: 36px;
