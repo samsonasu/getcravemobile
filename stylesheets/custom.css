@@ -627,8 +627,7 @@ border-bottom-left-radius: 0.4em;*/
 }
 .x-toolbar.x-docked-top {
 border-bottom: .1em solid #73271A;
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
+
 }
 
 
@@ -1355,4 +1354,7 @@ text-align: left;
 background-color: rgba(255, 255, 255, 0.3);
 background-image: none;
 }
+
+
+
 
