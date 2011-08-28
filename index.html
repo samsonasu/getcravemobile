@@ -75,7 +75,7 @@
 <textarea id="restaurantTemplate" style="display:none">
   <tpl for=".">
     <div class="aplace">
-      <img src="../images/no-image-place.png" class="dishImg" style="height: 60px;">
+      <img src="../images/no-image-place.png" class="dishImg" style="height: 50px;">
       <div class="dishListinfo">
         <span class="dishname">{name}</span>
         <span class="distanceFigure">{[this.distDisplay(values.distance)]}</span>
@@ -88,7 +88,7 @@
 <textarea id="restaurantSearchTemplate" style="display:none">
   <tpl for=".">
     <div class="aplace">
-      <img src="../images/no-image-place.png" class="dishImg" style="height: 60px;">
+      <img src="../images/no-image-place.png" class="dishImg" style="height: 50px;">
       <div class="dishListinfo">
         <span class="dishname">{name}</span>
         <span class="restAddress">{street_address}<br>{city}</span>
@@ -103,7 +103,7 @@
 <textarea id="restDishTemplate" style="display:none">
     <tpl for=".">
         <div class="adish">
-            <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 60px;">
+            <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 50px;">
             <div class="dishListinfo">
                 <span class="dishname">{name}</span>
                 <span class="restaurantName">{rating_count}</span>
@@ -117,7 +117,7 @@
 <textarea id="dishSearchTemplate" style="display:none">
     <tpl for=".">
         <div class="adish">
-            <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 60px;">
+            <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 50px;">
             <div class="dishListinfo">
               <span class="dishname">{name}</span>
               <span class="restaurantName">@{restaurant.name}</span>
@@ -138,7 +138,7 @@
 <textarea id="ratingTemplate" style="display:none">
     <tpl for=".">
         <div class="arating">
-            <img src="{[Crave.photo_url(values.user)]}" class="dishImg" style="height: 60px;">
+            <img src="{[Crave.photo_url(values.user)]}" class="dishImg" style="height: 50px;">
             <div class="ratingListItem">
                 <span class="ratingDescription">
                   <a style="font-weight: bold;" href="#" onclick="Crave.back_stack.push({panel: Crave.activityPanel});Crave.show_user_profile({user.id});">{user.user_name}</a>
@@ -154,7 +154,7 @@
 <textarea id="profileRatingTemplate" style="display:none">
     <tpl for=".">
         <div class="arating">
-            <img src="{[Crave.photo_url(values.menu_item)]}" class="dishImg" style="height: 60px;">
+            <img src="{[Crave.photo_url(values.menu_item)]}" class="dishImg" style="height: 50px;">
             <div class="ratingListItem">
                 <span class="chevrony"></span>
                 <span class="ratingDescription">
@@ -196,7 +196,7 @@
 <textarea id="searchResultTemplate" style="display:none">
   <div class="item">
     <tpl for="menu_item">
-      <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 60px;">
+      <img src="{[Crave.photo_url(values)]}" class="dishImg" style="height: 50px;">
       <div class="dishListinfo">
           <span class="dishname">{name}</span>
           <span class="restaurantName">@{restaurant.name}</span>
@@ -205,7 +205,7 @@
       <span class="chevrony"></span>
     </tpl>
     <tpl for="restaurant">
-      <img src="../images/no-image-place.png" class="dishImg" style="height: 60px;">
+      <img src="../images/no-image-place.png" class="dishImg" style="height: 50px;">
       <div class="dishListinfo">
         <span class="dishname">{name}</span>
         <span class="distanceFigure">{[Crave.distDisplay(values.distance)]}</span>

@@ -22,11 +22,11 @@ body {
   -webkit-background-size: .6em 1em;
   width: 8px;
   height: 15px;
-  margin: 28px 3px 0 0;
+  margin: 22px 3px 0 0;
 }
 .adish {overflow:hidden;}
 .dishListinfo {float:left;margin:0;font-size:14px;color:#282828;line-height: 20px;width: 210px;}
-.dishImg {display:block;float:left;width:60px;margin:3px;-webkit-border-radius:5px;margin-right:10px;}
+.dishImg {display:block;float:left;width:50px;margin:3px;-webkit-border-radius:5px;margin-right:10px;padding:0px;}
 .dishname {font-weight:bold;}
 .restaurantName {display:block;}
 .distanceFigure {display:block;color:#5d5d5d;}
@@ -90,7 +90,7 @@ padding: .3em .3em;
 
 .highlightPressed.x-list .x-list-item.x-item-pressed, .highlightSelected.x-list .x-list-item.x-item-selected {
   border-top-color: #ccc;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, white), color-stop(100%, #FFFCCC));
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #edecec), color-stop(100%, #d8d8d8));
 }
 
 /** frame panel thing used on the filters screen and probably elsewhere **/
@@ -232,6 +232,7 @@ FORM.framePanel .x-form-field-container {
 .framePanel .settingItem.header {
   border-top: none;
   padding: 12px 4px 4px 8px;
+  margin-top:10px;
 }
 
 .framePanel .settingItem.header.borderTop {
@@ -988,7 +989,7 @@ IMG.stars {
   min-height: 80px;
 }
 .arating .ratingListItem {
-  padding-left: 68px;
+  padding-left: 60px;
 }
 
 .arating .ratingListItem SPAN.review {
@@ -1003,7 +1004,7 @@ IMG.stars {
   color: #01669a;
   text-decoration: none;
   -webkit-touch-callout: inherit;
-  -webkit-tap-highlight-color: red;
+  -webkit-tap-highlight-color: #ccc;
 }
 
 .arating .ratingDescription A:hover {

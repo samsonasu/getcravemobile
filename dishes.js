@@ -712,7 +712,7 @@ Crave.photo_url = function(obj, placeholder) {
 Crave.photo_for = function(obj, placeholder) {
   var photo_url = Crave.photo_url(obj, placeholder);
   if (photo_url) {
-    return '<img src='+photo_url+' class="dishImg" style="height: 60px;">';
+    return '<img src='+photo_url+' class="dishImg" style="height: 50px;">';
   } else {
     return "";
   }
