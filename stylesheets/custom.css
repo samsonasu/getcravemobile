@@ -1356,6 +1356,10 @@ background-color: rgba(255, 255, 255, 0.3);
 background-image: none;
 }
 
+.x-sheet .x-sheet-body .x-button {
+margin-bottom: 0.5em;
+height: 40px;
+}
 
 
 
