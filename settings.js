@@ -91,7 +91,14 @@ Crave.buildSettingsPanel = function() {
         }
       },{
          cls: 'settingItem header borderTop',
-         html: "<div class='title'>Terms Of Service</span><span class='chevrony'></div>"
+         html: "<div class='title'>Terms Of Service</span><span class='chevrony'></div>",
+         listeners: {
+          afterrender: function(c){
+            c.el.on('click', function(){
+              location.href="http://getcrave.com/tos.html";
+            });
+          }
+        }
       },{
          cls: 'settingItem header borderTop',
          html: "<div class='title'>Version</span><span class='version'>1.0</div>"
