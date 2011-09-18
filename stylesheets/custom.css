@@ -232,7 +232,7 @@ FORM.framePanel .x-form-field-container {
 .framePanel .settingItem.header {
   border-top: none;
   padding: 12px 4px 4px 8px;
-  margin-top:10px;
+  margin-top:0px;
 }
 
 .framePanel .settingItem.header.borderTop {
@@ -242,7 +242,7 @@ FORM.framePanel .x-form-field-container {
 .framePanel .settingItem.header IMG {
   float: left;
   position: relative;
-  top: -8px;
+  top: 0px;
   height: 24px;
   max-width: 24px;
   margin-right: 6px;
