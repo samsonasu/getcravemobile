@@ -375,7 +375,7 @@ Crave.updateLocation = function(callback) {
       Ext.Msg.alert("No Location", "We couldn't find your location so we're using your last known position.")
       position_callback(Crave.latest_position);
     } else {
-      Ext.Msg.alert("No Location", "We couldn't find your location so we're showing results near San Fransisco.")
+      Ext.Msg.alert("No Location", "We couldn't find your location so we're showing results near San Francisco.")
       position_callback({
         latitude: 37.77494,
         longitude: -122.41958
